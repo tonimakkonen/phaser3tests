@@ -28,6 +28,8 @@ var config = {
 var player;
 var platforms;
 var cursors;
+var food;
+var lastFood = 0;
 
 var game = new Phaser.Game(config);
 
@@ -36,6 +38,7 @@ function preload ()
     this.load.image('sky', 'sky.png');
     this.load.image('tile', 'tile.png');
     this.load.image('marsu', 'marsu.png');
+    this.load.image('carrot', 'carrot.png');
 }
 
 function create ()
@@ -53,22 +56,37 @@ function create ()
     
     // create player
     player = this.physics.add.sprite(100, 600-40-20, 'marsu');
-    //player.anchor.setTo(0.5, 0.5);
-
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+    
+    // food group
+    food = this.physics.add.group();
+    food.create(400, 40, 'carrot');
 
 
     cursors = this.input.keyboard.createCursorKeys();
     
+    //this.time.events.repeat(Phaser.Timer.SECOND * 2, 10, createFood, this);
+    
     // set up physics
     this.physics.add.collider(player, platforms);
-
+    this.physics.add.collider(food, platforms);
+    
+    this.physics.add.overlap(player, food, eatFood, null, this);
 
 }
 
 function update ()
 {
+ 
+    // create food every 2 seconds
+    var curTime = this.time.now;
+    if (curTime - lastFood > 1000) {
+        lastFood = curTime;
+        food.create(Math.random()*800, 40, 'carrot');
+    }
+    
+    
     if (cursors.left.isDown) {
         player.setVelocityX(-160);
     }
@@ -81,6 +99,11 @@ function update ()
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
     }
+}
+        
+function eatFood(player, f)
+{
+    f.destroy();
 }
 
     </script>
