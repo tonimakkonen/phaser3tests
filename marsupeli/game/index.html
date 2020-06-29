@@ -30,6 +30,7 @@ var platforms;
 var cursors;
 var food;
 var lastFood = 0;
+var snakes;
 
 var game = new Phaser.Game(config);
 
@@ -39,6 +40,7 @@ function preload ()
     this.load.image('tile', 'tile.png');
     this.load.image('marsu', 'marsu.png');
     this.load.image('carrot', 'carrot.png');
+    this.load.image('snake', 'snake.png');
 }
 
 function create ()
@@ -62,6 +64,10 @@ function create ()
     // food group
     food = this.physics.add.group();
     food.create(400, 40, 'carrot');
+    
+    // snake groupp
+    snakes = this.physics.add.group();
+    snakes.create(400, 300, 'snake');
 
 
     cursors = this.input.keyboard.createCursorKeys();
@@ -71,6 +77,7 @@ function create ()
     // set up physics
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(food, platforms);
+    this.physics.add.collider(snakes, platforms);
     
     this.physics.add.overlap(player, food, eatFood, null, this);
 
