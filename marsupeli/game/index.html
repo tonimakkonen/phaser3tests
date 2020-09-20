@@ -40,6 +40,7 @@ function preload ()
     this.load.image('tile', 'tile.png');
     this.load.image('marsu', 'marsu.png');
     this.load.image('carrot', 'carrot.png');
+    this.load.image('mansikka', 'mansikka.png');
     this.load.image('snake', 'snake.png');
 }
 
@@ -67,7 +68,11 @@ function create ()
     
     // snake groupp
     snakes = this.physics.add.group();
-    snakes.create(400, 300, 'snake');
+
+    snake = snakes.create(400, 300, 'snake');
+    snake.setBounce(0.1);
+    snake.setCollideWorldBounds(true);
+    snake.lastUpdate = this.time.now;
 
 
     cursors = this.input.keyboard.createCursorKeys();
@@ -86,12 +91,33 @@ function create ()
 function update ()
 {
  
-    // create food every 2 seconds
+    // create food every 10 seconds
     var curTime = this.time.now;
-    if (curTime - lastFood > 1000) {
+    if (curTime - lastFood > 10000) {
         lastFood = curTime;
-        food.create(Math.random()*800, 40, 'carrot');
+        if(Math.random() > 0.5) {
+            food.create(Math.random()*800, 40, 'carrot');    
+        } else {
+            food.create(Math.random()*800, 40, 'mansikka');
+        }
+        
     }
+    
+    // change snake motion
+    snakes.children.each(
+        function(snake) {
+            console.log(snake.lastUpdate);
+            if (curTime - snake.lastUpdate > 1000) {
+                snake.lastUpdate = curTime;
+                snake.setVelocityX(Math.random() * 200 - 100);    
+                if (snake.body.touching.down && Math.random() > 0.6) {
+                    snakes.setVelocityY(-500);
+                }
+            }
+            
+        },
+    this);
+    
     
     
     if (cursors.left.isDown) {
