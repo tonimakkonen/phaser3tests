@@ -30,9 +30,10 @@ var playerAlive = true;
 var platforms;
 var cursors;
 var food;
-var lastFood = 0;
-var lastSnake = 0;
+var lastFood = 0.0;
+var lastSnake = 0.0;
 var snakes;
+var shots;
         
 var playerMaxHealth = 6;
 var playerHealth = playerMaxHealth;
@@ -40,6 +41,7 @@ var playerHealthUi = new Array(playerMaxHealth).fill(null);
         
 var score = 0;
 var scoreText;
+var lastShot = 0.0;
 
 var game = new Phaser.Game(config);
 
@@ -52,46 +54,48 @@ function preload ()
     this.load.image('mansikka', 'mansikka.png');
     this.load.image('snake', 'snake.png');
     this.load.image('sydan', 'sydan.png');
+    this.load.image('pullo', 'pullo.png');
+    this.load.image('tuli', 'tuli.png');
 }
 
 function create ()
 {
+    
+    cursors = this.input.keyboard.createCursorKeys();
+    
     this.add.image(400, 300, 'sky');
 
     platforms = this.physics.add.staticGroup();
     // ground
     for (var i = 0; i < 20; i++) platforms.create(i*40 + 20, 600-20, 'tile');
-    for (var i = 0; i < 5; i++) platforms.create((i+5)*40 + 20, 600-20-3*40, 'tile');
-    for (var i = 0; i < 5; i++) platforms.create((i+10)*40 + 20, 600-20-5*40, 'tile');
-    for (var i = 0; i < 5; i++) platforms.create((i+1)*40 + 20, 600-20-7*40, 'tile');
-    for (var i = 0; i < 5; i++) platforms.create((i+14)*40 + 20, 600-20-9*40, 'tile');
-    for (var i = 0; i < 5; i++) platforms.create((i+6)*40 + 20, 600-20-12*40, 'tile');
+    // other platforms
+    for (var i = 0; i < 6; i++) platforms.create((i+10)*40 + 20, 600-20-2*40, 'tile');
+    for (var i = 0; i < 5; i++) platforms.create((i+4)*40 + 20, 600-20-3*40, 'tile');
+    for (var i = 0; i < 4; i++) platforms.create((i+9)*40 + 20, 600-20-7*40, 'tile');
+    for (var i = 0; i < 5; i++) platforms.create((i+13)*40 + 20, 600-20-9*40, 'tile');
+    for (var i = 0; i < 5; i++) platforms.create((i+0)*40 + 20, 600-20-10*40, 'tile');
+    for (var i = 0; i < 6; i++) platforms.create((i+7)*40 + 20, 600-20-12*40, 'tile');
     
     // create player
-    player = this.physics.add.sprite(100, 600-40-20, 'marsu');
+    player = this.physics.add.sprite(400, 240, 'marsu');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
     
-    // food group
     food = this.physics.add.group();
-    food.create(400, 40, 'carrot');
-    
-    // snake groupp
     snakes = this.physics.add.group();
-
-
-    cursors = this.input.keyboard.createCursorKeys();
-    
-    //this.time.events.repeat(Phaser.Timer.SECOND * 2, 10, createFood, this);
+    bottles = this.physics.add.group();
+    shots = this.physics.add.group();
     
     // set up physics
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(food, platforms);
     this.physics.add.collider(snakes, platforms);
+    this.physics.add.collider(shots, platforms);
     
     this.physics.add.overlap(player, food, eatFood, null, this);
     
     this.physics.add.overlap(player, snakes, hitBySnake, null, this);
+    this.physics.add.overlap(shots, snakes, snakeHitByShot, null, this);
     
     // GUI
     scoreText = this.add.text(5, 5, 'Pisteet: 0', { fontFamily: 'Courier' }).setColor('#000000');
@@ -108,9 +112,11 @@ function update ()
     if (!playerAlive) {
         return;
     }
+    
+    var curTime = this.time.now;
  
     // create food every 10 seconds
-    var curTime = this.time.now;
+    
     if (curTime - lastFood > 10000) {
         lastFood = curTime;
         if(Math.random() > 0.5) {
@@ -118,6 +124,9 @@ function update ()
         } else {
             food.create(Math.random()*800, 40, 'mansikka');
         }
+        if (Math.random() > 0.5) {
+            food.create(Math.random()*800, 40, 'pullo');    
+        } 
     }
     
     // create snakes evey 30 seconds
@@ -146,7 +155,7 @@ function update ()
                     } else { // random motion, jump occasionally
                         snake.setVelocityX(Math.random()*200 - 100);
                         if (Math.random() > 0.5) {
-                            snake.setVelocityY(-300);
+                            snake.setVelocityY(-350);
                         }   
                     }
                 }        
@@ -155,7 +164,14 @@ function update ()
         },
     this);
     
-    
+    // destroy shots
+    shots.children.each(
+        function(shot) {
+            if (curTime - shot.createdAt > 2500) {
+                shot.destroy();
+            }
+        },
+    this)
     
     if (cursors.left.isDown) {
         player.setVelocityX(-160);
@@ -168,6 +184,18 @@ function update ()
     }
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
+    }
+    
+    if (cursors.space.isDown && curTime - lastShot > 500) {
+        console.log('shoot')
+        lastShot = curTime;
+        var newShot = shots.create(player.x, player.y, 'tuli');
+        var velx = player.body.velocity.x;
+        var vely = player.body.velocity.y;
+        newShot.setVelocity(velx, vely);
+        newShot.setBounce(0.95);
+        newShot.setCollideWorldBounds(true);
+        newShot.createdAt = curTime; // TODO: Is such a field present
     }
 }
         
@@ -201,13 +229,25 @@ function changeHealth(th, amount) { // increase health or update score
         
 function eatFood(player, f)
 {
-    changeHealth(this, +1);
+    if (f.texture.key === "pullo") {
+        updateScore(+30);
+    } else {
+        changeHealth(this, +1);    
+    }
+    
     f.destroy();
 }
         
 function hitBySnake(player, snake)
 {
-    changeHealth(this, -3);
+    changeHealth(this, -2);
+    snake.destroy();
+}
+        
+function snakeHitByShot(shot, snake)
+{
+    updateScore(+10);
+    shot.destroy();
     snake.destroy();
 }
     
