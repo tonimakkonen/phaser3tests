@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+<body>
+
+    <script>
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'phaser-example',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+var game = new Phaser.Game(config);
+        
+var blue_units;
+var blue_shots;
+var red_units;
+var red_shots;
+
+function preload ()
+{
+    // basic
+    this.load.image('bg_image', 'bg_image.png');
+    this.load.image('ui_holder', 'ui_holder.png');
+    this.load.image('tile', 'tile.png');
+    
+    // units
+    this.load.image('blue_soldier', 'blue_soldier.png');
+}
+
+function create ()
+{
+    
+    cursors = this.input.keyboard.createCursorKeys();
+
+    // add bg image and UI holder image
+    this.add.image(400, 300, 'bg_image');
+    this.add.image(400, 600-20, 'ui_holder');
+
+    platforms = this.physics.add.staticGroup();
+    // ground
+    for (var i = 0; i < 20; i++) platforms.create(i*40 + 20, 600-20-40, 'tile');
+    
+    // unit physics groups
+    blue_units = this.physics.add.group();
+    red_units = this.physics.add.group();
+    
+    this.physics.add.collider(blue_units, platforms);
+    this.physics.add.collider(red_units, platforms);
+    
+    create_unit(1, 200, 200, 1, this);
+    
+}
+
+function update ()
+{
+    
+    
+}
+
+function create_unit(type, xpos, ypos, player, th)
+{
+    // TODO: This is garbage still
+    var graph_name;
+    var group;
+    if (player == 1) {
+        group = blue_units;
+        graph_name = 'blue_';
+    } else if (player == 2) {
+        group = red_units;
+        graph_name = 'red_';
+    } else {
+        console.error('bad player type');
+        return;
+    }
+    if (type == 1) {
+        graph_name += 'soldier';
+        health = 1;
+    } else {
+        console.error('unknown unit type');
+        return;
+    }
+    new_unit = group.create(xpos, ypos, graph_name);
+    new_unit.setBounce(0.2);
+    new_unit.setCollideWorldBounds(true);
+    new_unit.x_type = type;
+    new_unit.x_health = health;
+    new_unit.x_last_update = this.time.now;
+}
+
+    </script>
+
+</body>
+</html>
