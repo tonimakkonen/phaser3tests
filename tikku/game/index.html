@@ -32,6 +32,9 @@ var red_units;
 var red_shots;
         
 var dummy = 0;
+        
+var money = 100;
+var money_text;
 
 function preload ()
 {
@@ -92,6 +95,10 @@ function create ()
     this.physics.add.overlap(blue_shots, platforms, shot_hit_ground, null, this);
     this.physics.add.overlap(red_shots, platforms, shot_hit_ground, null, this);
     
+    // GUI
+    money_text = this.add.text(5, 600-25, 'Gold: ' + money, { fontFamily: 'Courier' }).setColor('#FFFFFF');
+    money_text.setDepth(1)
+    
     // TODO: Add tile based coordinates
     
     // create the blue base
@@ -120,7 +127,7 @@ function update ()
     
     
     // attack
-    if (cur_time - dummy > 1000) {
+    if (cur_time - dummy > 500) {
         dummy = cur_time;
         //create_unit(1, 100, 500, 1, this);
         r = Math.random();
@@ -232,6 +239,8 @@ function run_unit_ai(unit, cur_time, th)
         if (cur_time - unit.x_last_update > 5000) {
             unit.x_last_update = cur_time;
             create_unit(1, unit.x, unit.y, unit.x_player, th);
+            // Give money every 5 seconds
+            update_money(25);
         }
     } else if (unit.x_type == 3) { // TURRET
         // shoot in random directions quickly
@@ -273,6 +282,15 @@ function check_shot_outside(shot)
     if (shot.x < 0 || shot.x > 800 || shot.y < 0 || shot.y > 600) {
         shot.destroy();
     }            
+}
+        
+function update_money(amount)
+{
+    money += amount;
+    if (money < 0) {
+        money = 0;
+    }
+    money_text.setText('Gold: ' + money);
 }
 
     </script>
