@@ -14,7 +14,6 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
             debug: false
         }
     },
@@ -48,6 +47,7 @@ function preload ()
     // buildings
     this.load.image('blue_base', 'blue_base.png');
     this.load.image('blue_turret', 'blue_turret.png');
+    this.load.image('blue_barracks', 'blue_barracks.png');
     
     // shots
     this.load.image('shot', 'shot.png');
@@ -92,10 +92,18 @@ function create ()
     this.physics.add.overlap(blue_shots, platforms, shot_hit_ground, null, this);
     this.physics.add.overlap(red_shots, platforms, shot_hit_ground, null, this);
     
+    // TODO: Add tile based coordinates
+    
     // create the blue base
     create_unit(2, 80, 600-120, 1, this);
-    // create one turret
-    create_unit(3, 120+20, 600-120, 1, this);
+    // create some test stuff
+    create_unit(4, 120+20, 600-100, 1, this);
+    create_unit(4, 120+60, 600-100, 1, this);
+    create_unit(4, 120+100, 600-100, 1, this);
+    
+    create_unit(3, 120+100, 600-300, 1, this);
+    create_unit(3, 120+140, 600-300, 1, this);
+    create_unit(3, 120+140, 600-100, 1, this);
     
 }
 
@@ -104,8 +112,15 @@ function update ()
     cur_time = this.time.now;
     blue_units.children.each(function(unit) { run_unit_ai(unit, cur_time, this) }, this);
     red_units.children.each(function(unit) { run_unit_ai(unit, cur_time, this) }, this);
+    // kill shots over the border
+    blue_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
+    red_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
     
-    if (cur_time - dummy > 2500) {
+    // mouse over for info
+    
+    
+    // attack
+    if (cur_time - dummy > 1000) {
         dummy = cur_time;
         //create_unit(1, 100, 500, 1, this);
         r = Math.random();
@@ -132,26 +147,38 @@ function create_unit(type, xpos, ypos, player, th)
         return;
     }
     var health;
+    var is_building = false;
     if (type == 1) {
         graph_name += 'soldier';
         health = 5;
     } else if (type == 2) {
         graph_name += 'base';
         health = 100;
+        is_building = true;
     } else if (type == 3) {
         graph_name += 'turret';
         health = 100;
+        is_building = true;
+    } else if (type == 4) {
+        graph_name += 'barracks';
+        health = 25;
+        is_building = true;
     } else {
         console.error('unknown unit type');
         return;
     }
-    console.log(graph_name)
     new_unit = group.create(xpos, ypos, graph_name);
-    new_unit.setBounce(0.2);
+    
     new_unit.x_player = player;
     new_unit.x_type = type;    
     new_unit.x_health = health;
     new_unit.x_last_update = th.time.now; // TODO: Use input
+    if (is_building) {
+        new_unit.setImmovable(true);
+    } else {
+        new_unit.setGravity(0, 300);
+        new_unit.setBounce(0.2);    
+    }
 }
         
 function shoot(type, player, xpos, ypos, xvel, yvel, th) {
@@ -168,6 +195,7 @@ function shoot(type, player, xpos, ypos, xvel, yvel, th) {
     new_shot = group.create(xpos, ypos, 'shot');
     new_shot.setVelocityX(xvel);
     new_shot.setVelocityY(yvel);
+    new_shot.setGravity(0, 300);
 }
         
         
@@ -200,7 +228,7 @@ function run_unit_ai(unit, cur_time, th)
             } 
         }
     } else if (unit.x_type == 2) { // BASE
-        // create an unit every 5 secons
+        // create an unit every 5 seconds
         if (cur_time - unit.x_last_update > 5000) {
             unit.x_last_update = cur_time;
             create_unit(1, unit.x, unit.y, unit.x_player, th);
@@ -213,6 +241,12 @@ function run_unit_ai(unit, cur_time, th)
             velx = Math.cos(a)*400;
             vely = -Math.sin(a)*400;
             shoot(1, unit.x_player, unit.x, unit.y, velx, vely, th);
+        }
+    } else if (unit.x_type == 4) { // BARRACKS
+        // create an unit every 5 seconds
+        if (cur_time - unit.x_last_update > 5000) {
+            unit.x_last_update = cur_time;
+            create_unit(1, unit.x, unit.y, unit.x_player, th);
         }
     }
 
@@ -232,6 +266,13 @@ function shot_hit_ground(shot, tile)
 {
     // TODO:
     shot.destroy();
+}
+        
+function check_shot_outside(shot)
+{
+    if (shot.x < 0 || shot.x > 800 || shot.y < 0 || shot.y > 600) {
+        shot.destroy();
+    }            
 }
 
     </script>
