@@ -51,6 +51,7 @@ function preload ()
     this.load.image('blue_base', 'blue_base.png');
     this.load.image('blue_turret', 'blue_turret.png');
     this.load.image('blue_barracks', 'blue_barracks.png');
+    this.load.image('blue_wall', 'blue_wall.png');
     
     // shots
     this.load.image('shot', 'shot.png');
@@ -103,14 +104,21 @@ function create ()
     
     // create the blue base
     create_unit(2, 80, 600-120, 1, this);
+    
     // create some test stuff
+    
+    // barracks
     create_unit(4, 120+20, 600-100, 1, this);
     create_unit(4, 120+60, 600-100, 1, this);
     create_unit(4, 120+100, 600-100, 1, this);
     
-    create_unit(3, 120+100, 600-300, 1, this);
-    create_unit(3, 120+140, 600-300, 1, this);
-    create_unit(3, 120+140, 600-100, 1, this);
+    // turrets
+    //create_unit(3, 120+100, 600-300, 1, this);
+    //create_unit(3, 120+140, 600-300, 1, this);
+    //create_unit(3, 120+140, 600-100, 1, this);
+    
+    // wall
+    create_unit(5, 120+180, 600-100, 1, this);
     
 }
 
@@ -123,11 +131,10 @@ function update ()
     blue_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
     red_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
     
-    // mouse over for info
-    
+    // mouse over for info   
     
     // attack
-    if (cur_time - dummy > 500) {
+    if (cur_time - dummy > 1500) {
         dummy = cur_time;
         //create_unit(1, 100, 500, 1, this);
         r = Math.random();
@@ -169,6 +176,10 @@ function create_unit(type, xpos, ypos, player, th)
     } else if (type == 4) {
         graph_name += 'barracks';
         health = 25;
+        is_building = true;
+    } else if (type == 5) {
+        graph_name += 'wall';
+        health = 250;
         is_building = true;
     } else {
         console.error('unknown unit type');
