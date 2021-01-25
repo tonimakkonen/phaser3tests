@@ -35,13 +35,20 @@ var dummy = 0;
         
 var money = 100;
 var money_text;
+        
+var ui_options = [5, 4, 3]; // UI order
+var ui_selection_image = null; // sprite for current selection
+var ui_selection_unit = -1;
 
 function preload ()
 {
     // basic
     this.load.image('bg_image', 'bg_image.png');
-    this.load.image('ui_holder', 'ui_holder.png');
     this.load.image('tile', 'tile.png');
+    
+    // UI
+    this.load.image('ui_holder', 'ui_holder.png');
+    this.load.image('selection', 'selection.png');
     
     // units
     this.load.image('blue_soldier', 'blue_soldier.png');
@@ -59,12 +66,17 @@ function preload ()
 
 function create ()
 {
-    
-    cursors = this.input.keyboard.createCursorKeys();
 
-    // add bg image and UI holder image
+    // add bg image
     this.add.image(400, 300, 'bg_image');
+    
+    // UI
     this.add.image(400, 600-20, 'ui_holder');
+    
+    // TODO: Make this better
+    this.add.image(120+20, 600-20, 'blue_wall').setScale(0.5);
+    this.add.image(160+20, 600-20, 'blue_barracks').setScale(0.5);
+    this.add.image(200+20, 600-20, 'blue_turret').setScale(0.5);
 
     platforms = this.physics.add.staticGroup();
     // ground
@@ -108,9 +120,9 @@ function create ()
     // create some test stuff
     
     // barracks
-    create_unit(4, 120+20, 600-100, 1, this);
-    create_unit(4, 120+60, 600-100, 1, this);
-    create_unit(4, 120+100, 600-100, 1, this);
+    //create_unit(4, 120+20, 600-100, 1, this);
+    //create_unit(4, 120+60, 600-100, 1, this);
+    //create_unit(4, 120+100, 600-100, 1, this);
     
     // turrets
     //create_unit(3, 120+100, 600-300, 1, this);
@@ -118,12 +130,43 @@ function create ()
     //create_unit(3, 120+140, 600-100, 1, this);
     
     // wall
-    create_unit(5, 120+180, 600-100, 1, this);
+    //create_unit(5, 120+180, 600-100, 1, this);
     
 }
 
 function update ()
 {
+    
+    // UI logic
+    
+    // TODO: This is garbage
+    if (game.input.mousePointer.isDown) {
+        //console.log(ui_selection_image);
+        var do_select = -1;
+        var do_select_index = -1;
+        if (game.input.mousePointer.y >= 600 - 40) {
+            var index = Math.floor((game.input.mousePointer.x - 120) / 40)
+            if (index >= 0 && index <= ui_options.length - 1) {
+                do_select = ui_options[index];
+                do_select_index = index;
+            }
+        }
+        if (do_select == -1 && ui_selection_unit != -1) {
+            if (ui_selection_image != null) {
+                ui_selection_image.destroy();
+            }
+            ui_selection_unit = -1;
+        } else if (do_select >= 0 && do_select != this.ui_selection_unit) {
+            if (ui_selection_image != null) {
+                ui_selection_image.destroy();
+            }
+            ui_selection_unit = do_select;
+            ui_selection_image = this.add.image(120+20 + 40*do_select_index, 600-20, 'selection');
+        }    
+    }
+    
+    
+    // Game logic
     cur_time = this.time.now;
     blue_units.children.each(function(unit) { run_unit_ai(unit, cur_time, this) }, this);
     red_units.children.each(function(unit) { run_unit_ai(unit, cur_time, this) }, this);
@@ -134,7 +177,7 @@ function update ()
     // mouse over for info   
     
     // attack
-    if (cur_time - dummy > 1500) {
+    if (cur_time - dummy > 4000) {
         dummy = cur_time;
         //create_unit(1, 100, 500, 1, this);
         r = Math.random();
