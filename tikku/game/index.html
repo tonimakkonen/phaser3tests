@@ -53,6 +53,7 @@ function preload ()
     
     // units
     this.load.image('blue_soldier', 'blue_soldier.png');
+    this.load.image('blue_cannon', 'blue_cannon.png');
     this.load.image('red_soldier', 'red_soldier.png');
     
     // buildings
@@ -63,6 +64,7 @@ function preload ()
     
     // shots
     this.load.image('shot', 'shot.png');
+    this.load.image('big_shot', 'big_shot.png');
 }
 
 function create ()
@@ -134,6 +136,9 @@ function create ()
     
     // wall
     create_unit(5, 120+180, 600-100, 1, this);
+    
+    // tank
+    create_unit(6, 120+180, 600 - 100 , 1, this);
     
 }
 
@@ -229,6 +234,9 @@ function create_unit(type, xpos, ypos, player, th)
         graph_name += 'wall';
         health = 250;
         is_building = true;
+    } else if (type == 6) {
+        graph_name += 'cannon';
+        health = 85;
     } else {
         console.error('unknown unit type');
         return;
@@ -264,7 +272,12 @@ function shoot(type, player, xpos, ypos, xvel, yvel, th) {
         return;
     }
     // TODO: Add actual types
-    new_shot = group.create(xpos, ypos, 'shot');
+    if (type == 1) {
+        new_shot = group.create(xpos, ypos, 'shot');   
+    } else if (type == 2) {
+        new_shot = group.create(xpos, ypos, 'big_shot');
+    }
+    new_shot.x_type = type;
     new_shot.setVelocityX(xvel);
     new_shot.setVelocityY(yvel);
     new_shot.setGravity(0, 300);
@@ -278,25 +291,17 @@ function run_unit_ai(unit, cur_time, th)
     } else {
         if (unit.x < 40) unit.destroy();
     }
+    dir_to_enemy = unit.x_player == 1 ? 1 : -1;
     // TODO: Implemente proper AI
     if (unit.x_type == 1) { // SOLDIER
         if (cur_time - unit.x_last_update > 500) {
             unit.x_last_update = cur_time;
-            
-            if (unit.x_player == 1) {
-                dir = 1;
-            } else {
-                dir = -1;
-            }
-            unit.setVelocityX(Math.random()*50*dir);
-            // jump every now and then
+            unit.setVelocityX(Math.random()*50*dir_to_enemy);
             if (Math.random() > 0.85) {
                 unit.setVelocityY(-200);
             } 
-            // shoot
-            // TODO: select direction
             if (Math.random() > 0.5) {
-                shoot(1, unit.x_player, unit.x, unit.y, dir*200, -50, th);
+                shoot(1, unit.x_player, unit.x, unit.y, dir_to_enemy*200, -50, th);
             } 
         }
     } else if (unit.x_type == 2) { // BASE
@@ -322,12 +327,22 @@ function run_unit_ai(unit, cur_time, th)
             unit.x_last_update = cur_time;
             create_unit(1, unit.x, unit.y, unit.x_player, th);
         }
+    } else if (unit.x_type == 6) {
+        if (cur_time - unit.x_last_update > 2000) {
+            unit.x_last_update = cur_time;
+            unit.setVelocityX(Math.random()*10*dir_to_enemy);
+            if (Math.random() > 0.95) {
+                unit.setVelocityY(-200);
+            } 
+            shoot(2, unit.x_player, unit.x, unit.y, dir_to_enemy*200, -200, th);
+        }
     }
 
 }
         
 function unit_hit(unit, shot)
 {
+    // TODO: Bigger shots?
     update_unit_health(unit, -3);   
     shot.destroy();
 }
