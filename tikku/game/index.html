@@ -35,6 +35,7 @@ var dummy = 0;
         
 var money = 100;
 var money_text;
+var help_text;
         
 var ui_options = [5, 4, 3]; // UI order
 var ui_selection_image = null; // sprite for current selection
@@ -110,7 +111,9 @@ function create ()
     
     // GUI
     money_text = this.add.text(5, 600-25, 'Gold: ' + money, { fontFamily: 'Courier' }).setColor('#FFFFFF');
-    money_text.setDepth(1)
+    money_text.setDepth(1);
+    help_text = this.add.text(400, 600-25, 'Nothing selected', { fontFamily: 'Courier' }).setColor('#FFFFFF');
+    help_text.setDepth(1);
     
     // TODO: Add tile based coordinates
     
@@ -125,12 +128,12 @@ function create ()
     //create_unit(4, 120+100, 600-100, 1, this);
     
     // turrets
-    //create_unit(3, 120+100, 600-300, 1, this);
+    create_unit(3, 120+100, 600-300, 1, this);
     //create_unit(3, 120+140, 600-300, 1, this);
     //create_unit(3, 120+140, 600-100, 1, this);
     
     // wall
-    //create_unit(5, 120+180, 600-100, 1, this);
+    create_unit(5, 120+180, 600-100, 1, this);
     
 }
 
@@ -190,7 +193,7 @@ function update ()
 
 function create_unit(type, xpos, ypos, player, th)
 {
-    // TODO: This is garbage still
+    // TODO: make use of some kind of map with properties, do not hard code stuff
     var graph_name;
     var group;
     if (player == 1) {
@@ -205,6 +208,7 @@ function create_unit(type, xpos, ypos, player, th)
     }
     var health;
     var is_building = false;
+    var width = 40;
     if (type == 1) {
         graph_name += 'soldier';
         health = 5;
@@ -212,6 +216,7 @@ function create_unit(type, xpos, ypos, player, th)
         graph_name += 'base';
         health = 100;
         is_building = true;
+        width = 80;
     } else if (type == 3) {
         graph_name += 'turret';
         health = 100;
@@ -233,9 +238,15 @@ function create_unit(type, xpos, ypos, player, th)
     new_unit.x_player = player;
     new_unit.x_type = type;    
     new_unit.x_health = health;
+    new_unit.x_max_health = health;
     new_unit.x_last_update = th.time.now; // TODO: Use input
+    new_unit.x_is_building = is_building;
+    new_unit.x_width = width;
     if (is_building) {
         new_unit.setImmovable(true);
+        new_unit.x_health_bar = th.add.rectangle(xpos, ypos-width/2, width*0.75, 2, 0x00ff00);
+        new_unit.x_health_bar.alpha = 0.25;
+        new_unit.x_health_bar.setDepth(1);
     } else {
         new_unit.setGravity(0, 300);
         new_unit.setBounce(0.2);    
@@ -317,12 +328,34 @@ function run_unit_ai(unit, cur_time, th)
         
 function unit_hit(unit, shot)
 {
-    // TODO:
-    unit.x_health -= 3;
-    if (unit.x_health <= 0) {
-        unit.destroy();
-    }
+    update_unit_health(unit, -3);   
     shot.destroy();
+}
+        
+function update_unit_health(unit, amount)
+{
+    unit.x_health += amount;
+    if (unit.x_health > unit.x_max_health) {
+        unit.x_health = unit.x_max_health;
+    }
+    if (unit.x_is_building) {
+        var fraction = unit.x_health / unit.x_max_health;
+        var new_width = unit.x_width * 0.75 * fraction;
+        if (fraction >= 0.5) {
+            unit.x_health_bar.fillColor = '0x00ff00';
+        } else if (fraction < 0.5 && fraction >= 0.25) {
+            unit.x_health_bar.fillColor = '0xffff00';
+        } else {
+            unit.x_health_bar.fillColor = '0xff0000';
+        }
+        unit.x_health_bar.width = new_width;
+    }
+    if (unit.x_health <= 0) {   
+        unit.destroy();
+        if (unit.x_is_building) {
+            unit.x_health_bar.destroy();
+        }
+    }
 }
         
 function shot_hit_ground(shot, tile)
