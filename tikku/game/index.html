@@ -21,17 +21,64 @@ const UNIT_CANNON = 6;
 
 const SHOT_BASIC = 1;
 const SHOT_EXPLOSIVE = 2;
-
-// unit properties etc. (some AI still hard coded?)
+    
+// game object properties (some things still hard coded)
+// jump
+// spawm
+// shoot
+        
         
 var unit_properties = new Map();
-unit_properties.set(UNIT_SOLDIER, {building: false, sprite: 'soldier', health: 20})
-unit_properties.set(UNIT_BASE, {building: true, sprite: 'base', health: 20})
-unit_properties.set(UNIT_TURRET, {building: true, sprite: 'turret', health: 20})
-unit_properties.set(UNIT_BARRACKS, {building: true, sprite: 'barracks', health: 20})
-unit_properties.set(UNIT_WALL, {building: true, sprite: 'wall', health: 20})
-unit_properties.set(UNIT_CANNON, {building: false, sprite: 'cannon', health: 20})
+unit_properties.set(UNIT_SOLDIER, 
+                    {
+    building: false, sprite: 'soldier', health: 5,
+    movement: {minspeed: 0, maxspeed: 80},
+    jump: {prob: 0.1, velocity: 300},
+    shoot: {type: SHOT_BASIC, ticks: 10, velocity: 250, amin: 20, amax: 20}
+                    });
+        
+unit_properties.set(UNIT_BASE, 
+                    {
+    building: true, width: 80, sprite: 'base', health: 200,
+    spawn: {type: UNIT_SOLDIER, ticks: 40}
+                    });
+        
+unit_properties.set(UNIT_TURRET, 
+                    {
+    building: true, width: 40, sprite: 'turret', health: 40,
+    shoot: {type: SHOT_BASIC, ticks: 10, amin: 10, amax: 50}
+                    });
+        
+unit_properties.set(UNIT_BARRACKS, 
+                    {
+    building: true, width: 40, sprite: 'barracks', health: 40,
+    spawn: {type: UNIT_SOLDIER, ticks: 100}
+                    });
+        
+unit_properties.set(UNIT_WALL, 
+                    {
+    building: true, width: 40, sprite: 'wall', health: 100,
+                    });
+        
+unit_properties.set(UNIT_CANNON, 
+                    {
+    building: false, sprite: 'cannon', health: 20,
+    movement: {minspeed: 20, maxspeed: 20},
+    shoot: {type: SHOT_EXPLOSIVE, ticks: 20, velocity: 300, amin: 40, amax: 50}
+                    });
+    
+var shot_properties = new Map();
+shot_properties.set(SHOT_BASIC, {sprite: 'shot', damage: 3, explosion: null});
+shot_properties.set(SHOT_EXPLOSIVE, {sprite: 'big_shot', damage: 5, explosion: {type: SHOT_BASIC, amount: 5}});
+        
+// timing system
+        
+const tick_millis = 100;
+var last_tick = 0;
+var tick_number = 0;
 
+        
+// game config
     
 var config = {
     type: Phaser.AUTO,
@@ -54,7 +101,6 @@ var config = {
 var game = new Phaser.Game(config);
         
 
-        
 var blue_units;
 var blue_shots;
 var red_units;
@@ -213,29 +259,24 @@ function update ()
     
     // Game logic
     cur_time = this.time.now;
-    blue_units.children.each(function(unit) { run_unit_ai(unit, cur_time, this) }, this);
-    red_units.children.each(function(unit) { run_unit_ai(unit, cur_time, this) }, this);
+    // Run a game tick
+    if (cur_time - last_tick > tick_millis) {
+        last_tick = cur_time;
+        // TODO: Is time needed here
+        blue_units.children.each(function(unit) { run_unit_ai(unit, tick_number, this) }, this);
+        red_units.children.each(function(unit) { run_unit_ai(unit, tick_number, this) }, this);    
+        tick_number += 1;
+    }
+    
     // kill shots over the border
+    // TODO: Have a faster implementation for this
     blue_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
     red_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
     
-    // mouse over for info   
-    
-    // attack
-    //if (cur_time - dummy > 4000) {
-    //    dummy = cur_time;
-    //    //create_unit(1, 100, 500, 1, this);
-    //    r = Math.random();
-    //    if (r < 0.333) ypos = 2;
-    //    else if (r < 0.666) ypos = 7;
-    //    else ypos = 13;
-    //    create_unit(1, 800-20, 600 - 20 - ypos*40 , 2, this);
-    //}
 }
 
 function create_unit(type, xpos, ypos, player, th)
 {
-    // TODO: make use of some kind of map with properties, do not hard code stuff
     var graph_name;
     var group;
     if (player == PLAYER_BLUE) {
@@ -256,18 +297,15 @@ function create_unit(type, xpos, ypos, player, th)
     graph_name += props.sprite;
     var health;
     var is_building = false;
-    var width = 40;
     new_unit = group.create(xpos, ypos, graph_name);
     new_unit.x_player = player;
     new_unit.x_type = type;    
     new_unit.x_health = props.health;
-    new_unit.x_max_health = props.health;
-    new_unit.x_last_update = th.time.now; // TODO: Use input
-    new_unit.x_is_building = props.buiding;
-    new_unit.x_width = width; // TODO
-    if (props.buiding) {
+    new_unit.x_created = tick_number;
+    new_unit.x_props = props;
+    if (props.building) {
         new_unit.setImmovable(true);
-        new_unit.x_health_bar = th.add.rectangle(xpos, ypos-width/2, width*0.75, 2, 0x00ff00);
+        new_unit.x_health_bar = th.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00);
         new_unit.x_health_bar.alpha = 0.25;
         new_unit.x_health_bar.setDepth(1);
     } else {
@@ -276,38 +314,83 @@ function create_unit(type, xpos, ypos, player, th)
     }
 }
         
-function shoot(type, player, xpos, ypos, xvel, yvel, th) {
+// Fire a shot
+function create_shot(type, player, xpos, ypos, xvel, yvel, th) {
     var group;
-    if (player == 1) {
+    if (player == PLAYER_BLUE) {
         group = blue_shots;
-    } else if (player == 2) {
+    } else if (player == PLAYER_RED) {
         group = red_shots;
     } else {
         console.error('bad player type for shot');
         return;
     }
-    // TODO: Add actual types
-    if (type == 1) {
-        new_shot = group.create(xpos, ypos, 'shot');   
-    } else if (type == 2) {
-        new_shot = group.create(xpos, ypos, 'big_shot');
+    var props = shot_properties.get(type);
+    if (props == null) {
+        console.error('Unknown shot type');
+        return;
     }
+    new_shot = group.create(xpos, ypos, props.sprite);   
     new_shot.x_player = player;
     new_shot.x_type = type;
+    new_shot.x_props = props;
     new_shot.setVelocityX(xvel);
     new_shot.setVelocityY(yvel);
     new_shot.setGravity(0, 300);
 }
         
-        
-function run_unit_ai(unit, cur_time, th)
+// Run unit logic for a single tick
+function run_unit_ai(unit, tick_count, th)
 {
+    // TODO: HAndle this better?
     if (unit.x_player == 1) {
         if (unit.x > 600-40) unit.destroy();
     } else {
         if (unit.x < 40) unit.destroy();
     }
     dir_to_enemy = unit.x_player == 1 ? 1 : -1;
+    var props = unit.x_props;
+    
+    // handle movement and jumps only every 5 th tick so that it's less random
+    if (tick_count % 5 == 0) {
+        if (props.movement != null) {
+            var velx = Math.random()*(props.movement.maxspeed - props.movement.minspeed) + props.movement.minspeed;
+            unit.setVelocityX(dir_to_enemy*velx);
+        }
+        if (props.jump != null) {
+            if (Math.random() < props.jump.prob) {
+                unit.setVelocityY(-props.jump.velocity);
+            }
+        }
+    }
+    
+    // shooting
+    if (props.shoot != null) {
+        var shoot = props.shoot;
+        if (unit.x_last_shot == null) unit.x_last_shot = unit.x_created;
+        if (tick_count - unit.x_last_shot > shoot.ticks) {
+            var angle = Math.PI * (Math.random()*(shoot.amax - shoot.amin) + shoot.amin) / 180.0;
+            var velx = Math.cos(angle)*shoot.velocity;
+            var vely = -Math.sin(angle)*shoot.velocity;
+            create_shot(shoot.type, unit.x_player, unit.x, unit.y, dir_to_enemy*velx, vely, th);
+            unit.x_last_shot = tick_count;
+        }
+    }
+
+    // spawn logic
+    if (props.spawn != null) {
+        var spawn = props.spawn;
+        if (unit.x_last_spawn == null) unit.x_last_spawn = unit.x_created;
+        if (tick_count - unit.x_last_spawn > spawn.ticks) {
+            create_unit(spawn.type, unit.x, unit.y, unit.x_player, th);
+            unit.x_last_spawn = tick_count;
+        }
+    }
+    
+    // Earning logic
+    
+    
+    /*
     // TODO: Implemente proper AI
     if (unit.x_type == 1) { // SOLDIER
         if (cur_time - unit.x_last_update > 500) {
@@ -350,13 +433,13 @@ function run_unit_ai(unit, cur_time, th)
             shoot(2, unit.x_player, unit.x, unit.y, dir_to_enemy*200, -200, th);
         }
     }
-
+    */
 }
         
 function unit_hit(unit, shot)
 {
-    // TODO: Bigger shots?
-    update_unit_health(unit, -3);   
+    var props = shot.x_props;
+    update_unit_health(unit, -props.damage);   
     destroy_shot(shot, this);
 }
         
@@ -368,26 +451,31 @@ function shot_hit_ground(shot, tile)
 function destroy_shot(shot, th)
 {
     // Big shot explosion
-    if (shot.x_type == 2) {
-        for (i = 0; i < 10; i++) {
+    var props = shot.x_props;
+    if (props.explosion != null) {
+        var explosion = props.explosion;
+        for (i = 0; i < explosion.amount; i++) {
             velx = (Math.random() - 0.5)*200;
             vely = -(Math.random()+ 0.5)*200;
-            shoot(1, shot.x_player, shot.x, shot.y - 5, velx, vely, th);    
+            create_shot(explosion.type, shot.x_player, shot.x, shot.y - 5, velx, vely, th);    
         }
-        
     }
     shot.destroy();
 }
         
+// Updare unit health and potentially a health bar also
+// Kills the unit if health below zero
 function update_unit_health(unit, amount)
 {
+    var props = unit.x_props;
     unit.x_health += amount;
-    if (unit.x_health > unit.x_max_health) {
-        unit.x_health = unit.x_max_health;
+    if (unit.x_health > props.health) {
+        unit.x_health = props.health;
     }
-    if (unit.x_is_building) {
-        var fraction = unit.x_health / unit.x_max_health;
-        var new_width = unit.x_width * 0.75 * fraction;
+    if (props.building) {
+        
+        var fraction = unit.x_health / props.health;
+        var new_width = props.width * 0.75 * fraction;
         if (fraction >= 0.5) {
             unit.x_health_bar.fillColor = '0x00ff00';
         } else if (fraction < 0.5 && fraction >= 0.25) {
@@ -399,7 +487,7 @@ function update_unit_health(unit, amount)
     }
     if (unit.x_health <= 0) {   
         unit.destroy();
-        if (unit.x_is_building) {
+        if (unit.x_health_bar != null) {
             unit.x_health_bar.destroy();
         }
     }
