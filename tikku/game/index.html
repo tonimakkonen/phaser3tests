@@ -27,8 +27,8 @@ const MODE_SETUP = 1;
 const MODE_BLUE = 2;
 const MODE_RED = 3;
 const MODE_BATTLE = 4;
-const MODE_AFTER_BATTLE = 5;
-const MODE_WIN = 6;
+const MODE_BLUE_WIN = 5;
+const MODE_RED_WIN = 6;
 
     
 // game object properties (some things still hard coded)
@@ -46,7 +46,8 @@ unit_properties.set(UNIT_SOLDIER,
 unit_properties.set(UNIT_BASE, 
                     {
     building: true, width: 80, sprite: 'base', health: 200,
-    spawn: {type: UNIT_SOLDIER, ticks: 40}
+    victory: true,
+    spawn: {type: UNIT_SOLDIER, ticks: 50}
                     });
         
 unit_properties.set(UNIT_TURRET, 
@@ -62,7 +63,7 @@ unit_properties.set(UNIT_BARRACKS,
     building: true, width: 40, sprite: 'barracks', health: 40,
     help: 'Barracks, spawns soldiers',
     cost: 100,
-    spawn: {type: UNIT_SOLDIER, ticks: 100}
+    spawn: {type: UNIT_SOLDIER, ticks: 75}
                     });
         
 unit_properties.set(UNIT_WALL, 
@@ -75,7 +76,7 @@ unit_properties.set(UNIT_WALL,
 unit_properties.set(UNIT_CANNON, 
                     {
     building: false, sprite: 'cannon', health: 20,
-    movement: {minspeed: 20, maxspeed: 20},
+    movement: {minspeed: 25, maxspeed: 25},
     shoot: {type: SHOT_EXPLOSIVE, ticks: 20, velocity: 300, amin: 30, amax: 50}
                     });
         
@@ -84,7 +85,7 @@ unit_properties.set(UNIT_FACTORY,
     building: true, width: 40, sprite: 'factory', health: 40,
     help: 'Factory, spawns artillery',
     cost: 400,
-    spawn: {type: UNIT_CANNON, ticks: 100}
+    spawn: {type: UNIT_CANNON, ticks: 150}
                     });
     
 const unit_buy_list = [UNIT_WALL, UNIT_BARRACKS, UNIT_TURRET, UNIT_FACTORY];
@@ -168,6 +169,7 @@ var ui_grid_selected = null;
 var ui_list = []; // list of temp ui components that will be destroyed
         
 var player_data = new Map();
+var player_lost = 0;
 player_data.set(PLAYER_BLUE, {gold: 100})
 player_data.set(PLAYER_RED, {gold: 100})
 
@@ -255,13 +257,8 @@ function create ()
     ui_money_blue.setDepth(10);
     ui_money_red = this.add.text(800-200, 600-65, '', { fontFamily: 'Courier' }).setColor('#FFFFFF');
     ui_money_red.setDepth(10);
-    update_money();
     
-    
-    // create the blue and red base
-    create_unit(2, 40, 600-120, 1, this);
-    create_unit(2, 800 - 40, 600-120, 2, this);
-    
+    move_to_mode(MODE_SETUP, true, this);
 }
 
 function update ()
@@ -273,11 +270,11 @@ function update ()
     
     if (mode_current == MODE_SETUP) {
         if (click_now && game.input.mousePointer.y >= 560) {
-            move_to_mode(MODE_BLUE, this);
+            move_to_mode(MODE_BLUE, false, this);
         }
     } else if (mode_current == MODE_BLUE) {
         if (click_now && game.input.mousePointer.y >= 560) {
-            move_to_mode(MODE_RED, this);
+            move_to_mode(MODE_RED, false, this);
         }
         if (click_now) {
             if (ui_grid_selected == null) check_grid_buy(PLAYER_BLUE, this);
@@ -285,24 +282,24 @@ function update ()
         }
     } else if (mode_current == MODE_RED) {
         if (click_now && game.input.mousePointer.y >= 560) {
-            move_to_mode(MODE_BATTLE, this);
+            move_to_mode(MODE_BATTLE, false, this);
         }
         if (click_now) {
             if (ui_grid_selected == null) check_grid_buy(PLAYER_RED, this);
             else check_buy(PLAYER_RED, this);
         }
     } else if (mode_current == MODE_BATTLE) {
-
-        if (mode_timer <= 0) {
-            // destroy all units and shots, add money to players
-            blue_shots.children.each(function(shot) { shot.destroy(); }, this);    
-            red_shots.children.each(function(shot) { shot.destroy(); }, this);    
-            blue_units.children.each(function(unit) { reset_unit(unit, this);  }, this);    
-            red_units.children.each(function(unit) { reset_unit(unit, this); }, this);
+        
+        if (player_lost == PLAYER_BLUE) {
+            move_to_mode(MODE_RED_WIN, false, this);
+        } else if (player_lost == PLAYER_RED) {
+            move_to_mode(MODE_BLUE_WIN, false, this);
+        } else if (mode_timer <= 0) {
+            // add money to players
             player_data.get(PLAYER_BLUE).gold += 100;
             player_data.get(PLAYER_RED).gold += 100;
             update_money();
-            move_to_mode(MODE_BLUE, this);
+            move_to_mode(MODE_BLUE, false, this);
         } else {
             cur_time = this.time.now;
             if (cur_time - last_tick > tick_millis) {
@@ -326,6 +323,10 @@ function update ()
                 blue_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
                 red_shots.children.each(function(shot) { check_shot_outside(shot) }, this);
             }
+        }
+    } else if (mode_current == MODE_BLUE_WIN || mode_current == MODE_RED_WIN) {
+        if (click_now && game.input.mousePointer.y >= 560) {
+            move_to_mode(MODE_SETUP, true, this);
         }
     }
 }
@@ -413,9 +414,14 @@ function update_grid(player, th) {
  
 // Moving between modes 
         
-function move_to_mode(mode, th) {
+function move_to_mode(mode, kill_all, th) {
     
     // Reset various stuff
+    player_lost = 0;
+    blue_shots.children.each(function(shot) { shot.destroy(); }, this);    
+    red_shots.children.each(function(shot) { shot.destroy(); }, this);    
+    blue_units.children.each(function(unit) { reset_unit(unit, kill_all, this);  }, this);    
+    red_units.children.each(function(unit) { reset_unit(unit, kill_all, this); }, this);
     ui_grid_selected = null;
     for(i = 0; i < ui_list.length; i++) ui_list[i].destroy();
     ui_list = [];
@@ -437,14 +443,28 @@ function move_to_mode(mode, th) {
     
         // text is updated in battle phase
     }
+    if (mode_current == MODE_BLUE_WIN) {
+        mode_text.setText('Blue wins!');
+    }
+    if (mode_current == MODE_RED_WIN) {
+        mode_text.setText('Red wins!');
+    }
+    if (mode_current == MODE_SETUP) {
+        // reset all and create player bases
+        create_unit(UNIT_BASE, 40, 600-120, PLAYER_BLUE, th);
+        create_unit(UNIT_BASE, 800 - 40, 600-120, PLAYER_RED, th);
+        player_data.get(PLAYER_BLUE).gold = 100;
+        player_data.get(PLAYER_RED).gold = 100;
+        update_money();
+    }
 }
         
     
-function reset_unit(unit, th) {
-    if (!unit.x_props.building) {
+function reset_unit(unit, kill_all, th) {
+    if (!unit.x_props.building || kill_all) {
         unit.destroy();
     } else {
-        unit.x_last_spawn = 0;
+        unit.x_last_spawn = -1;
         unit.x_last_shoot = 0;
     }       
 }
@@ -500,6 +520,8 @@ function create_unit(type, xpos, ypos, player, th)
     new_unit.x_health = props.health;
     new_unit.x_created = tick_number;
     new_unit.x_props = props;
+    new_unit.x_last_spawn = -1;
+    new_unit.x_last_shot = 0;
     if (props.building) {
         new_unit.setImmovable(true);
         new_unit.x_health_bar = th.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00);
@@ -543,9 +565,9 @@ function run_unit_ai(unit, tick_count, th)
 {
     // TODO: HAndle this better?
     if (unit.x_player == 1) {
-        if (unit.x > 600-40) unit.destroy();
+        if (unit.x > 800-10) unit.destroy();
     } else {
-        if (unit.x < 40) unit.destroy();
+        if (unit.x < 10) unit.destroy();
     }
     dir_to_enemy = unit.x_player == 1 ? 1 : -1;
     var props = unit.x_props;
@@ -566,7 +588,6 @@ function run_unit_ai(unit, tick_count, th)
     // shooting
     if (props.shoot != null) {
         var shoot = props.shoot;
-        if (unit.x_last_shot == null) unit.x_last_shot = unit.x_created;
         if (tick_count - unit.x_last_shot > shoot.ticks) {
             var angle = Math.PI * (Math.random()*(shoot.amax - shoot.amin) + shoot.amin) / 180.0;
             var velx = Math.cos(angle)*shoot.velocity;
@@ -579,8 +600,7 @@ function run_unit_ai(unit, tick_count, th)
     // spawn logic
     if (props.spawn != null) {
         var spawn = props.spawn;
-        if (unit.x_last_spawn == null) unit.x_last_spawn = -100; // dummy solution to always spawn at at the start
-        if (tick_count - unit.x_last_spawn > spawn.ticks) {
+        if (tick_count - unit.x_last_spawn > spawn.ticks || unit.x_last_spawn == -1) {
             create_unit(spawn.type, unit.x, unit.y, unit.x_player, th);
             unit.x_last_spawn = tick_count;
         }
@@ -644,6 +664,10 @@ function update_unit_health(unit, amount)
         }
         if (unit.x_grid != null) {
             unit.x_grid.used = false;
+        }
+        // Update victory condition!
+        if (props.victory) {
+           player_lost = unit.x_player;
         }
     }
 }
