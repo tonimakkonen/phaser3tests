@@ -6,6 +6,33 @@
 <body>
 
     <script>
+
+// setting up constants
+        
+const PLAYER_BLUE = 1;
+const PLAYER_RED = 2;
+        
+const UNIT_SOLDIER = 1;
+const UNIT_BASE = 2;
+const UNIT_TURRET = 3;
+const UNIT_BARRACKS = 4;
+const UNIT_WALL = 5;
+const UNIT_CANNON = 6;
+
+const SHOT_BASIC = 1;
+const SHOT_EXPLOSIVE = 2;
+
+// unit properties etc. (some AI still hard coded?)
+        
+var unit_properties = new Map();
+unit_properties.set(UNIT_SOLDIER, {building: false, sprite: 'soldier', health: 20})
+unit_properties.set(UNIT_BASE, {building: true, sprite: 'base', health: 20})
+unit_properties.set(UNIT_TURRET, {building: true, sprite: 'turret', health: 20})
+unit_properties.set(UNIT_BARRACKS, {building: true, sprite: 'barracks', health: 20})
+unit_properties.set(UNIT_WALL, {building: true, sprite: 'wall', health: 20})
+unit_properties.set(UNIT_CANNON, {building: false, sprite: 'cannon', health: 20})
+
+    
 var config = {
     type: Phaser.AUTO,
     width: 800,
@@ -26,6 +53,8 @@ var config = {
 
 var game = new Phaser.Game(config);
         
+
+        
 var blue_units;
 var blue_shots;
 var red_units;
@@ -36,7 +65,7 @@ var dummy = 0;
 var money = 100;
 var money_text;
 var help_text;
-        
+    
 var ui_options = [5, 4, 3]; // UI order
 var ui_selection_image = null; // sprite for current selection
 var ui_selection_unit = -1;
@@ -209,56 +238,34 @@ function create_unit(type, xpos, ypos, player, th)
     // TODO: make use of some kind of map with properties, do not hard code stuff
     var graph_name;
     var group;
-    if (player == 1) {
+    if (player == PLAYER_BLUE) {
         group = blue_units;
         graph_name = 'blue_';
-    } else if (player == 2) {
+    } else if (player == PLAYER_RED) {
         group = red_units;
         graph_name = 'red_';
     } else {
         console.error('bad player type');
         return;
     }
+    var props = unit_properties.get(type);
+    if (props == null) {
+        console.error('Unknown unit type');
+        return;
+    }
+    graph_name += props.sprite;
     var health;
     var is_building = false;
     var width = 40;
-    if (type == 1) {
-        graph_name += 'soldier';
-        health = 5;
-    } else if (type == 2) {
-        graph_name += 'base';
-        health = 100;
-        is_building = true;
-        width = 80;
-    } else if (type == 3) {
-        graph_name += 'turret';
-        health = 100;
-        is_building = true;
-    } else if (type == 4) {
-        graph_name += 'barracks';
-        health = 25;
-        is_building = true;
-    } else if (type == 5) {
-        graph_name += 'wall';
-        health = 250;
-        is_building = true;
-    } else if (type == 6) {
-        graph_name += 'cannon';
-        health = 85;
-    } else {
-        console.error('unknown unit type');
-        return;
-    }
     new_unit = group.create(xpos, ypos, graph_name);
-    
     new_unit.x_player = player;
     new_unit.x_type = type;    
-    new_unit.x_health = health;
-    new_unit.x_max_health = health;
+    new_unit.x_health = props.health;
+    new_unit.x_max_health = props.health;
     new_unit.x_last_update = th.time.now; // TODO: Use input
-    new_unit.x_is_building = is_building;
-    new_unit.x_width = width;
-    if (is_building) {
+    new_unit.x_is_building = props.buiding;
+    new_unit.x_width = width; // TODO
+    if (props.buiding) {
         new_unit.setImmovable(true);
         new_unit.x_health_bar = th.add.rectangle(xpos, ypos-width/2, width*0.75, 2, 0x00ff00);
         new_unit.x_health_bar.alpha = 0.25;
