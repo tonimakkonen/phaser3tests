@@ -453,8 +453,8 @@ function move_to_mode(mode, kill_all, th) {
         // reset all and create player bases
         create_unit(UNIT_BASE, 40, 600-120, PLAYER_BLUE, th);
         create_unit(UNIT_BASE, 800 - 40, 600-120, PLAYER_RED, th);
-        player_data.get(PLAYER_BLUE).gold = 100;
-        player_data.get(PLAYER_RED).gold = 100;
+        player_data.get(PLAYER_BLUE).gold = 150;
+        player_data.get(PLAYER_RED).gold = 150;
         update_money();
     }
 }
