@@ -51,18 +51,21 @@ unit_properties.set(UNIT_BASE,
 unit_properties.set(UNIT_TURRET, 
                     {
     building: true, width: 40, sprite: 'turret', health: 40,
+    help: 'Turret',
     shoot: {type: SHOT_BASIC, ticks: 10, amin: 10, amax: 50}
                     });
         
 unit_properties.set(UNIT_BARRACKS, 
                     {
     building: true, width: 40, sprite: 'barracks', health: 40,
+    help: 'Barracks, spawn soldiers',
     spawn: {type: UNIT_SOLDIER, ticks: 100}
                     });
         
 unit_properties.set(UNIT_WALL, 
                     {
     building: true, width: 40, sprite: 'wall', health: 100,
+    help: 'Wall, blocks enemy units and takes a lot of damage',
                     });
         
 unit_properties.set(UNIT_CANNON, 
@@ -71,6 +74,8 @@ unit_properties.set(UNIT_CANNON,
     movement: {minspeed: 20, maxspeed: 20},
     shoot: {type: SHOT_EXPLOSIVE, ticks: 20, velocity: 300, amin: 40, amax: 50}
                     });
+    
+const unit_buy_list = [UNIT_WALL, UNIT_BARRACKS, UNIT_TURRET];
     
 var shot_properties = new Map();
 shot_properties.set(SHOT_BASIC, {sprite: 'shot', damage: 3, explosion: null});
@@ -85,9 +90,23 @@ var tick_number = 0;
 var mode_current = MODE_SETUP;
 var mode_timer = 0;
 var mode_text;
+var mode_ui;
         
 // input system
 var input_last = false;
+        
+// grid system
+var game_grid = [
+    {x: 3, y: 12, player: PLAYER_BLUE},
+    {x: 4, y: 12, player: PLAYER_BLUE},
+    {x: 5, y: 12, player: PLAYER_BLUE},
+    {x: 14, y: 12, player: PLAYER_RED}
+]
+// automatic grid updates
+for (i = 0; i < game_grid.length; i++) {
+    game_grid[i].used = false;
+}
+
 
         
 // game config
@@ -120,15 +139,8 @@ var blue_shots;
 var red_units;
 var red_shots;
         
-var dummy = 0;
-        
-var money = 100;
-var money_text;
-var help_text;
-    
-var ui_options = [5, 4, 3]; // UI order
-var ui_selection_image = null; // sprite for current selection
-var ui_selection_unit = -1;
+var ui_grid_selected = null;
+var ui_list = []; // list of temp ui components that will be destroyed
         
 // TODO: ADD VALUES FOR DIFFERENT UNITS
 
@@ -140,7 +152,7 @@ function preload ()
     
     // UI
     this.load.image('ui_holder', 'ui_holder.png');
-    this.load.image('selection', 'selection.png');
+    this.load.image('grid', 'grid.png');
     
     // units
     this.load.image('blue_soldier', 'blue_soldier.png');
@@ -226,15 +238,23 @@ function update ()
     if (mode_current == MODE_SETUP) {
         if (click_now && game.input.mousePointer.y >= 560) {
             console.log('lkh')
-            move_to_mode(MODE_BLUE);
+            move_to_mode(MODE_BLUE, this);
         }
     } else if (mode_current == MODE_BLUE) {
         if (click_now && game.input.mousePointer.y >= 560) {
-            move_to_mode(MODE_RED);
+            move_to_mode(MODE_RED, this);
+        }
+        if (click_now) {
+            if (ui_grid_selected == null) check_grid_buy(PLAYER_BLUE, this);
+            else check_buy(PLAYER_BLUE, this);
         }
     } else if (mode_current == MODE_RED) {
         if (click_now && game.input.mousePointer.y >= 560) {
-            move_to_mode(MODE_BATTLE);
+            move_to_mode(MODE_BATTLE, this);
+        }
+        if (click_now) {
+            if (ui_grid_selected == null) check_grid_buy(PLAYER_RED, this);
+            else check_buy(PLAYER_RED, this);
         }
     } else if (mode_current == MODE_BATTLE) {
 
@@ -244,7 +264,7 @@ function update ()
             red_shots.children.each(function(shot) { shot.destroy(); }, this);    
             blue_units.children.each(function(unit) { reset_unit(unit, this);  }, this);    
             red_units.children.each(function(unit) { reset_unit(unit, this); }, this);
-            move_to_mode(MODE_BLUE);
+            move_to_mode(MODE_BLUE, this);
         } else {
             cur_time = this.time.now;
             if (cur_time - last_tick > tick_millis) {
@@ -263,30 +283,130 @@ function update ()
         }
     }
 }
+
+// Grid and buy functionality
         
-function move_to_mode(mode) {
+// Check if we press on a grid in the buy phase, if so create buy menu
+function check_grid_buy(player, th) {
+    console.log('grid buy! for player ' + player)
+    var mx = game.input.mousePointer.x;
+    var my = game.input.mousePointer.y;
+    for (i = 0; i < game_grid.length; i++) {
+        grid = game_grid[i];
+        if (grid.player == player && !grid.used) {
+            var x = grid.x*40 + 20;
+            var y = grid.y*40 + 20;
+            if (mx >= x-20 && mx <= x+20 && my >= y-20 && my <= y+20) {
+                grid.x_image.alpha = 1.0;
+                ui_grid_selected = grid;
+                ui_buy_bg = th.add.rectangle(400, 80, 800, 160, 0x000000);
+                ui_buy_bg.alpha = 0.5;
+                ui_list.push(ui_buy_bg);
+                for (j = 0; j < unit_buy_list.length; j++) {
+                    im = th.add.image(15, 30*j + 15, get_unit_graph_name(player, unit_buy_list[j]));
+                    im.setScale(0.5);
+                    ui_list.push(im);
+                    txt = th.add.text(45, 30*j + 10, unit_properties.get(unit_buy_list[j]).help, { fontFamily: 'Courier' }).setColor('#FFFFFF');
+                    ui_list.push(txt);
+                }
+                
+            }
+        }
+    }
+}
+        
+function check_buy(player, th) {
+    for (i = 0; i < unit_buy_list.length; i++) {
+        if (game.input.mousePointer.y >= i*30 && game.input.mousePointer.y < i*30 + 30) {
+            // Buy the unit!
+            // t(type, xpos, ypos, player, th)
+            new_unit = create_unit(unit_buy_list[i], ui_grid_selected.x*40 + 20, ui_grid_selected.y*40 + 20, player, th);
+            new_unit.x_grid = ui_grid_selected;
+            ui_grid_selected.used = true;
+            ui_grid_selected.x_image.destroy();
+            ui_grid_selected.x_image = null;
+            ui_grid_selected = null;
+        }
+    }
+    // We are always done after a click, clean the list
+    if (ui_grid_selected != null) {
+        ui_grid_selected.x_image.alpha = 0.25;
+        ui_grid_selected = null;
+    }
+    for(i = 0; i < ui_list.length; i++) ui_list[i].destroy();
+    ui_list = [];
+}
+
+function update_grid(player, th) {
+    for (i = 0; i < game_grid.length; i++) {
+        grid = game_grid[i];
+        if (grid.player == player) {
+            grid.x_image = th.add.image(grid.x*40 + 20, grid.y*40 + 20, 'grid');
+            grid.x_image.alpha = 0.25;
+        } else {
+            if (grid.x_image != null) {
+                grid.x_image.destroy();
+                grid.x_image = null;
+            }
+        }
+    }
+}
+ 
+// Moving between modes 
+        
+function move_to_mode(mode, th) {
+    
+    // Reset various stuff
+    ui_grid_selected = null;
+    for(i = 0; i < ui_list.length; i++) ui_list[i].destroy();
+    ui_list = [];
+    tick_number = 0;
+    last_tick = 0;
+    
     mode_current = mode;
     if (mode_current == MODE_BLUE) {
         mode_text.setText('Blue buy phase. Buy/sell buldings.');
-    }
-    if (mode_current == MODE_RED) {
+        update_grid(PLAYER_BLUE, th);    
+    } else if (mode_current == MODE_RED) {
         mode_text.setText('Red buy phase. Buy/sell buldings.');
+        update_grid(PLAYER_RED, th);
+    } else {
+        update_grid(-1, th);
     }
     if (mode_current == MODE_BATTLE) {
         mode_timer = 900; // 90 seconds
-        tick_number = 0;
-        last_tick = 0;
+    
         // text is updated in battle phase
     }
 }
+        
     
 function reset_unit(unit, th) {
     if (!unit.x_props.building) {
         unit.destroy();
     } else {
         unit.x_last_spawn = 0;
-    }
+        unit.x_last_shoot = 0;
+    }       
+}
         
+function get_unit_graph_name(player, type) {
+    var graph_name;
+    if (player == PLAYER_BLUE) {
+        graph_name = 'blue_';
+    } else if (player == PLAYER_RED) {
+        graph_name = 'red_';
+    } else {
+        console.error('bad player type: ' + player);
+        return;
+    }
+    var props = unit_properties.get(type);
+    if (props == null) {
+        console.error('Unknown unit type');
+        return;
+    }
+    graph_name += props.sprite;
+    return graph_name;
 }
 
 function create_unit(type, xpos, ypos, player, th)
@@ -326,6 +446,7 @@ function create_unit(type, xpos, ypos, player, th)
         new_unit.setGravity(0, 300);
         new_unit.setBounce(0.2);    
     }
+    return new_unit;
 }
         
 // Fire a shot
@@ -456,6 +577,9 @@ function update_unit_health(unit, amount)
         unit.destroy();
         if (unit.x_health_bar != null) {
             unit.x_health_bar.destroy();
+        }
+        if (unit.x_grid != null) {
+            unit.x_grid.used = false;
         }
     }
 }
