@@ -460,12 +460,11 @@ function move_to_mode(mode, kill_all, th) {
         
     
 function reset_unit(unit, kill_all, th) {
+    unit.x_last_spawn = -1;
+    unit.x_last_shoot = 0;
     if (!unit.x_props.building || kill_all) {
         unit.destroy();
-    } else {
-        unit.x_last_spawn = -1;
-        unit.x_last_shoot = 0;
-    }       
+    }
 }
 
 ////////////////////
