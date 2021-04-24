@@ -383,7 +383,7 @@ function pick_random_unused_grid(player) {
     for (i = 0; i < 40; i++) {
         var index = Math.floor(Math.random() * game_grid.length);
         if (index >= game_grid.length) index = game_grid.length - 1;
-        if (game_grid[index].player == player && game_grid[i].used == false) {
+        if (game_grid[index].player == player && game_grid[index].used == false) {
             return game_grid[index];
         }
     }
@@ -495,6 +495,7 @@ function check_buy(player, th) {
 function perform_buy(player, unit, grid, th) {
     if (grid.used == true) {
         console.error('Grid already used: ' + grid);
+        return;
     }
     player_data.get(player).gold -= unit_properties.get(unit).cost;
     update_money();
