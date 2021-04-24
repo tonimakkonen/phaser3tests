@@ -53,7 +53,7 @@ unit_properties.set(UNIT_TURRET,
                     {
     building: true, width: 40, sprite: 'turret', health: 40, victory: false,
     help: 'Turret, shoots at enemy units',
-    cost: 350,
+    cost: 250,
     shoot: {type: SHOT_BASIC, ticks: 5, velocity: 300, amin: 10, amax: 50}
                     });
         
@@ -67,7 +67,7 @@ unit_properties.set(UNIT_BARRACKS,
         
 unit_properties.set(UNIT_WALL, 
                     {
-    building: true, width: 40, sprite: 'wall', health: 100, victory: false,
+    building: true, width: 40, sprite: 'wall', health: 150, victory: false,
     help: 'Wall, blocks enemy units and takes a lot of damage',
     cost: 50,
                     });
@@ -83,7 +83,7 @@ unit_properties.set(UNIT_FACTORY,
                     {
     building: true, width: 40, sprite: 'factory', health: 40, victory: false,
     help: 'Factory, spawns artillery',
-    cost: 400,
+    cost: 350,
     spawn: {type: UNIT_CANNON, ticks: 150}
                     });
     
@@ -296,8 +296,8 @@ function update ()
             move_to_mode(MODE_BLUE_WIN, false, this);
         } else if (mode_timer <= 0) {
             // add money to players
-            player_data.get(PLAYER_BLUE).gold += 100;
-            player_data.get(PLAYER_RED).gold += 100;
+            player_data.get(PLAYER_BLUE).gold += 200;
+            player_data.get(PLAYER_RED).gold += 200;
             update_money();
             move_to_mode(MODE_BLUE, false, this);
         } else {
@@ -334,7 +334,6 @@ function update ()
         
 // Check if we press on a grid in the buy phase, if so create buy menu
 function check_grid_buy(player, th) {
-    console.log('grid buy');
     var mx = game.input.mousePointer.x;
     var my = game.input.mousePointer.y;
     for (i = 0; i < game_grid.length; i++) {
@@ -380,7 +379,6 @@ function check_grid_buy(player, th) {
 }
         
 function check_buy(player, th) {
-    console.log('list buy');
     if (ui_grid_selected.used) {
         // about to sell
         if (game.input.mousePointer.y <= 30) {
@@ -436,6 +434,18 @@ function update_grid(player, th) {
         }
     }
 }
+
+function reset_grid(th) {
+    for (i = 0; i < game_grid.length; i++) {
+        grid = game_grid[i];
+        if (grid.x_image != null) {
+            grid.x_image.destroy();
+            grid.x_image = null;
+        }
+        grid.used = false;
+        grid.building = null;
+    }
+}
  
 // Moving between modes 
         
@@ -460,12 +470,13 @@ function move_to_mode(mode, kill_all, th) {
     } else if (mode_current == MODE_RED) {
         mode_text.setText('Red buy phase. Press here when done.');
         update_grid(PLAYER_RED, th);
-    } else {
+    } else if (mode == MODE_BATTLE) {
         update_grid(-1, th);
+    } else {
+        reset_grid(th);
     }
     if (mode_current == MODE_BATTLE) {
         mode_timer = 600; // 60 seconds
-    
         // text is updated in battle phase
     }
     if (mode_current == MODE_BLUE_WIN) {
@@ -485,11 +496,15 @@ function move_to_mode(mode, kill_all, th) {
 }
         
     
+// TODO: This is not very well made
 function reset_unit(unit, kill_all, th) {
     unit.x_last_spawn = -1;
     unit.x_last_shoot = 0;
     if (!unit.x_props.building || kill_all) {
         unit.destroy();
+        if (unit.x_health_bar !== undefined) {
+            unit.x_health_bar.destroy();
+        }
     }
 }
 
@@ -582,6 +597,7 @@ function create_shot(type, player, xpos, ypos, xvel, yvel, th) {
     new_shot.setGravity(0, 300);
 }
         
+///////////
 // LOGIC //
 ///////////
         
@@ -709,9 +725,9 @@ function check_shot_outside(shot)
         
 function collect_gold(unit, gold)
 {
-    player_data.get(unit.x_player).gold += 100;
-    update_money();
+    player_data.get(unit.x_player).gold += 50;
     gold.destroy();
+    update_money();
 }
         
 function update_money() {
