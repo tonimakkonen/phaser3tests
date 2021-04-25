@@ -10,6 +10,7 @@
 // setting up constants
 // TODO: Consider doing a better UI system
 // TODO: Better reset between modes
+// TODO: Better AI
         
 const PLAYER_BLUE = 1;
 const PLAYER_RED = 2;
@@ -67,7 +68,7 @@ unit_properties.set(UNIT_BARRACKS,
     building: true, width: 40, sprite: 'barracks', health: 40, victory: false,
     help: 'Barracks, spawns soldiers',
     cost: 100,
-    spawn: {type: UNIT_SOLDIER, ticks: 75}
+    spawn: {type: UNIT_SOLDIER, ticks: 100}
                     });
         
 unit_properties.set(UNIT_WALL, 
@@ -123,18 +124,24 @@ var game_grid = [
     {x: 3, y: 12, player: PLAYER_BLUE},
     {x: 4, y: 12, player: PLAYER_BLUE},
     {x: 5, y: 12, player: PLAYER_BLUE},
+    {x: 0, y: 8, player: PLAYER_BLUE},
     {x: 1, y: 8, player: PLAYER_BLUE},
+    {x: 2, y: 8, player: PLAYER_BLUE},
     {x: 3, y: 8, player: PLAYER_BLUE},
+    {x: 0, y: 5, player: PLAYER_BLUE},
     {x: 1, y: 5, player: PLAYER_BLUE},
-    {x: 3, y: 5, player: PLAYER_BLUE},
+    {x: 2, y: 5, player: PLAYER_BLUE},
     {x: 19-2, y: 12, player: PLAYER_RED, list: unit_buy_list_offence},
     {x: 19-3, y: 12, player: PLAYER_RED, list: unit_buy_list_defence},
     {x: 19-4, y: 12, player: PLAYER_RED, list: unit_buy_list_defence},
-    {x: 19-5, y: 12, player: PLAYER_RED, list: unit_buy_list_defence},
+    {x: 19-5, y: 12, player: PLAYER_RED, list: [UNIT_WALL]},
+    {x: 19-0, y: 8, player: PLAYER_RED, list: [UNIT_FACTORY]},
     {x: 19-1, y: 8, player: PLAYER_RED, list: unit_buy_list_offence},
+    {x: 19-2, y: 8, player: PLAYER_RED, list: unit_buy_list_offence},
     {x: 19-3, y: 8, player: PLAYER_RED, list: unit_buy_list_offence},
+    {x: 19-0, y: 5, player: PLAYER_RED, list: unit_buy_list_offence},
     {x: 19-1, y: 5, player: PLAYER_RED, list: unit_buy_list_offence},
-    {x: 19-3, y: 5, player: PLAYER_RED, list: unit_buy_list_offence}
+    {x: 19-2, y: 5, player: PLAYER_RED, list: [UNIT_BARRACKS]}
 ]
 // automatic grid updates
 for (i = 0; i < game_grid.length; i++) {
@@ -228,7 +235,7 @@ function create ()
     platforms = this.physics.add.staticGroup();
     // ground
     for (var i = 0; i < 20; i++) platforms.create(i*40 + 20, 600-20-40, 'tile');
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
         platforms.create(i*40 + 20, 600-20-200, 'tile');
         platforms.create(800 - (i*40 + 20), 600-20-200, 'tile');
     }
@@ -598,7 +605,7 @@ function move_to_mode(mode, kill_all, th) {
 // TODO: This is not very well made
 function reset_unit(unit, kill_all, th) {
     unit.x_last_spawn = -1;
-    unit.x_last_shoot = 0;
+    unit.x_last_shot = 0;
     if (!unit.x_props.building || kill_all) {
         unit.destroy();
         if (unit.x_health_bar !== undefined) {
