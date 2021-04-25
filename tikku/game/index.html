@@ -374,7 +374,7 @@ function update()
             // add money to players
             player_data.get(PLAYER_BLUE).gold += 200;
             if (game_ai == AI_DIFFICULT) {
-                player_data.get(PLAYER_RED).gold += 400;    
+                player_data.get(PLAYER_RED).gold += 300;    
             } else {
                 player_data.get(PLAYER_RED).gold += 200;
             }
@@ -615,8 +615,8 @@ function move_to_mode(mode, kill_all, th) {
         // reset all and create player bases
         create_unit(UNIT_BASE, 40, 600-120, PLAYER_BLUE, th);
         create_unit(UNIT_BASE, 800 - 40, 600-120, PLAYER_RED, th);
-        player_data.get(PLAYER_BLUE).gold = 200;
-        player_data.get(PLAYER_RED).gold = 200;
+        player_data.get(PLAYER_BLUE).gold = 250;
+        player_data.get(PLAYER_RED).gold = 250;
         update_money();
         mode_text.setText('Tikku battle!');
         
