@@ -21,7 +21,7 @@ var config = {
   },
   scale: {
     mode: Phaser.Scale.FIT,
-    parent: "gamediv",
+    parent: 'gamediv',
     width: setting_width,
     height: setting_height
   },
