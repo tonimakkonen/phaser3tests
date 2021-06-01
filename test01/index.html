@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Testing stuff</title>
-    <script src="phaser.min.js"></script>
+    <script type="text/javascript" src="phaser.min.js"></script>
     <style>
     .center {
       display: flex;
@@ -15,41 +15,11 @@
   <body>
 
     <div id = "gamediv" class = "center">
-      <script type="text/javascript">
-
-        var config = {
-          type: Phaser.AUTO,
-          width: 800,
-          height: 600,
-          parent: 'gamediv',
-          physics: {
-            default: 'arcade',
-            arcade: {
-              debug: false
-            }
-          },
-          scene: {
-            preload: preload,
-            create: create,
-            update: update
-          }
-        };
-
-        var game = new Phaser.Game(config);
-
-        function preload() {
-
-        }
-
-        function create() {
-
-        }
-
-        function update() {
-
-        }
-
-      </script>
+      <script type="text/javascript" src="game_main.js"></script>
     </div>
+
+    <hr>
+    <p>Help text..</p>
+    <a href="credits.html">Credits and attributions</a>
   </body>
 </html>
