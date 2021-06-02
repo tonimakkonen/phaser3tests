@@ -32,6 +32,7 @@ var game = new Phaser.Game(config);
 
 function preload() {
   this.load.image('test_image', 'imgs/mountains.png');
+  this.load.audio('test_music', 'sound/music.mp3');
 }
 
 function create() {
@@ -39,14 +40,14 @@ function create() {
   // Allow right clicks
   this.input.mouse.disableContextMenu();
 
+  this.input.keyboard.on('keydown-' + 'F10', function (event) { this.scale.startFullscreen(); }, this);
+
   //this.scale.startFullscreen();
 
   this.add.image(setting_width/2, setting_height/2, 'test_image');
 
+  this.sound.play('test_music');
 
-    this.input.on('pointerdown', function (pointer) {
-      this.scale.startFullscreen();
-    }, this);
 }
 
 function update() {
