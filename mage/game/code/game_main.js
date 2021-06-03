@@ -11,6 +11,7 @@ var config = {
   physics: {
     default: 'arcade',
     arcade: {
+      tileBias: 160,
       debug: false
     }
   },
@@ -28,103 +29,160 @@ var config = {
   },
 };
 
-var game = new Phaser.Game(config);
+var gameSingleton = new Phaser.Game(config);
 
+// TODO: Go trough..
 var player;
 var blocks;
+var shots;
+var enemies;
+
+// TODO rethink
+var lastShot = 0;
 
 function preload() {
-  loadResources(this);
+  resLoadResources(this);
 }
 
 function create() {
 
+  resCreateAnimations(this);
+
+  //this.physics.arcade.tile_bias = 40;
+
   // Set up input
   mageInitializeInput(this);
-
-
-  // capture cursors
-  cursors = this.input.keyboard.createCursorKeys();
-
-
-
-
-  // Dummy code for now
-  var map_width = 5; // how many screens
-  var map_height = 2;
-  var tiles_x = 1280 / 80;
-  var tiles_y = 720 / 80;
-  var map_xpix = map_width * 1280;
-  var map_ypix = map_height * 720;
-
-  this.physics.world.setBounds(0, 0, map_xpix, map_xpix);
-
 
   // TODO move elsewhere
   var bg = this.add.image(setting_width/2, setting_height/2, 'bg0');
   bg.setScrollFactor(0.0, 0.0);
 
-  var bg3 = this.add.image(setting_width*0.5, setting_height-480/2, 'bg2');
-  bg3.setScrollFactor(0.05, 0.0);
-  bg3 = this.add.image(setting_width*1.5, setting_height-480/2, 'bg2');
-  bg3.setScrollFactor(0.05, 0.0);
-
-  //var bg2 = this.add.image(setting_width/2, setting_height - 160/2 - 80, 'bg1');
-  //bg2.setScrollFactor(0.15, 0.15);
-  //bg2 = this.add.image(setting_width*1.5, setting_height - 160/2 - 80, 'bg1');
-  //bg2.setScrollFactor(0.15, 0.15);
-
-  //var bg4 = this.add.image(setting_width/2, setting_height - 160/2, 'bg3');
-  //bg4.setScrollFactor(0.25, 0.25);
-  //bg4 = this.add.image(setting_width*1.5, setting_height - 160/2, 'bg3');
-  //bg4.setScrollFactor(0.25, 0.25);
-
-
-
   this.sound.play('test_music');
+
+
+  // capture cursors
+  cursors = this.input.keyboard.createCursorKeys();
+
+  var map_y = 18;
+  var map_x = 80;
+  var map_walk = new Array(map_x*map_y).fill(0);
+
+
+
+
+  // Dummy code for now
+  this.physics.world.setBounds(0, 0, map_x*80, map_y*80);
+
+
+
+
+
+
 
   // Create dummy player and sopme blocks
   player = this.physics.add.sprite(100, 450, 'player');
   player.setGravity(0, 400);
   player.setCollideWorldBounds(true);
+  player.setBounce(0.0, 0.0);
+
+  shots = this.physics.add.group();
+  enemies = this.physics.add.group();
 
   blocks = this.physics.add.staticGroup();
-  for (var i = 0; i < map_width*tiles_x; i++) {
-    var py = tiles_y*map_height - 1;
-    blocks.create(i*80 + 40, py*80 + 40, 'block');
+
+  for (var i = 0; i < map_x; i++) {
+    var py = map_y - 1;
+    map_walk[i + py*map_x] = 1;
   }
 
-  for (var i = 0; i < 80; i++) {
-    var rx = Math.floor(Math.random()*tiles_x*map_width);
-    var ry = Math.floor(Math.random()*(tiles_y*map_height - 1));
-    blocks.create(rx*80 + 40, ry*80 + 40, 'block');
+  for (var i = 5; i < map_y; i++) {
+    map_walk[8 + i*map_x] = 1;
   }
+
+  for (var i = 0; i < 240; i++) {
+    var px = Math.floor(Math.random()*map_x);
+    var py = Math.floor(Math.random()*(map_y - 1));
+    map_walk[px + py*map_x] = 1;
+  }
+
+  // Add sprites
+  for (var px = 0; px < map_x; px++) {
+    for (var py = 0; py < map_y; py++) {
+      if (map_walk[px+py*map_x] == 1) {
+        this.add.sprite(px*80 + 40, py*80 + 40, 'block_free');
+      }
+    }
+  }
+
+  createMapBlocks(this, map_walk, map_x, map_y, 80, 80, blocks);
+
+  // TODO: Move this elsewhere
+
+  // Add blocks
 
   this.physics.add.collider(player, blocks);
+  this.physics.add.collider(shots, blocks);
+  this.physics.add.collider(enemies, blocks);
+  this.physics.add.collider(enemies, shots);
+
+  this.physics.add.collider(player, enemies);
 
   this.cameras.main.startFollow(player);
-  this.cameras.main.setBounds(0, 0, map_width*1280, map_height*720);
+  this.cameras.main.setBounds(0, 0, map_x*80, map_y*80);
+
+  for (var i = 0; i < 30; i++) {
+    var newEnemy = enemies.create(Math.random()*map_x*80, Math.random()*map_y*80, 'enemy1');
+    newEnemy.setVelocity(Math.random()*100 - 50, Math.random()*100 - 50);
+    newEnemy.setBounce(0.5, 0.5);
+    newEnemy.setCollideWorldBounds(true);
+  }
+  for (var i = 0; i < 30; i++) {
+    var newEnemy = enemies.create(Math.random()*map_x*80, Math.random()*map_y*80, 'enemy2');
+    newEnemy.setVelocity(Math.random()*100 - 50, Math.random()*100 - 50);
+    newEnemy.setBounce(1.0, 1.0);
+    newEnemy.setCollideWorldBounds(true);
+    newEnemy.setGravity(0, 0);
+  }
+
+
+  for (var i = 0; i < 30; i++) {
+    var newEnemy = enemies.create(Math.random()*map_x*80, Math.random()*map_y*80, 'enemy_forest_monster');
+    newEnemy.setVelocity(Math.random()*100 - 50, Math.random()*100 - 50);
+    newEnemy.setBounce(0.1, 0.1);
+    newEnemy.setCollideWorldBounds(true);
+    newEnemy.setGravity(0, 400);
+    newEnemy.anims.play('left', true);
+    //if (i % 2 == 1) newEnemy.anims.play('kakka', true);
+  }
 
 }
 
 function update() {
 
-  if (input_a.isDown)
-  {
-      player.setVelocityX(-500);
-  }
-  else if (input_d.isDown)
-  {
-      player.setVelocityX(500);
-  }
-  else
-  {
-      player.setVelocityX(0);
+  mageHandlePlayerMovement();
+
+  // Shoot (move elsewhere)
+  var curTime = this.time.now;
+  if (this.input.mousePointer.isDown && curTime - lastShot > 250) {
+    shoot(this);
+    lastShot = curTime;
   }
 
-  if (input_space.isDown && player.body.touching.down)
-  {
-      player.setVelocityY(-600);
-  }
 
+}
+
+// TODO: move elsewhere
+function shoot(game) {
+
+  var dx = game.cameras.main.worldView.x + game.input.mousePointer.x - player.x;
+  var dy = game.cameras.main.worldView.y + game.input.mousePointer.y - player.y;
+  var len = Math.sqrt(dx*dx + dy*dy);
+  dx = dx / len;
+  dy = dy / len;
+
+
+  var newShot = shots.create(player.x, player.y, 'shot');
+  newShot.setVelocity(dx*500, dy*500);
+  newShot.setBounce(0.8, 0.8);
+  newShot.setGravity(0, 100);
 }
