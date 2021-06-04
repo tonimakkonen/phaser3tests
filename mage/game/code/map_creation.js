@@ -1,5 +1,65 @@
 
-//
+"use strict";
+
+// Create a dummy map
+function mapCreateDummy() {
+  var mapY = 18;
+  var mapX = 80;
+  var tiles = new Array(mapX*mapY).fill(0);
+
+  for (var i = 0; i < mapX; i++) {
+    var py = mapY - 1;
+    tiles[i + py*mapX] = 1;
+  }
+
+  for (var i = 0; i < 200; i++) {
+    var px = Math.floor(Math.random()*mapX);
+    var py = Math.floor(Math.random()*(mapY - 1));
+    tiles[px + py*mapX] = 1;
+  }
+
+  return { tiles: tiles, x: mapX, y: mapY}
+
+}
+
+// Create all the map objects
+function mapInitialize(game, map) {
+
+  // Add BG images
+  var bg = game.add.image(setting_width/2, setting_height/2, 'bg0');
+  bg.setScrollFactor(0.0, 0.0);
+
+  // Add Blocks
+  for (var px = 0; px < map.x; px++) {
+    for (var py = 0; py < map.y; py++) {
+      if (map.tiles[px+py*map.x] == 1) {
+        var image = game.add.sprite(px*80 + 40, py*80 + 40, 'block_free');
+      }
+    }
+  }
+  createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, blockGroup);
+
+  // Add enemies
+  for (var i = 0; i < 40; i++) {
+    var newEnemy = enemyGroup.create(Math.random()*map.x*80, Math.random()*map.y*80, 'enemy2');
+    newEnemy.setBounce(0.8, 0.8);
+    newEnemy.setCollideWorldBounds(true);
+    enemyList.push(newEnemy);
+  }
+
+  // Create player
+  player = playerGroup.create(100, 450, 'player');
+  player.setGravity(0, 400);
+  player.setCollideWorldBounds(true);
+  player.setBounce(0.0, 0.0);
+
+
+  game.physics.world.setBounds(0, 0, map.x*80, map.y*80);
+  game.cameras.main.startFollow(player);
+  game.cameras.main.setBounds(0, 0, map.x*80, map.y*80);
+}
+
+// Create "blocks" responsible for blocking the player
 function createMapBlocks(game, mapArray, mapX, mapY, tileX, tileY, group) {
 
   const MARGIN = 2; // TODO

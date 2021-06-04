@@ -1,4 +1,5 @@
 
+"use strict";
 
 function resLoadResources(game) {
 
@@ -30,7 +31,6 @@ function resLoadResources(game) {
   game.load.image('aim', 'imgs/aim.png');
 
   // TODO
-  game.load.image('player', 'imgs/player.png');
   game.load.image('enemy1', 'imgs/enemy1.png');
   game.load.image('enemy2', 'imgs/enemy2.png');
 
@@ -47,7 +47,7 @@ function resLoadResources(game) {
 
 // Load single image
 function resLoadSingle(game, value) {
-  game.load(value.name, value.location);
+  game.load.image(value.name, value.location);
 }
 
 // Load image with 4 frames for left right

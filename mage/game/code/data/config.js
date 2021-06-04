@@ -29,7 +29,7 @@ GRAPHS.set(
   {
     location: 'imgs/player.png',
     name: 'player',
-    type: GRAPH_SINGLE,
+    type: GRAPH_TYPE_SINGLE,
   }
 );
 

@@ -1,11 +1,14 @@
 
-var input_a;
-var input_s;
-var input_d;
-var input_w;
-var input_space;
+"use strict";
 
-function mageInitializeInput(game) {
+var inputA;
+var inputS;
+var inputD;
+var inputW;
+var inputSpace;
+var inputTab;
+
+function inputInitialize(game) {
 
   // Allow right clicks
   game.input.mouse.disableContextMenu();
@@ -16,10 +19,11 @@ function mageInitializeInput(game) {
   // Set default cursor (why do I need to do it like this?)
   game.input.setDefaultCursor('url(imgs/aim.cur), pointer');
 
-  input_a = game.input.keyboard.addKey('A');
-  input_s = game.input.keyboard.addKey('S');
-  input_d = game.input.keyboard.addKey('D');
-  input_w = game.input.keyboard.addKey('W');
-  input_space = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  inputA = game.input.keyboard.addKey('A');
+  inputS = game.input.keyboard.addKey('S');
+  inputD = game.input.keyboard.addKey('D');
+  inputW = game.input.keyboard.addKey('W');
+  inputSpace = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  inputTab = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 
 }
