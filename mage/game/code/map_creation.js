@@ -41,10 +41,7 @@ function mapInitialize(game, map) {
 
   // Add enemies
   for (var i = 0; i < 40; i++) {
-    var newEnemy = enemyGroup.create(Math.random()*map.x*80, Math.random()*map.y*80, 'enemy2');
-    newEnemy.setBounce(0.8, 0.8);
-    newEnemy.setCollideWorldBounds(true);
-    enemyList.push(newEnemy);
+    enemyCreate(game, ENEMY_ELECTRIC, Math.random()*map.x*80, Math.random()*map.y*80);
   }
 
   // Create player

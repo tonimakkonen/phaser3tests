@@ -1,6 +1,13 @@
 
 "use strict";
 
+function enemyCreate(game, enemyType, x, y) {
+  var newEnemy = enemyGroup.create(x, y, 'enemy_burning');
+  newEnemy.setBounce(0.8, 0.8);
+  newEnemy.setCollideWorldBounds(true);
+  enemyList.push(newEnemy);
+}
+
 function enemyHandleLogic(game, enemy) {
 
   // Just do some logic for now. Gravitate enemies towards player

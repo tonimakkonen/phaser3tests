@@ -18,9 +18,10 @@ const GRAPH_TYPE_LEFT_RIGHT = 2;
 ////////////////////
 
 
-const GRAPH_PLAYER = 1;
-const GRAPH_FOREST_MONSTER = 2;
-
+const GRAPH_PLAYER          = 1;
+const GRAPH_FOREST_MONSTER  = 2;
+const GRAPH_BURNING         = 3;
+const GRAPH_ELECTRIC        = 4;
 
 var GRAPHS = new Map();
 
@@ -44,6 +45,24 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_BURNING,
+  {
+    location: 'imgs/monsters/burning.png',
+    name: 'enemy_burning',
+    type: GRAPH_TYPE_SINGLE,
+  }
+);
+
+GRAPHS.set(
+  GRAPH_ELECTRIC,
+  {
+    location: 'imgs/monsters/electric.png',
+    name: 'enemy_electric',
+    type: GRAPH_TYPE_SINGLE,
+  }
+);
+
 
 ///////////////////////////////
 // All different enemy types //
@@ -60,6 +79,24 @@ var ENEMIES = new Map();
 ENEMIES.set(
   ENEMY_FOREST_MONSTER,
   {
-    graph: GRAPH_FOREST_MONSTER
+    graph: GRAPH_FOREST_MONSTER,
+    moveWalk: { maxSpeed: 100, alpha: 1},
+    health: 100
+  }
+);
+
+ENEMIES.set(
+  ENEMY_BURNING,
+  {
+    graph: GRAPH_BURNING,
+    moveBounce: { maxSpeed: 80, alpha: 1, jumpTime: 1, jumpSpeed: 240}
+  }
+);
+
+ENEMIES.set(
+  ENEMY_ELECTRIC,
+  {
+    graph: GRAPH_ELECTRIC,
+    moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320}
   }
 );
