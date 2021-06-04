@@ -62,8 +62,8 @@ function create() {
   this.physics.add.collider(shotGroup, blockGroup);
 
   this.physics.add.collider(enemyGroup, shotGroup);
-  this.physics.add.collider(enemyGroup, enemyGroup);
-  this.physics.add.collider(playerGroup, enemyGroup);
+  //this.physics.add.collider(enemyGroup, enemyGroup);
+  //this.physics.add.collider(playerGroup, enemyGroup);
 
   // Create a dummy map
   var map = mapCreateDummy();

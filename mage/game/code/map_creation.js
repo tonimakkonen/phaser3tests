@@ -33,6 +33,7 @@ function mapInitialize(game, map) {
   for (var px = 0; px < map.x; px++) {
     for (var py = 0; py < map.y; py++) {
       if (map.tiles[px+py*map.x] == 1) {
+        // TODO
         var image = game.add.sprite(px*80 + 40, py*80 + 40, 'block_free');
       }
     }
@@ -41,7 +42,9 @@ function mapInitialize(game, map) {
 
   // Add enemies
   for (var i = 0; i < 40; i++) {
-    enemyCreate(game, ENEMY_ELECTRIC, Math.random()*map.x*80, Math.random()*map.y*80);
+    enemyCreate(game, ENEMY_ELECTRIC, Math.random()*map.x*80, Math.random()*(map.y-1)*80);
+    enemyCreate(game, ENEMY_BURNING, Math.random()*map.x*80, Math.random()*(map.y-1)*80);
+    enemyCreate(game, ENEMY_FOREST_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-1)*80);
   }
 
   // Create player

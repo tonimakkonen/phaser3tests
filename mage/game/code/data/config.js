@@ -89,7 +89,8 @@ ENEMIES.set(
   ENEMY_BURNING,
   {
     graph: GRAPH_BURNING,
-    moveBounce: { maxSpeed: 80, alpha: 1, jumpTime: 1, jumpSpeed: 240}
+    moveBounce: { maxSpeed: 80, alpha: 1, jumpTime: 1, jumpSpeed: 240},
+    health: 50
   }
 );
 
@@ -97,6 +98,7 @@ ENEMIES.set(
   ENEMY_ELECTRIC,
   {
     graph: GRAPH_ELECTRIC,
-    moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320}
+    moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320},
+    health: 40
   }
 );
