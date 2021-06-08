@@ -44,27 +44,24 @@ function playerHandleLogic(game, curTime) {
   }
   player.setGravityY(grav);
 
+  // Shooting
+  var dx = game.cameras.main.worldView.x + game.input.mousePointer.x - player.x;
+  var dy = game.cameras.main.worldView.y + game.input.mousePointer.y - player.y;
+  var len = Math.sqrt(dx*dx + dy*dy);
+  if (len == 0) len = 1; // NaN guard
+  dx = dx / len;
+  dy = dy / len;
+
   // Shoot (move elsewhere)
   if (game.input.activePointer.leftButtonDown() && curTime - lastShot > 250) {
-    shoot(game);
+    shotShoot(game, true, SHOT_ICE, player.x, player.y, dx, dy);
+    lastShot = curTime;
+  }
+
+  if (game.input.activePointer.rightButtonDown() && curTime - lastShot > 250) {
+    shotShoot(game, true, SHOT_ELECTRIC, player.x, player.y, dx, dy);
     lastShot = curTime;
   }
 
 
-}
-
-// TODO: move elsewhere
-function shoot(game) {
-
-  var dx = game.cameras.main.worldView.x + game.input.mousePointer.x - player.x;
-  var dy = game.cameras.main.worldView.y + game.input.mousePointer.y - player.y;
-  var len = Math.sqrt(dx*dx + dy*dy);
-  dx = dx / len;
-  dy = dy / len;
-
-
-  var newShot = shotGroup.create(player.x, player.y, 'shot_ice');
-  newShot.setVelocity(dx*500, dy*500);
-  newShot.setBounce(0.8, 0.8);
-  newShot.setGravity(0, 100);
 }

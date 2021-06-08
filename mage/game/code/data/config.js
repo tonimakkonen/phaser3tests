@@ -1,6 +1,30 @@
 
 "use strict";
 
+///////////////////////
+// Generic variables //
+///////////////////////
+
+// Typical HD (720p) resolution. Should work on most devices
+var settingWidth = 1280;
+var settingHeight = 720;
+
+const GAME_MODE_MAIN_MENU   = 1;
+const GAME_MODE_PLAYING     = 2;
+const GAME_MODE_MAP_EDITOR  = 3;
+
+
+///////////////////
+// Various stuff //
+///////////////////
+
+const DAMAGE_TYPE_NONE = 0;
+const DAMAGE_TYPE_BLUNT = 1;
+const DAMAGE_TYPE_FIRE = 2;
+const DAMAGE_TYPE_FROST = 3;
+const DAMAGE_TYPE_ELECTRIC = 4;
+
+
 //////////////////////////////////////////////////
 // All the different types of graphic resources //
 //////////////////////////////////////////////////
@@ -142,6 +166,42 @@ LAYERS.set(
   }
 );
 
+//////////////////////////////////
+// All the different shot types //
+//////////////////////////////////
+
+
+const SHOT_ICE = 1;
+const SHOT_ELECTRIC = 2;
+
+
+var SHOTS = new Map();
+
+// TODO: Gravity and velocity
+
+SHOTS.set(
+  SHOT_ICE,
+  {
+    graph: GRAPH_ICE_SHOT,
+    damage: 10,
+    type: DAMAGE_TYPE_FROST,
+    velocity: 400,
+    grav: 1.0,
+    bounce: { count: 5, amount: 0.9 }
+  }
+)
+
+SHOTS.set(
+  SHOT_ELECTRIC,
+  {
+    graph: GRAPH_ELECTRIC_SHOT,
+    damage: 20,
+    type: DAMAGE_TYPE_ELECTRIC,
+    velocity: 600,
+    grav: 0.0
+  }
+)
+
 
 ///////////////////////////////
 // All different enemy types //
@@ -179,7 +239,8 @@ ENEMIES.set(
   {
     graph: GRAPH_ELECTRIC_MONSTER,
     moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320, sway: 0.3, towards: true},
-    health: 40
+    health: 40,
+    shoot1: { type: SHOT_ELECTRIC, time: 500, towards: true }
   }
 );
 

@@ -26,8 +26,15 @@ function mapCreateDummy() {
 function mapInitialize(game, map) {
 
   // Add BG images
-  var bg = game.add.image(setting_width/2, setting_height/2, 'bg0');
+  // TODO: Make this more generic
+
+  var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
   bg.setScrollFactor(0.0, 0.0);
+
+  var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
+  bg2.setScrollFactor(0.15, 0.15);
+  bg2 = game.add.image(settingWidth*1.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
+  bg2.setScrollFactor(0.15, 0.15);
 
   // Add Blocks
   for (var px = 0; px < map.x; px++) {
@@ -93,7 +100,7 @@ function mapInitialize(game, map) {
       }
     }
   }
-  createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, blockGroup);
+  createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, groupBlocks);
 
   // Add enemies
   for (var i = 0; i < 20; i++) {
@@ -104,7 +111,8 @@ function mapInitialize(game, map) {
   }
 
   // Create player
-  player = playerGroup.create(100, 450, 'player');
+  // TODO:
+  player = groupPlayer.create(100, 450, 'player');
   player.setGravity(0, 400);
   player.setCollideWorldBounds(true);
   player.setBounce(0.0, 0.0);

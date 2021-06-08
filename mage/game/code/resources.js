@@ -36,18 +36,9 @@ function resLoadResources(game) {
   game.load.image('bg1', 'imgs/bg1.png');
   game.load.image('bg2', 'imgs/bg2.png');
   game.load.image('bg3', 'imgs/bg3.png');
-
-  // Projectiles and similar
-  game.load.image('shot', 'imgs/shot.png');
-
-  // UI and similar
-  game.load.image('aim', 'imgs/aim.png');
-
+  game.load.image('bg_forest', 'imgs/bg_forest.png');
 
   // TODO: Make this more generic
-
-
-
   game.load.image('ground_r0', 'imgs/ground/ground_r0.png');
   game.load.image('ground_r1', 'imgs/ground/ground_r1.png');
 

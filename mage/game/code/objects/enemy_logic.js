@@ -8,8 +8,8 @@ function enemyCreate(game, enemyType, x, y) {
   var graph = GRAPHS.get(info.graph);
   if (!graph) throw 'Unkown graph: ' + info.graph;
 
-  var newEnemy = enemyGroup.create(x, y, graph.name);
-  enemyList.push(newEnemy);
+  var newEnemy = groupEnemies.create(x, y, graph.name);
+  listEnemies.push(newEnemy);
 
   // Add some variables
   newEnemy.xType = enemyType;
@@ -17,6 +17,8 @@ function enemyCreate(game, enemyType, x, y) {
   newEnemy.xGraph = graph;
   newEnemy.xHealth = info.health;
   newEnemy.xRandom = Math.random(); // E.g. sway effects and such
+  newEnemy.xLastShot1 = 0.0;
+  newEnemy.xLastShot2 = 0.0;
 
   newEnemy.setCollideWorldBounds(true);
 
@@ -50,6 +52,10 @@ function enemyHandleLogic(game, enemy, curTime) {
   // Towards player
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  if (len == 0) len = 1.0; // NaN guard
+  const dx1 = dx / len;
+  const dy1 = dy / len;
 
   // If too far away, just freeze enemies
   if (Math.abs(dx) > 80*16 || Math.abs(dy) > 80*16) {
@@ -58,6 +64,7 @@ function enemyHandleLogic(game, enemy, curTime) {
     return true;
   }
 
+  // Handle different movement modes
   if(enemy.xInfo.moveFloat) {
     enemyHandleFloatMove(game, enemy, curTime, enemy.xInfo.moveFloat, dx, dy);
   } else if (enemy.xInfo.moveBounce) {
@@ -67,6 +74,11 @@ function enemyHandleLogic(game, enemy, curTime) {
   } else {
     throw 'no movement defined';
   }
+
+  // Handle firing
+  if (enemy.xInfo.shoot1) enemyHandleShot(game, enemy, enemy.xInfo.shoot1, 1, dx1, dy1);
+  if (enemy.xInfo.shoot2) enemyHandleShot(game, enemy, enemy.xInfo.shoot2, 2, dx1, dy1);
+
 
   return true;
 }
@@ -124,4 +136,17 @@ function enemyHandleBounceMove(game, enemy, move, dx, dy) {
 function enemyHandleWalkMove(game, enemy, move, dx, dy) {
   // TODO:
   enemy.setGravity(dx > 0 ? 100 : -100, 400);
+}
+
+function enemyDealDamage(game, enemy, amount, type) {
+
+}
+
+function enemyHandleShot(game, enemy, info, type, dx1, dy1) {
+  var last = type == 1 ? enemy.xLastShot1 : enemy.xLastShot2;
+  const now = game.time.now;
+  if (now >= last + info.time) {
+    shotShoot(game, false, info.type, enemy.x, enemy.y, dx1, dy1);
+    type == 1 ? enemy.xLastShot1 = now : enemy.xLastShot2 = now;
+  }
 }
