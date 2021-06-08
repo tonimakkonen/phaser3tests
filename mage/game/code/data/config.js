@@ -13,15 +13,25 @@ const GRAPH_TYPE_SINGLE = 1;
 // Requires sizeX and sizeY to be defined
 const GRAPH_TYPE_LEFT_RIGHT = 2;
 
+// 3 frames just repeating
+const GRAPH_TYPE_ANIM_3 = 3;
+
 ////////////////////
 // All the graphs //
 ////////////////////
 
 
 const GRAPH_PLAYER          = 1;
-const GRAPH_FOREST_MONSTER  = 2;
-const GRAPH_BURNING         = 3;
-const GRAPH_ELECTRIC        = 4;
+
+const GRAPH_FOREST_MONSTER    = 101;
+const GRAPH_BURNING_MONSTER   = 102;
+const GRAPH_ELECTRIC_MONSTER  = 103;
+const GRAPH_STORM_MONSTER     = 104;
+
+const GRAPH_WATERMELON_PICKUP = 201;
+
+const GRAPH_ICE_SHOT          = 301;
+const GRAPH_ELECTRIC_SHOT     = 302;
 
 var GRAPHS = new Map();
 
@@ -33,6 +43,8 @@ GRAPHS.set(
     type: GRAPH_TYPE_SINGLE,
   }
 );
+
+// Monsters
 
 GRAPHS.set(
   GRAPH_FOREST_MONSTER,
@@ -46,7 +58,7 @@ GRAPHS.set(
 );
 
 GRAPHS.set(
-  GRAPH_BURNING,
+  GRAPH_BURNING_MONSTER,
   {
     location: 'imgs/monsters/burning.png',
     name: 'enemy_burning',
@@ -55,11 +67,78 @@ GRAPHS.set(
 );
 
 GRAPHS.set(
-  GRAPH_ELECTRIC,
+  GRAPH_ELECTRIC_MONSTER,
   {
     location: 'imgs/monsters/electric.png',
     name: 'enemy_electric',
     type: GRAPH_TYPE_SINGLE,
+  }
+);
+
+GRAPHS.set(
+  GRAPH_STORM_MONSTER,
+  {
+    location: 'imgs/monsters/storm_monster.png',
+    name: 'enemy_storm',
+    type: GRAPH_TYPE_ANIM_3,
+    sizeX: 80,
+    sizeY: 80
+  }
+);
+
+// Pickups
+
+GRAPHS.set(
+  GRAPH_WATERMELON_PICKUP,
+  {
+    location: 'imgs/pickups/watermelon.png',
+    name: 'pickup_watermelon',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+// Shots
+
+GRAPHS.set(
+  GRAPH_ICE_SHOT,
+  {
+    location: 'imgs/shots/ice.png',
+    name: 'shot_ice',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_ELECTRIC_SHOT,
+  {
+    location: 'imgs/shots/electric.png',
+    name: 'shot_electric',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+
+///////////////////////////////////
+// All the different layer types //
+///////////////////////////////////
+
+
+const LAYER_TYPE_TOP = 1;
+
+
+const LAYER_GROUND = 1;
+
+
+var LAYERS = new Map();
+
+LAYERS.set(
+  LAYER_GROUND,
+  {
+    type: LAYER_TYPE_TOP,
+    name: 'ground',
+    locationBase: 'imgs/ground/ground',
+    walkable: true,
+    internalZ: 5
   }
 );
 
@@ -69,9 +148,10 @@ GRAPHS.set(
 ///////////////////////////////
 
 
-const ENEMY_FOREST_MONSTER  = 1;
-const ENEMY_BURNING         = 2;
-const ENEMY_ELECTRIC        = 3;
+const ENEMY_FOREST_MONSTER    = 1;
+const ENEMY_BURNING_MONSTER   = 2;
+const ENEMY_ELECTRIC_MONSTER  = 3;
+const ENEMY_STORM_MONSTER     = 4;
 
 
 var ENEMIES = new Map();
@@ -86,19 +166,28 @@ ENEMIES.set(
 );
 
 ENEMIES.set(
-  ENEMY_BURNING,
+  ENEMY_BURNING_MONSTER,
   {
-    graph: GRAPH_BURNING,
+    graph: GRAPH_BURNING_MONSTER,
     moveBounce: { maxSpeed: 80, alpha: 1, jumpTime: 1, jumpSpeed: 240},
     health: 50
   }
 );
 
 ENEMIES.set(
-  ENEMY_ELECTRIC,
+  ENEMY_ELECTRIC_MONSTER,
   {
-    graph: GRAPH_ELECTRIC,
-    moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320},
+    graph: GRAPH_ELECTRIC_MONSTER,
+    moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320, sway: 0.3, towards: true},
     health: 40
+  }
+);
+
+ENEMIES.set(
+  ENEMY_STORM_MONSTER,
+  {
+    graph: GRAPH_STORM_MONSTER,
+    moveFloat: { maxSpeed: 200, alpha: 1, minDistance: 260, maxDistance: 340, sway: 0.2, above: true, margin: 20},
+    health: 80
   }
 );

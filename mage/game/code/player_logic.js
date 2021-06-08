@@ -3,7 +3,7 @@
 
 // Handle player movement
 
-function playerHandleLogic(game) {
+function playerHandleLogic(game, curTime) {
 
   if (player == null) return;
 
@@ -45,7 +45,6 @@ function playerHandleLogic(game) {
   player.setGravityY(grav);
 
   // Shoot (move elsewhere)
-  var curTime = game.time.now;
   if (game.input.activePointer.leftButtonDown() && curTime - lastShot > 250) {
     shoot(game);
     lastShot = curTime;
@@ -64,7 +63,7 @@ function shoot(game) {
   dy = dy / len;
 
 
-  var newShot = shotGroup.create(player.x, player.y, 'shot');
+  var newShot = shotGroup.create(player.x, player.y, 'shot_ice');
   newShot.setVelocity(dx*500, dy*500);
   newShot.setBounce(0.8, 0.8);
   newShot.setGravity(0, 100);

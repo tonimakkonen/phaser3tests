@@ -8,10 +8,23 @@ function resLoadResources(game) {
     (value, key) => {
       if (value.type == GRAPH_TYPE_SINGLE) {
         resLoadSingle(game, value);
-      } else if (value.type == GRAPH_TYPE_LEFT_RIGHT) {
-        resLoadLeftRight(game, value);
+      } else if (
+        value.type == GRAPH_TYPE_LEFT_RIGHT ||
+        value.type == GRAPH_TYPE_ANIM_3) {
+        resLoadAnim(game, value);
       } else {
-        throw 'Unkown graph type: ' + value.type;
+        throw 'Unkown graph type: ' + value;
+      }
+    }
+  );
+
+  // Load images related to layers
+  LAYERS.forEach(
+    (value, key) => {
+      if (value.type == LAYER_TYPE_TOP) {
+        resLoadTopLayer(game, value);
+      } else {
+        throw new 'Unkown layer type: ' + value;
       }
     }
   );
@@ -30,16 +43,13 @@ function resLoadResources(game) {
   // UI and similar
   game.load.image('aim', 'imgs/aim.png');
 
-  // TODO
-  game.load.image('enemy1', 'imgs/enemy1.png');
-  game.load.image('enemy2', 'imgs/enemy2.png');
+
+  // TODO: Make this more generic
 
 
-  game.load.image('block', 'imgs/block_full.png');
-  game.load.image('block_grass', 'imgs/block_grass.png');
-  game.load.image('block_free', 'imgs/block_free.png');
 
-  // TODO: set up animations
+  game.load.image('ground_r0', 'imgs/ground/ground_r0.png');
+  game.load.image('ground_r1', 'imgs/ground/ground_r1.png');
 
   // Sound
   game.load.audio('test_music', 'sound/music.mp3', true);
@@ -51,7 +61,7 @@ function resLoadSingle(game, value) {
 }
 
 // Load image with 4 frames for left right
-function resLoadLeftRight(game, value) {
+function resLoadAnim(game, value) {
   game.load.spritesheet(
     value.name,
     value.location,
@@ -59,7 +69,21 @@ function resLoadLeftRight(game, value) {
   );
 }
 
-//
+function resLoadTopLayer(game, value) {
+  resLoadImageFromBase(game, value.name, value.locationBase, 'full');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'left');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'right');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'bottomleft');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'bottomright');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'bottom');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'top');
+}
+
+function resLoadImageFromBase(game, nameBase, urlBase, part) {
+  game.load.image(nameBase + '_' + part, urlBase + '_' + part + '.png');
+}
+
+// create all the needed animations
 function resCreateAnimations(game) {
   GRAPHS.forEach(
     (value, key) => {
@@ -67,6 +91,8 @@ function resCreateAnimations(game) {
         // no animations
       } else if (value.type == GRAPH_TYPE_LEFT_RIGHT) {
         resCreateLeftRightAnim(game, value);
+      } else if (value.type == GRAPH_TYPE_ANIM_3) {
+        resCreateAnim3(game, value);
       } else {
         throw 'Unkown graph type: ' + value.type;
       }
@@ -74,6 +100,7 @@ function resCreateAnimations(game) {
   );
 }
 
+// Create left/right anims
 function resCreateLeftRightAnim(game, value) {
   // Create animations
   game.anims.create({
@@ -85,6 +112,16 @@ function resCreateLeftRightAnim(game, value) {
   game.anims.create({
     key: 'right',
     frames: game.anims.generateFrameNumbers(value.name, { start: 2, end: 3 }),
+    frameRate: 4,
+    repeat: -1
+  });
+}
+
+// Create 3 frame animations
+function resCreateAnim3(game, value) {
+  game.anims.create({
+    key: 'anim',
+    frames: game.anims.generateFrameNumbers(value.name, { start: 0, end: 2 }),
     frameRate: 4,
     repeat: -1
   });

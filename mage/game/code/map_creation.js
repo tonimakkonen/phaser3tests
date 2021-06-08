@@ -12,9 +12,9 @@ function mapCreateDummy() {
     tiles[i + py*mapX] = 1;
   }
 
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < 100; i++) {
     var px = Math.floor(Math.random()*mapX);
-    var py = Math.floor(Math.random()*(mapY - 1));
+    var py = Math.floor(Math.random()*(mapY - 8) + 7);
     tiles[px + py*mapX] = 1;
   }
 
@@ -33,18 +33,74 @@ function mapInitialize(game, map) {
   for (var px = 0; px < map.x; px++) {
     for (var py = 0; py < map.y; py++) {
       if (map.tiles[px+py*map.x] == 1) {
-        // TODO
-        var image = game.add.sprite(px*80 + 40, py*80 + 40, 'block_free');
+        const onLeft = px == 0 || map.tiles[(px-1)+py*map.x] == 1;
+        const onRight = px == map.x -1 || map.tiles[(px+1)+py*map.x] == 1;
+        const onTop = py == 0 || map.tiles[px+(py-1)*map.x] == 1;
+        const onBottom = py == map.y - 1 || map.tiles[px+(py+1)*map.x] == 1;
+        const cx = px*80 + 40;
+        const cy = py*80 + 40;
+        const dx = 20;
+        const dy = 20;
+        // top left part
+        if (onLeft) {
+          game.add.sprite(cx - dx, cy - dy, 'ground_full');
+        } else {
+          game.add.sprite(cx - dx, cy - dy, 'ground_left');
+        }
+        // top right part
+        if (onRight) {
+          game.add.sprite(cx + dx, cy - dy, 'ground_full');
+        } else {
+          game.add.sprite(cx + dx, cy - dy, 'ground_right');
+        }
+        // bottom left
+        if (onLeft && onBottom) {
+          game.add.sprite(cx - dx, cy + dy, 'ground_full');
+        } else if (onLeft) {
+          game.add.sprite(cx - dx, cy + dy, 'ground_bottom');
+        } else if(onBottom) {
+          game.add.sprite(cx - dx, cy + dy, 'ground_left');
+        } else {
+          game.add.sprite(cx - dx, cy + dy, 'ground_bottomleft');
+        }
+        // bottom right
+        if (onRight && onBottom) {
+          game.add.sprite(cx + dx, cy + dy, 'ground_full');
+        } else if (onRight) {
+          game.add.sprite(cx + dx, cy + dy, 'ground_bottom');
+        } else if (onBottom) {
+          game.add.sprite(cx + dx, cy + dy, 'ground_right');
+        } else {
+          game.add.sprite(cx + dx, cy + dy, 'ground_bottomright');
+        }
+        // Add top layer
+        if (!onTop) {
+          var image = game.add.sprite(cx, cy - 2.0 * dy, 'ground_top');
+          image.setDepth(1);
+        }
+
+        // Random layers
+        // TODO: Do not use random
+        const rx = Math.random()*10.0 - 5.0;
+        const ry = Math.random()*10.0 - 5.0;
+        if (Math.random() < 0.15) {
+          var im = game.add.sprite(cx + rx, cy + ry, 'ground_r0');
+          im.rotation = Math.random()*Math.PI;
+        } else if (Math.random() < 0.15) {
+          var im = game.add.sprite(cx + rx, cy + ry, 'ground_r1');
+          im.rotation = Math.random()*Math.PI;
+        }
       }
     }
   }
   createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, blockGroup);
 
   // Add enemies
-  for (var i = 0; i < 40; i++) {
-    enemyCreate(game, ENEMY_ELECTRIC, Math.random()*map.x*80, Math.random()*(map.y-1)*80);
-    enemyCreate(game, ENEMY_BURNING, Math.random()*map.x*80, Math.random()*(map.y-1)*80);
-    enemyCreate(game, ENEMY_FOREST_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-1)*80);
+  for (var i = 0; i < 20; i++) {
+    enemyCreate(game, ENEMY_ELECTRIC_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
+    enemyCreate(game, ENEMY_BURNING_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
+    enemyCreate(game, ENEMY_FOREST_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
+    enemyCreate(game, ENEMY_STORM_MONSTER, Math.random()*map.x*80, Math.random()*(4)*80);
   }
 
   // Create player

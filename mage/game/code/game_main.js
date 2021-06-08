@@ -61,7 +61,7 @@ function create() {
   this.physics.add.collider(enemyGroup, blockGroup);
   this.physics.add.collider(shotGroup, blockGroup);
 
-  this.physics.add.collider(enemyGroup, shotGroup);
+  this.physics.add.overlap(shotGroup, enemyGroup, shotHitEnemy, null, this);
   //this.physics.add.collider(enemyGroup, enemyGroup);
   //this.physics.add.collider(playerGroup, enemyGroup);
 
@@ -73,15 +73,25 @@ function create() {
 
 function update() {
 
-  playerHandleLogic(this);
+  var curTime = this.time.now;
+
+  playerHandleLogic(this, curTime);
 
   // Handle all enemy logic
   for (var i = enemyList.length - 1; i >= 0; i--) {
-    const alive = enemyHandleLogic(this, enemyList[i]);
+    var enemy = enemyList[i];
+    const alive = enemyHandleLogic(this, enemy, curTime);
     if (!alive) {
-      //enemyList[i].destroy();
-      //enemyList.splice(i);
+      enemy.destroy();
+      enemyList.splice(i, 1);
+      enemyGroup.remove(enemy);
     }
   }
 
+}
+
+function shotHitEnemy(shot, enemy) {
+  shot.destroy();
+  enemy.xHealth -= 20; // handle enemy destruction in enemy logic?
+  console.log(enemy.xHealth);
 }
