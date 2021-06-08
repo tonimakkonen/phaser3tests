@@ -4,18 +4,47 @@
 // Create a dummy map
 function mapCreateDummy() {
   var mapY = 18;
-  var mapX = 80;
+  var mapX = 80*3 - 2;
   var tiles = new Array(mapX*mapY).fill(0);
 
+  // floor
   for (var i = 0; i < mapX; i++) {
-    var py = mapY - 1;
+    py = mapY - 1;
     tiles[i + py*mapX] = 1;
   }
 
-  for (var i = 0; i < 100; i++) {
+  // Add seed tiles
+  for (var i = 0; i < 150; i++) {
     var px = Math.floor(Math.random()*mapX);
-    var py = Math.floor(Math.random()*(mapY - 8) + 7);
+    var py = Math.floor(Math.random()*(mapY - 7) + 8);
     tiles[px + py*mapX] = 1;
+  }
+
+  // vertical tiles
+  var count = 0;
+  for (var i = 0; i < 10000; i++) {
+    var px = Math.floor(Math.random()*mapX);
+    var py = Math.floor(Math.random()*mapY);
+    const ot = (py > 0) && tiles[px + (py-1)*mapX] == 1;
+    const ob = (py < mapX-1) && tiles[px + (py+1)*mapX] == 1;
+    if (ot || ob) {
+      tiles[px + py*mapX] = 1;
+      count += 1;
+      if (count > 400) break;
+    }
+  }
+  // and horizontal
+  count = 0;
+  for (var i = 0; i < 10000; i++) {
+    var px = Math.floor(Math.random()*mapX);
+    var py = Math.floor(Math.random()*mapY);
+    const ol = (px > 0) && tiles[px - 1 + py*mapX] == 1;
+    const or = (px < mapX-1) && tiles[px + 1 + py*mapX] == 1;
+    if (ol || or) {
+      tiles[px + py*mapX] = 1;
+      count += 1;
+      if (count > 1600) break;
+    }
   }
 
   return { tiles: tiles, x: mapX, y: mapY}
@@ -34,6 +63,8 @@ function mapInitialize(game, map) {
   var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
   bg2.setScrollFactor(0.15, 0.15);
   bg2 = game.add.image(settingWidth*1.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
+  bg2.setScrollFactor(0.15, 0.15);
+  bg2 = game.add.image(settingWidth*2.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
   bg2.setScrollFactor(0.15, 0.15);
 
   // Add Blocks
@@ -102,12 +133,19 @@ function mapInitialize(game, map) {
   }
   createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, groupBlocks);
 
+  // TODO: This parts needs to be done better
+
   // Add enemies
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 10; i++) {
     enemyCreate(game, ENEMY_ELECTRIC_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_BURNING_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_FOREST_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_STORM_MONSTER, Math.random()*map.x*80, Math.random()*(4)*80);
+  }
+
+  // Add some pickups
+  for (var i = 0; i < 40; i++) {
+    pickupCreate(game, PICKUP_WATERMELON, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
   }
 
   // Create player
@@ -117,7 +155,7 @@ function mapInitialize(game, map) {
   player.setCollideWorldBounds(true);
   player.setBounce(0.0, 0.0);
 
-
+  // TODO:
   game.physics.world.setBounds(0, 0, map.x*80, map.y*80);
   game.cameras.main.startFollow(player);
   game.cameras.main.setBounds(0, 0, map.x*80, map.y*80);

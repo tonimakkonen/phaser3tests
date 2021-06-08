@@ -44,7 +44,11 @@ var listEnemies = []; // List of all enemies
 
 // TODO: Think about player properties
 var player = null;
-var lastShot = 0;
+var lastShot = 0; // TODO
+var playerHealth = 100.0;
+
+// TODO: Where do these need to be?
+var uiHealthBar = null;
 
 
 function preload() {
@@ -66,17 +70,25 @@ function create() {
 
   this.physics.add.collider(groupBlocks, groupPlayer);
   this.physics.add.collider(groupBlocks, groupEnemies);
-
-  // TODO: Add callbacks
+  this.physics.add.collider(groupBlocks, groupPickups);
   this.physics.add.collider(groupBlocks, groupPlayerShots, mainShotHitWall, null, this);
   this.physics.add.collider(groupBlocks, groupEnemyShots, mainShotHitWall, null, this);
 
   this.physics.add.overlap(groupPlayerShots, groupEnemies, mainShotHitEnemy, null, this);
   this.physics.add.overlap(groupEnemyShots, groupPlayer, mainShotHitPlayer, null, this);
+  this.physics.add.overlap(groupPickups, groupPlayer, mainCollectedPickup, null, this);
 
-  // Create a dummy map
+  // TODO, start with main menu instead
+
   var map = mapCreateDummy();
   mapInitialize(this, map);
+
+  uiCreate(this);
+
+  // TODO
+  var music = this.sound.add('test_music');
+  music.setLoop(true);
+  music.play();
 
 }
 
@@ -95,14 +107,19 @@ function update() {
 }
 
 // Just use these function to relay messages to the right place
+
 function mainShotHitEnemy(shot, enemy) {
   shotHitEnemy(this, shot, enemy);
 }
 
-function mainShotHitPlayer(shot, pl) {
+function mainShotHitPlayer(shot, _pl) {
   shotHitPlayer(this, shot);
 }
 
 function mainShotHitWall(wall, shot) {
   shotHitWall(this, shot);
+}
+
+function mainCollectedPickup(pickup, _pl) {
+  pickupCollect(this, pickup);
 }

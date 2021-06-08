@@ -24,8 +24,9 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy) {
 
 }
 
-function shotHitPlayer(game, shot, player) {
+function shotHitPlayer(game, shot) {
   shot.destroy();
+  playerDealDamage(game, shot.xInfo.damage, 0); // TODO:
 }
 
 function shotHitEnemy(game, shot, enemy) {

@@ -49,6 +49,11 @@ function enemyHandleLogic(game, enemy, curTime) {
     return false; // Kill this enemy
   }
 
+  // TODO: Do better
+  if (player == null) {
+    return true;
+  }
+
   // Towards player
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;

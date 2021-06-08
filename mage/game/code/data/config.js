@@ -9,6 +9,7 @@
 var settingWidth = 1280;
 var settingHeight = 720;
 
+// Game modes
 const GAME_MODE_MAIN_MENU   = 1;
 const GAME_MODE_PLAYING     = 2;
 const GAME_MODE_MAP_EDITOR  = 3;
@@ -18,11 +19,11 @@ const GAME_MODE_MAP_EDITOR  = 3;
 // Various stuff //
 ///////////////////
 
-const DAMAGE_TYPE_NONE = 0;
-const DAMAGE_TYPE_BLUNT = 1;
-const DAMAGE_TYPE_FIRE = 2;
-const DAMAGE_TYPE_FROST = 3;
-const DAMAGE_TYPE_ELECTRIC = 4;
+const DAMAGE_TYPE_NONE      = 0;
+const DAMAGE_TYPE_BLUNT     = 1;
+const DAMAGE_TYPE_FIRE      = 2;
+const DAMAGE_TYPE_FROST     = 3;
+const DAMAGE_TYPE_ELECTRIC  = 4;
 
 
 //////////////////////////////////////////////////
@@ -240,7 +241,7 @@ ENEMIES.set(
     graph: GRAPH_ELECTRIC_MONSTER,
     moveFloat: { maxSpeed: 100, alpha: 1, minDistance: 160, maxDistance: 320, sway: 0.3, towards: true},
     health: 40,
-    shoot1: { type: SHOT_ELECTRIC, time: 500, towards: true }
+    shoot1: { type: SHOT_ELECTRIC, time: 2500, towards: true }
   }
 );
 
@@ -249,6 +250,24 @@ ENEMIES.set(
   {
     graph: GRAPH_STORM_MONSTER,
     moveFloat: { maxSpeed: 200, alpha: 1, minDistance: 260, maxDistance: 340, sway: 0.2, above: true, margin: 20},
-    health: 80
+    health: 80,
+    shoot1: { type: SHOT_ICE, time: 1000, towards: true }
+  }
+);
+
+////////////////////////////////////
+// All the different pickup types //
+////////////////////////////////////
+
+
+const PICKUP_WATERMELON = 1;
+
+var PICKUPS = new Map();
+
+PICKUPS.set(
+  PICKUP_WATERMELON,
+  {
+    graph: GRAPH_WATERMELON_PICKUP,
+    heal: 40
   }
 );

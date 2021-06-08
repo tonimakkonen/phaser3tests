@@ -10,7 +10,7 @@ function playerHandleLogic(game, curTime) {
   var ld = inputA.isDown;
   var rd = inputD.isDown;
   var jump = inputSpace.isDown;
-  var tdown = player.body.touching.down;
+  var tdown = player.body.blocked.down;
 
   var moveLeft = ld && !rd;
   var moveRight = rd && !ld;
@@ -63,5 +63,15 @@ function playerHandleLogic(game, curTime) {
     lastShot = curTime;
   }
 
+}
 
+function playerDealDamage(game, amount, type) {
+  // TODO: Consider type, kick effect etc?
+  playerHealth -= amount;
+  if (playerHealth <= 0.0) {
+    player.destroy();
+    player = null;
+    playerHealth = 0.0;
+  }
+  uiUpdateHealthBar(game);
 }
