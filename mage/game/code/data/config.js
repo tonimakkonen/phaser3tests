@@ -10,6 +10,7 @@ var settingWidth = 1280;
 var settingHeight = 720;
 
 // Game modes
+const GAME_MODE_NONE        = 0; // dummy mode, sets up game
 const GAME_MODE_MAIN_MENU   = 1;
 const GAME_MODE_PLAYING     = 2;
 const GAME_MODE_MAP_EDITOR  = 3;

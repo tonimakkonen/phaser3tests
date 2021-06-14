@@ -51,6 +51,15 @@ function mapCreateDummy() {
 
 }
 
+function mapCreateEmpty(x, y) {
+  // TODO: Add other stuff as well
+  return { tiles: new Array(x*y).fill(0), x: x, y: y};
+}
+
+function mapCreateBlockObjects(game, map, x, y, list) {
+
+}
+
 // Create all the map objects
 function mapInitialize(game, map) {
 
