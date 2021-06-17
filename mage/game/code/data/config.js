@@ -5,6 +5,9 @@
 // Generic variables //
 ///////////////////////
 
+// Used for local storage. Update this with big changes to storage.
+var VERSION = 1;
+
 // Typical HD (720p) resolution. Should work on most devices
 // TODO: Change setting to config
 var settingWidth = 1280;
@@ -91,7 +94,7 @@ GRAPHS.set(
   GRAPH_BURNING_MONSTER,
   {
     location: 'imgs/monsters/burning.png',
-    name: 'enemy_burning',
+    name: 'enemy_burning_monster',
     type: GRAPH_TYPE_SINGLE,
   }
 );
@@ -100,7 +103,7 @@ GRAPHS.set(
   GRAPH_ELECTRIC_MONSTER,
   {
     location: 'imgs/monsters/electric.png',
-    name: 'enemy_electric',
+    name: 'enemy_electric_monster',
     type: GRAPH_TYPE_SINGLE,
   }
 );
@@ -109,7 +112,7 @@ GRAPHS.set(
   GRAPH_STORM_MONSTER,
   {
     location: 'imgs/monsters/storm_monster.png',
-    name: 'enemy_storm',
+    name: 'enemy_storm_moster',
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 80,
     sizeY: 80
@@ -120,7 +123,7 @@ GRAPHS.set(
   GRAPH_TWISTER_MONSTER,
   {
     location: 'imgs/monsters/twister_monster.png',
-    name: 'enemy_twister',
+    name: 'enemy_twister_moster',
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 45,
     sizeY: 70

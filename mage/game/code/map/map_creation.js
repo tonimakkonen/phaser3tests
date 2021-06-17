@@ -6,6 +6,8 @@ function mapCreateDummy() {
   var mapY = 18;
   var mapX = 80*3 - 2;
   var tiles = new Array(mapX*mapY).fill(0);
+  var enemies = new Array(mapX*mapY).fill(0);
+  var pickups = new Array(mapX*mapY).fill(0);
 
   // floor
   for (var i = 0; i < mapX; i++) {
@@ -47,16 +49,35 @@ function mapCreateDummy() {
     }
   }
 
-  return { tiles: tiles, x: mapX, y: mapY, playerStartX: 0, playerStartY: 0 }
+  // TODO: All of this will be removed
+  // Add some random enemies and PICKUPS
+  for (var i = 0; i < 5; i++) {
+    var index = mapPickFreeTile(tiles);
+    enemies[index] = ENEMY_TWISTER_MONSTER;
+  }
 
+  return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: 0 }
+
+}
+
+// TODO: Not the best
+function mapPickFreeTile(tiles) {
+  for (var i = 0; i < 100; i++) {
+    var index = Math.floor(Math.random() *tiles.length);
+    if (tiles[index] == 0) {
+      return index;
+    }
+  }
+  return 0;
 }
 
 function mapCreateEmpty(x, y) {
   return {
-    tiles: new Array(x*y).fill(0),
     x: x,
     y: y,
-    tilesTemp: Array.from(Array(x*y), () => []), // TODO: Dummy for map creation (consider if needed??)
+    tiles: new Array(x*y).fill(0),
+    enemies: new Array(x*y).fill(0),
+    pickups: new Array(x*y).fill(0),
     playerStartX: 0,
     playerStartY: 0
   };
@@ -87,9 +108,20 @@ function mapInitialize(game, map) {
   }
   createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, groupBlocks);
 
+  // Add enemies and pickups
+  for (var px = 0; px < map.x; px++) {
+    for (var py = 0; py < map.y; py++) {
+      const newEnemy = map.enemies[px + py*map.x];
+      if (newEnemy != 0) {
+          enemyCreate(game, newEnemy, px*80.0 + 40.0, py*80.0 + 40.0);
+      }
+    }
+  }
+
   // TODO: This parts needs to be done better
 
   // Add enemies
+  /*
   for (var i = 0; i < 5; i++) {
     enemyCreate(game, ENEMY_ELECTRIC_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_BURNING_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
@@ -102,6 +134,7 @@ function mapInitialize(game, map) {
   for (var i = 0; i < 40; i++) {
     pickupCreate(game, PICKUP_WATERMELON, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
   }
+  */
 
   // Create player
   // TODO:

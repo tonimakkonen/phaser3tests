@@ -52,8 +52,15 @@ var uiHealthBar = null;
 
 
 // Current map blueprint
+// Used by editor or by
 var mapBlueprint = null;
 
+// Run local storage
+storageLoad();
+
+////////////////////////
+// Phaser 3 functions //
+////////////////////////
 
 function preload() {
   resLoadResources(this);
@@ -81,6 +88,8 @@ function create() {
   this.physics.add.overlap(groupPlayerShots, groupEnemies, mainShotHitEnemy, null, this);
   this.physics.add.overlap(groupEnemyShots, groupPlayer, mainShotHitPlayer, null, this);
   this.physics.add.overlap(groupPickups, groupPlayer, mainCollectedPickup, null, this);
+
+
 
   // TODO
   //var music = this.sound.add('test_music');
