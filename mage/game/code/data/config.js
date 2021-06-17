@@ -6,8 +6,11 @@
 ///////////////////////
 
 // Typical HD (720p) resolution. Should work on most devices
+// TODO: Change setting to config
 var settingWidth = 1280;
 var settingHeight = 720;
+
+// TODO: Add map tile width and height
 
 // Game modes
 const GAME_MODE_NONE        = 0; // dummy mode, sets up game
