@@ -55,6 +55,20 @@ function mapCreateDummy() {
     var index = mapPickFreeTile(tiles);
     enemies[index] = ENEMY_TWISTER_MONSTER;
   }
+  for (var i = 0; i < 5; i++) {
+    var index = mapPickFreeTile(tiles);
+    enemies[index] = ENEMY_ELECTRIC_MONSTER;
+  }
+  for (var i = 0; i < 5; i++) {
+    var index = mapPickFreeTile(tiles);
+    enemies[index] = ENEMY_STORM_MONSTER;
+  }
+
+  // Add some pickups
+  for (var i = 0; i < 40; i++) {
+    var index = mapPickFreeTile(tiles);
+    pickups[index] = PICKUP_WATERMELON;
+  }
 
   return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: 0 }
 
@@ -111,10 +125,12 @@ function mapInitialize(game, map) {
   // Add enemies and pickups
   for (var px = 0; px < map.x; px++) {
     for (var py = 0; py < map.y; py++) {
+      const cx = px*80.0 + 40.0;
+      const cy = py*80.0 + 40.0;
       const newEnemy = map.enemies[px + py*map.x];
-      if (newEnemy != 0) {
-          enemyCreate(game, newEnemy, px*80.0 + 40.0, py*80.0 + 40.0);
-      }
+      if (newEnemy != 0) enemyCreate(game, newEnemy, cx, cy);
+      const newPickup = map.pickups[px + py*map.x];
+      if (newPickup != 0) pickupCreate(game, newPickup, cx, cy);
     }
   }
 
