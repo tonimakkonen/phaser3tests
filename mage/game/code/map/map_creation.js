@@ -145,11 +145,12 @@ function mapInitialize(game, map) {
   // TODO: This parts needs to be done better
 
   // Add enemies
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 5; i++) {
     enemyCreate(game, ENEMY_ELECTRIC_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_BURNING_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_FOREST_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
     enemyCreate(game, ENEMY_STORM_MONSTER, Math.random()*map.x*80, Math.random()*(4)*80);
+    enemyCreate(game, ENEMY_TWISTER_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
   }
 
   // Add some pickups

@@ -47,12 +47,13 @@ const GRAPH_TYPE_ANIM_3 = 3;
 ////////////////////
 
 
-const GRAPH_PLAYER          = 1;
+const GRAPH_PLAYER            = 1;
 
 const GRAPH_FOREST_MONSTER    = 101;
 const GRAPH_BURNING_MONSTER   = 102;
 const GRAPH_ELECTRIC_MONSTER  = 103;
 const GRAPH_STORM_MONSTER     = 104;
+const GRAPH_TWISTER_MONSTER   = 105;
 
 const GRAPH_WATERMELON_PICKUP = 201;
 
@@ -109,6 +110,17 @@ GRAPHS.set(
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 80,
     sizeY: 80
+  }
+);
+
+GRAPHS.set(
+  GRAPH_TWISTER_MONSTER,
+  {
+    location: 'imgs/monsters/twister_monster.png',
+    name: 'enemy_twister',
+    type: GRAPH_TYPE_ANIM_3,
+    sizeX: 45,
+    sizeY: 70
   }
 );
 
@@ -214,6 +226,7 @@ const ENEMY_FOREST_MONSTER    = 1;
 const ENEMY_BURNING_MONSTER   = 2;
 const ENEMY_ELECTRIC_MONSTER  = 3;
 const ENEMY_STORM_MONSTER     = 4;
+const ENEMY_TWISTER_MONSTER   = 5;
 
 
 var ENEMIES = new Map();
@@ -222,7 +235,7 @@ ENEMIES.set(
   ENEMY_FOREST_MONSTER,
   {
     graph: GRAPH_FOREST_MONSTER,
-    moveWalk: { maxSpeed: 100, alpha: 1},
+    moveWalk: { maxSpeed: 40, alpha: 1},
     health: 100
   }
 );
@@ -252,6 +265,18 @@ ENEMIES.set(
     graph: GRAPH_STORM_MONSTER,
     moveFloat: { maxSpeed: 200, alpha: 1, minDistance: 260, maxDistance: 340, sway: 0.2, above: true, margin: 20},
     health: 80,
+    shoot1: { type: SHOT_ICE, time: 1000, towards: true }
+  }
+);
+
+ENEMIES.set(
+  ENEMY_TWISTER_MONSTER,
+  {
+    graph: GRAPH_TWISTER_MONSTER,
+    moveWalk: { maxSpeed: 500, alpha: 1},
+    moveJump: { delay: 1500, velocity: 400 },
+    gravity: 50,
+    health: 40,
     shoot1: { type: SHOT_ICE, time: 1000, towards: true }
   }
 );

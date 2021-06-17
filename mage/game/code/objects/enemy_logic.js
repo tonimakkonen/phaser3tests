@@ -17,8 +17,10 @@ function enemyCreate(game, enemyType, x, y) {
   newEnemy.xGraph = graph;
   newEnemy.xHealth = info.health;
   newEnemy.xRandom = Math.random(); // E.g. sway effects and such
+  newEnemy.xLastJump = 0;
   newEnemy.xLastShot1 = 0.0;
   newEnemy.xLastShot2 = 0.0;
+
 
   newEnemy.setCollideWorldBounds(true);
 
@@ -26,7 +28,6 @@ function enemyCreate(game, enemyType, x, y) {
   if (info.moveBounce) {
     newEnemy.setBounce(0.4, 0.4);
   } else if (info.moveWalk) {
-    console.log('created enemy with walk');
     newEnemy.setBounce(0.1, 0.1);
   } else if (info.moveFloat) {
     newEnemy.setBounce(0.8, 0.8);
@@ -37,7 +38,7 @@ function enemyCreate(game, enemyType, x, y) {
   // For any constant animations, just set it playing here
   // Other enemies change their animation based on behaviour
   if (graph.type == GRAPH_TYPE_ANIM_3) {
-    newEnemy.anims.play('anim');
+    newEnemy.anims.play(graph.name + '_anim');
   }
 
 }
@@ -72,12 +73,15 @@ function enemyHandleLogic(game, enemy, curTime) {
   // Handle different movement modes
   if(enemy.xInfo.moveFloat) {
     enemyHandleFloatMove(game, enemy, curTime, enemy.xInfo.moveFloat, dx, dy);
-  } else if (enemy.xInfo.moveBounce) {
+  }
+  if (enemy.xInfo.moveBounce) {
     enemyHandleBounceMove(game, enemy, enemy.xInfo.moveBounce, dx, dy);
-  } else if (enemy.xInfo.moveWalk) {
+  }
+  if (enemy.xInfo.moveWalk) {
     enemyHandleWalkMove(game, enemy, enemy.xInfo.moveWalk, dx, dy);
-  } else {
-    throw 'no movement defined';
+  }
+  if (enemy.xInfo.moveJump) {
+    enemyHandleJump(game, enemy, enemy.xInfo.moveJump, dx, dy);
   }
 
   // Handle firing
@@ -141,6 +145,14 @@ function enemyHandleBounceMove(game, enemy, move, dx, dy) {
 function enemyHandleWalkMove(game, enemy, move, dx, dy) {
   // TODO:
   enemy.setGravity(dx > 0 ? 100 : -100, 400);
+}
+
+// Handle jump
+function enemyHandleJump(game, enemy, move, dx, dy) {
+  if (dy < 0 && enemy.body.blocked.down && game.time.now - enemy.xLastJump > move.delay) { // only jump if above
+    enemy.setVelocityY(-move.velocity);
+    enemy.xLastJump = game.time.now;
+  }
 }
 
 function enemyDealDamage(game, enemy, amount, type) {

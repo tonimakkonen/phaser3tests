@@ -95,13 +95,13 @@ function resCreateAnimations(game) {
 function resCreateLeftRightAnim(game, value) {
   // Create animations
   game.anims.create({
-    key: 'left',
+    key: value.name + '_left',
     frames: game.anims.generateFrameNumbers(value.name, { start: 0, end: 1 }),
     frameRate: 4,
     repeat: -1
   });
   game.anims.create({
-    key: 'right',
+    key: value.name + '_right',
     frames: game.anims.generateFrameNumbers(value.name, { start: 2, end: 3 }),
     frameRate: 4,
     repeat: -1
@@ -111,7 +111,7 @@ function resCreateLeftRightAnim(game, value) {
 // Create 3 frame animations
 function resCreateAnim3(game, value) {
   game.anims.create({
-    key: 'anim',
+    key: value.name + '_anim',
     frames: game.anims.generateFrameNumbers(value.name, { start: 0, end: 2 }),
     frameRate: 4,
     repeat: -1
