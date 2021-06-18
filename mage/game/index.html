@@ -16,6 +16,8 @@
     <script type="text/javascript" src="code/objects/shot_logic.js"></script>
     <script type="text/javascript" src="code/objects/pickup_logic.js"></script>
     <script type="text/javascript" src="code/map/map_creation.js"></script>
+    <script type="text/javascript" src="code/map/map_dummy.js"></script>
+    <script type="text/javascript" src="code/map/map_utils.js"></script>
     <script type="text/javascript" src="code/ui/ui.js"></script>
   </head>
   <body>
@@ -28,5 +30,8 @@
     <p>Super early alpha version.. PRESS F5 to generate a new random map. It's purely random so there is no guarantee you won't get stuck.</p>
     <p>Press F10 to enter full screen. A and D to move left and right, space to jump, and LMB and RMB to shoot.</p>
     <a href="credits.html">Credits and attributions</a>
+
+    <input id="file-input" type="file" name="name" style="display: none;" onchange="editorUploadFile(this.files[0])" />
+
   </body>
 </html>

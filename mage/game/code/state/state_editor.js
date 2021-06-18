@@ -9,8 +9,14 @@ const EDITOR_TOOL_PICKUP        = 5;
 const EDITOR_TOOL_DECORATION    = 6;
 
 const EDITOR_ERASE_ALL          = 1;
+const EDITOR_ERASE_OBJ          = 2;
 
 const EDITOR_SPECIAL_TRY        = 1;
+const EDITOR_SPECIAL_CONFIRM    = 2;
+const EDITOR_SPECIAL_EXPORT     = 3;
+const EDITOR_SPECIAL_IMPORT     = 4;
+
+const EDITOR_CONFIRM_NEW = 1;
 
 // Just add all tool options manually
 var EDITOR_MENU = new Set();
@@ -19,6 +25,14 @@ var EDITOR_MENU = new Set();
 EDITOR_MENU.add({x: 0, y: 0, tool: EDITOR_TOOL_PLAYER_START, image: 'player'});
 
 EDITOR_MENU.add({x: 2, y: 0, tool: EDITOR_TOOL_ERASE, option: EDITOR_ERASE_ALL,  image: 'ui_eraser_all'});
+EDITOR_MENU.add({x: 3, y: 0, tool: EDITOR_TOOL_ERASE, option: EDITOR_ERASE_OBJ,  image: 'ui_eraser_obj'});
+
+EDITOR_MENU.add({x: 4, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 2, info: 'Create new 3x2 map?'}, text: 'N: 3x2'});
+EDITOR_MENU.add({x: 5, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 5, y: 2, info: 'Create new 5x2 map?'}, text: 'N: 5x2'});
+EDITOR_MENU.add({x: 6, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 7, y: 3, info: 'Create new 7x3 map?'}, text: 'N: 7x3'});
+EDITOR_MENU.add({x: 7, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 9, y: 3, info: 'Create new 9x3 map?'}, text: 'N: 9x3'});
+EDITOR_MENU.add({x: 8, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 5, info: 'Create new 3x5 map?'}, text: 'N: 3x5'});
+EDITOR_MENU.add({x: 9, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 7, info: 'Create new 3x7 map?'}, text: 'N: 3x7'});
 
 // Second row, ground options
 EDITOR_MENU.add({x: 0, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, image: 'ground_full'});
@@ -29,8 +43,16 @@ EDITOR_MENU.add({x: 0, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, ima
 EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FOREST_MONSTER, image: 'enemy_forest_monster'});
 EDITOR_MENU.add({x: 1, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BURNING_MONSTER, image: 'enemy_burning_monster'});
 EDITOR_MENU.add({x: 2, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_ELECTRIC_MONSTER, image: 'enemy_electric_monster'});
+EDITOR_MENU.add({x: 3, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_STORM_MONSTER, image: 'enemy_storm_monster'});
+EDITOR_MENU.add({x: 4, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_TWISTER_MONSTER, image: 'enemy_twister_monster'});
 
+// Pickups
+EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
+
+// Special options
 EDITOR_MENU.add({x: 0, y: 6, special: EDITOR_SPECIAL_TRY, text: 'Try'});
+EDITOR_MENU.add({x: 2, y: 6, special: EDITOR_SPECIAL_EXPORT, text: 'Export'});
+EDITOR_MENU.add({x: 3, y: 6, special: EDITOR_SPECIAL_IMPORT, text: 'Import'});
 
 // Pickups
 
@@ -44,7 +66,9 @@ var edToolRight = EDITOR_TOOL_ERASE;
 var edToolLeftOption = LAYER_GROUND;
 var edToolRightOption = 0;
 var edLeftSelectPos = {x: 0, y: 1}; // TODO
-var edRightSelectPos = {x: 3, y: 0};
+var edRightSelectPos = {x: 2, y: 0};
+var edInConfirm = false; // if we are about to confirm a big operation
+var edConfirmOption = null; // what are we about to confirm
 
 // Temp phaser3 objects
 var edGrid = null;          // grid
@@ -56,6 +80,8 @@ var edTiles = [];           // tiles for each tile
 var edEnemies = [];         //  enemies for each tile
 var edPickups = [];         //  pickups for each tile
 var edDecorations = [];     //  decorations for each tile
+var edConfirmBox = null;
+var edConfirmText = null;
 
 
 // Start editor
@@ -70,10 +96,7 @@ function stateStartEditor(game) {
   editorCreateAllFromMap(game, mapBlueprint);
 
   // Create grid and other UI phaser3 objects
-  const w = mapBlueprint.x*80;
-  const h = mapBlueprint.y*80;
-  edGrid = game.add.grid(w / 2, h / 2, w, h, 80, 80, null, 0, 0x0000ff, 1);
-  edGrid.setDepth(10);
+  editorUpdateGrid(game, mapBlueprint);
   editorAddToolBox(game.add.rectangle(settingWidth / 2.0, settingHeight / 2.0, settingWidth - 160.0, settingHeight - 160.0, 0xffffff), 0.25);
   edLeftSelect = editorAddToolBox(game.add.rectangle(edLeftSelectPos.x * 80.0 + 40.0 + 80.0, edLeftSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0xff0000), 0.5);
   edRightSelect = editorAddToolBox(game.add.rectangle(edRightSelectPos.x * 80.0 + 40.0 + 80.0, edRightSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0x00ff00), 0.5);
@@ -91,6 +114,14 @@ function editorAddMenuOption(game, mo) {
   } else {
     throw 'Bad menu option: ' + mo;
   }
+}
+
+function editorUpdateGrid(game, map) {
+  if (edGrid != null) edGrid.destroy();
+  const w = mapBlueprint.x*80;
+  const h = mapBlueprint.y*80;
+  edGrid = game.add.grid(w / 2, h / 2, w, h, 80, 80, null, 0, 0x0000ff, 1);
+  edGrid.setDepth(10);
 }
 
 // Util method to add a tool box object
@@ -116,6 +147,27 @@ function stateHandleEditor(game) {
   if (edCamY > mapBlueprint.y * 80) edCamY = mapBlueprint.y * 80;
   game.cameras.main.centerOn(edCamX, edCamY);
 
+  // Handle confirmation
+  if (edInConfirm) {
+    edToolBoxObjects.forEach(o => o.setVisible(false));
+    if (inputLeftClick) {
+      if(game.input.mousePointer.y > 600.0 - 40.0 && game.input.mousePointer.y < 600.0 + 40.0) {
+        if (edConfirmOption.type == EDITOR_CONFIRM_NEW) {
+          editorDestroyAllMapObjects();
+          mapBlueprint = mapCreateEmpty(edConfirmOption.x*16, edConfirmOption.y*9);
+          editorCreateAllFromMap(game, mapBlueprint);
+          editorUpdateGrid(game, mapBlueprint);
+        }
+      }
+      edConfirmBox.destroy();
+      edConfirmBox = null;
+      edConfirmText.destroy();
+      edConfirmText = null;
+      edInConfirm = false;
+    }
+    return GAME_MODE_MAP_EDITOR;
+  }
+
   // In tool menu or not
   if (inputTab.isDown) {
     edToolBoxObjects.forEach(o => o.setVisible(true));
@@ -127,7 +179,7 @@ function stateHandleEditor(game) {
 }
 
 // When moving away from editor
-function editorClose(game) {
+function editorClose() {
   edGrid.destroy();
   edToolBoxObjects.forEach(o => o.destroy());
   edToolBoxObjects = [];
@@ -153,16 +205,36 @@ function editorHandleTab(game) {
 
   if (toolOn == null) return GAME_MODE_MAP_EDITOR;
   if (game.input.activePointer.leftButtonDown()) {
-    edToolLeft = toolOn.tool;
-    edToolLeftOption = toolOn.option;
-    edLeftSelectPos = {x: toolOn.x, y: toolOn.y};
-    edLeftSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
+    if (toolOn.tool) {
+      edToolLeft = toolOn.tool;
+      edToolLeftOption = toolOn.option;
+      edLeftSelectPos = {x: toolOn.x, y: toolOn.y};
+      edLeftSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
+    }
+    // Handle special options
+    if (inputLeftClick) {
+      if (toolOn.special == EDITOR_SPECIAL_TRY) {
+        editorClose();
+        return GAME_MODE_PLAYING;
+      } else if (toolOn.special == EDITOR_SPECIAL_CONFIRM) {
+        edConfirmBox = game.add.rectangle(settingWidth / 2.0, 600.0, settingWidth, 80, 0x000000).setDepth(10).setScrollFactor(0.0, 0.0);
+        edConfirmText = game.add.text(settingWidth / 2.0, 600.0, toolOn.option.info).setOrigin(0.5).setDepth(10).setScrollFactor(0.0, 0.0);
+        edInConfirm = true;
+        edConfirmOption = toolOn.option;
+      } else if (toolOn.special == EDITOR_SPECIAL_EXPORT) {
+        editorDownloadFile();
+      } else if (toolOn.special == EDITOR_SPECIAL_IMPORT) {
+        document.getElementById('file-input').click(); // HTML hacks
+      }
+    }
   }
   if (game.input.activePointer.rightButtonDown()) {
-    edToolRight = toolOn.tool;
-    edToolRightOption = toolOn.option;
-    edRightSelectPos = {x: toolOn.x, y: toolOn.y};
-    edRightSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
+    if (toolOn.tool) {
+      edToolRight = toolOn.tool;
+      edToolRightOption = toolOn.option;
+      edRightSelectPos = {x: toolOn.x, y: toolOn.y};
+      edRightSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
+    }
   }
 
 
@@ -198,11 +270,11 @@ function editorApplyTool(game, map, px, py, toolType, toolOption) {
   } else if (toolType == EDITOR_TOOL_PLAYER_START) {
     changes = editorApplyPlayerStart(game, map, px, py);
   } else if (toolType == EDITOR_TOOL_ENEMY) {
-    editorApplyEnemy(game, map, px, py, toolOption);
+    changes = editorApplyEnemy(game, map, px, py, toolOption);
   } else if (toolType == EDITOR_TOOL_PICKUP) {
-    editorApplyPickup(game, map, px, py, toolOption);
+    changes = editorApplyPickup(game, map, px, py, toolOption);
   } else if (toolType == EDITOR_TOOL_DECORATION) {
-    editorApplyDecoration(game, map, px, py, toolOption);
+    changes = editorApplyDecoration(game, map, px, py, toolOption);
   } else {
     throw 'Unknown tool type: ' + toolType;
   }
@@ -213,34 +285,60 @@ function editorApplyTool(game, map, px, py, toolType, toolOption) {
   }
 }
 
+////////////////////
+// File uploading //
+////////////////////
+
+// We are using html hacks here..
+
+function editorDownloadFile() {
+  // TODO: Make this a bit nicer...
+  const blob = new Blob([JSON.stringify(mapBlueprint)], { type: 'application/json;charset=utf-8' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  a.download = 'map.json';
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
+// Note, this method does not know about this instance
+function editorUploadFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.addEventListener('load', (event) => {
+    console.log('File loaded');
+    const json = event.target.result;
+    try {
+      mapBlueprint = JSON.parse(json);
+    } catch (err) {
+      alert('Failed to open file. Maybe wrong json format?')
+      return;
+    }
+    editorDestroyAllMapObjects();
+    editorCreateAllFromMap(gameSingleton, mapBlueprint); // Note, we need game singleton here
+    console.log('Done loading map from file:');
+  });
+  reader.readAsText(file);
+}
+
 ///////////
 // Tools //
 ///////////
 
 function editorApplyErase(game, map, px, py, type) {
+  // TODO: Various options
   var changes = false;
-  // erase ground
-  const lastState = map.tiles[px + py*map.x];
-  if (lastState != 0) {
-    map.tiles[px + py*map.x] = 0;
-    editorRedoTiles(game, map, px, py);
-    changes = true;
-  }
-
-  // erase enemies
-  // erase pickups
-
+  if (type == EDITOR_ERASE_ALL) changes = editorSetTile(game, map, px, py, 0) && changes;
+  changes = editorSetEnemy(game, map, px, py, 0) && changes;
+  changes = editorSetPickup(game, map, px, py, 0) && changes;
   return changes;
 }
 
 function editorApplyAddGround(game, map, px, py, type) {
-  const lastState = map.tiles[px + py*map.x];
-  if (lastState == 0) {
-    map.tiles[px + py*map.x] = 1;
-    editorRedoTiles(game, map, px, py);
-    return true;
-  }
-  return false;
+  return editorSetTile(game, map, px, py, type);
 }
 
 function editorApplyPlayerStart(game, map, px, py) {
@@ -254,28 +352,58 @@ function editorApplyPlayerStart(game, map, px, py) {
 }
 
 function editorApplyEnemy(game, map, px, py, option) {
-  const index = px + py*map.x;
-  if (map.tiles[index] != 0) return false;
-  const lastValue = map.enemies[index];
-  if (option != lastValue) {
-    map.enemies[index] = option;
-    editorUpdateEnemy(game, map, px, py);
-    return true;
-  }
-  return false;
+  if (mapIsBlocking(map.tiles[px + py*map.x])) return false;
+  return editorSetEnemy(game, map, px, py, option);
 }
 
 function editorApplyPickup(game, map, px, py, option) {
-  return false;
+  if (mapIsBlocking(map.tiles[px + py*map.x])) return false;
+  return editorSetPickup(game, map, px, py, option);
 }
 
 function editorApplyDecoration(game, map, px, py, option) {
   return false;
 }
 
+function editorSetTile(game, map, px, py, value) {
+  if (map.tiles[px + py*map.x] != value) {
+    map.tiles[px + py*map.x] = value;
+    editorRedoTiles(game, map, px, py);
+    if (mapIsBlocking(value)) {
+      editorSetEnemy(game, map, px, py, 0);
+      editorSetPickup(game, map, px, py, 0);
+    }
+    return true;
+  }
+  return false;
+}
+
+function editorSetEnemy(game, map, px, py, value) {
+  if (map.enemies[px + py*map.x] != value) {
+    map.enemies[px + py*map.x] = value;
+    editorUpdateEnemy(game, map, px, py);
+    return true;
+  }
+  return false;
+}
+
+function editorSetPickup(game, map, px, py, value) {
+  if (map.pickups[px + py*map.x] != value) {
+    map.pickups[px + py*map.x] = value;
+    editorUpdatePickup(game, map, px, py);
+    return true;
+  }
+  return false;
+}
+
 //////////////////////
 // Map modification //
 //////////////////////
+
+function editorRedoMap(game, map) {
+  editorDestroyAllMapObjects();
+  editorCreateAllFromMap(game, map);
+}
 
 // Set up all phaser3 objects to represent the map
 function editorCreateAllFromMap(game, map) {
@@ -299,12 +427,15 @@ function editorCreateAllFromMap(game, map) {
 function editorDestroyAllMapObjects() {
   for (var px = 0; px < mapBlueprint.x; px++) {
     for (var py = 0; py < mapBlueprint.y; py++) {
-      editorDestroyTile(game, mapBlueprint, px, py);
+      editorDestroyTile(mapBlueprint, px, py);
     }
   }
   edTiles = [];
+  edEnemies.forEach(o => { if (o) o.destroy(); });
   edEnemies = [];
+  edPickups.forEach(o => { if (o) o.destroy(); });
   edPickups = [];
+  edDecorations.forEach(o => { if (o) o.destroy(); });
   edDecorations = [];
 }
 
@@ -318,15 +449,15 @@ function editorRedoTiles(game, map, px, py) {
 }
 
 // Destroy all ground tiles from a given position
-function editorDestroyTile(game, map, px, py) {
-  var list = edTiles[px + py*map.x];
+function editorDestroyTile(map, px, py) {
+  var list = edTiles[px + py*map.x]; // list of list
   list.forEach(s => s.destroy());
   list.splice(0, list.length);
 }
 
 // redo all tiles for a given position
 function editorRedoTile(game, map, px, py) {
-  editorDestroyTile(game, map, px, py);
+  editorDestroyTile(map, px, py);
   mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x]);
 }
 
@@ -352,6 +483,8 @@ function editorUpdateSingle(game, map, existing, mapList, type, px, py) {
   const needed = mapList[index];
   if (needed != 0) {
     const graph = GRAPHS.get(type.get(needed).graph);
-    existing[index] = game.add.image(px * 80.0 + 40.0, py * 80.0 + 40.0, graph.name);
+    const im = game.add.image(px * 80.0 + 40.0, py * 80.0 + 40.0, graph.name);
+    im.setDepth(Z_ACTION);
+    existing[index] = im;
   }
 }

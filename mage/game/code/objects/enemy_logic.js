@@ -10,6 +10,7 @@ function enemyCreate(game, enemyType, x, y) {
 
   var newEnemy = groupEnemies.create(x, y, graph.name);
   listEnemies.push(newEnemy);
+  newEnemy.setDepth(Z_ACTION);
 
   // Add some variables
   newEnemy.xType = enemyType;

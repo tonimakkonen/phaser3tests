@@ -44,6 +44,7 @@ function resLoadResources(game) {
 
   // Load UI images not defined in config
   game.load.image('ui_eraser_all', 'imgs/ui/eraser_all.png');
+  game.load.image('ui_eraser_obj', 'imgs/ui/eraser_obj.png');
 
   // Sound
   game.load.audio('test_music', 'sound/music.mp3', true);

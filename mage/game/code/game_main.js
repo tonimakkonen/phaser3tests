@@ -100,6 +100,10 @@ function create() {
 
 function update() {
 
+  // Update input
+  // TODO: Does phaser have these in a better fashion?
+  inputUpdate(this);
+
   var newMode = gameMode;
   if (gameMode == GAME_MODE_NONE) {
     newMode = GAME_MODE_MAIN_MENU;
@@ -115,7 +119,6 @@ function update() {
   if (newMode != gameMode) {
     gameMode = newMode;
     if (gameMode == GAME_MODE_MAIN_MENU) {
-      console.log('blaa');
       stateStartMainMenu(this);
     } else if (gameMode == GAME_MODE_PLAYING) {
       stateStartPlay(this);

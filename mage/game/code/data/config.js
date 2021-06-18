@@ -112,7 +112,7 @@ GRAPHS.set(
   GRAPH_STORM_MONSTER,
   {
     location: 'imgs/monsters/storm_monster.png',
-    name: 'enemy_storm_moster',
+    name: 'enemy_storm_monster',
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 80,
     sizeY: 80
@@ -123,7 +123,7 @@ GRAPHS.set(
   GRAPH_TWISTER_MONSTER,
   {
     location: 'imgs/monsters/twister_monster.png',
-    name: 'enemy_twister_moster',
+    name: 'enemy_twister_monster',
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 45,
     sizeY: 70
@@ -162,15 +162,19 @@ GRAPHS.set(
 );
 
 
-///////////////////////////////////
-// All the different layer types //
-///////////////////////////////////
+/////////////////////////////////////////////////////////
+// All the different layer types and various z indexes //
+/////////////////////////////////////////////////////////
 
 
 const LAYER_TYPE_TOP = 1;
 
 
 const LAYER_GROUND = 1;
+
+
+// Z location of all game objects
+const Z_ACTION = 1.0;
 
 
 var LAYERS = new Map();
@@ -181,8 +185,9 @@ LAYERS.set(
     type: LAYER_TYPE_TOP,
     name: 'ground',
     locationBase: 'imgs/ground/ground',
-    walkable: true,
-    internalZ: 5
+    block: true,
+    zBlock: 0,
+    zTop: 2.0
   }
 );
 

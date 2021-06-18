@@ -8,6 +8,9 @@ var inputW;
 var inputSpace;
 var inputTab;
 
+var inputLeftClickLast = false;
+var inputLeftClick = false; // If we click on left button
+
 function inputInitialize(game) {
 
   // Allow right clicks
@@ -26,4 +29,14 @@ function inputInitialize(game) {
   inputSpace = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   inputTab = game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
 
+}
+
+function inputUpdate(game) {
+  const curValue = game.input.activePointer.leftButtonDown();
+  if (curValue && !inputLeftClickLast) {
+    inputLeftClick = true;
+  } else {
+    inputLeftClick = false;
+  }
+  inputLeftClickLast = curValue;
 }

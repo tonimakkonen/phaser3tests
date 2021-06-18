@@ -1,90 +1,6 @@
 
 "use strict";
 
-// Create a dummy map
-function mapCreateDummy() {
-  var mapY = 18;
-  var mapX = 80*3 - 2;
-  var tiles = new Array(mapX*mapY).fill(0);
-  var enemies = new Array(mapX*mapY).fill(0);
-  var pickups = new Array(mapX*mapY).fill(0);
-
-  // floor
-  for (var i = 0; i < mapX; i++) {
-    py = mapY - 1;
-    tiles[i + py*mapX] = 1;
-  }
-
-  // Add seed tiles
-  for (var i = 0; i < 150; i++) {
-    var px = Math.floor(Math.random()*mapX);
-    var py = Math.floor(Math.random()*(mapY - 7) + 8);
-    tiles[px + py*mapX] = 1;
-  }
-
-  // vertical tiles
-  var count = 0;
-  for (var i = 0; i < 10000; i++) {
-    var px = Math.floor(Math.random()*mapX);
-    var py = Math.floor(Math.random()*mapY);
-    const ot = (py > 0) && tiles[px + (py-1)*mapX] == 1;
-    const ob = (py < mapX-1) && tiles[px + (py+1)*mapX] == 1;
-    if (ot || ob) {
-      tiles[px + py*mapX] = 1;
-      count += 1;
-      if (count > 400) break;
-    }
-  }
-  // and horizontal
-  count = 0;
-  for (var i = 0; i < 10000; i++) {
-    var px = Math.floor(Math.random()*mapX);
-    var py = Math.floor(Math.random()*mapY);
-    const ol = (px > 0) && tiles[px - 1 + py*mapX] == 1;
-    const or = (px < mapX-1) && tiles[px + 1 + py*mapX] == 1;
-    if (ol || or) {
-      tiles[px + py*mapX] = 1;
-      count += 1;
-      if (count > 1600) break;
-    }
-  }
-
-  // TODO: All of this will be removed
-  // Add some random enemies and PICKUPS
-  for (var i = 0; i < 5; i++) {
-    var index = mapPickFreeTile(tiles);
-    enemies[index] = ENEMY_TWISTER_MONSTER;
-  }
-  for (var i = 0; i < 5; i++) {
-    var index = mapPickFreeTile(tiles);
-    enemies[index] = ENEMY_ELECTRIC_MONSTER;
-  }
-  for (var i = 0; i < 5; i++) {
-    var index = mapPickFreeTile(tiles);
-    enemies[index] = ENEMY_STORM_MONSTER;
-  }
-
-  // Add some pickups
-  for (var i = 0; i < 40; i++) {
-    var index = mapPickFreeTile(tiles);
-    pickups[index] = PICKUP_WATERMELON;
-  }
-
-  return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: 0 }
-
-}
-
-// TODO: Not the best
-function mapPickFreeTile(tiles) {
-  for (var i = 0; i < 100; i++) {
-    var index = Math.floor(Math.random() *tiles.length);
-    if (tiles[index] == 0) {
-      return index;
-    }
-  }
-  return 0;
-}
-
 function mapCreateEmpty(x, y) {
   return {
     x: x,
@@ -134,40 +50,25 @@ function mapInitialize(game, map) {
     }
   }
 
-  // TODO: This parts needs to be done better
-
-  // Add enemies
-  /*
-  for (var i = 0; i < 5; i++) {
-    enemyCreate(game, ENEMY_ELECTRIC_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
-    enemyCreate(game, ENEMY_BURNING_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
-    enemyCreate(game, ENEMY_FOREST_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
-    enemyCreate(game, ENEMY_STORM_MONSTER, Math.random()*map.x*80, Math.random()*(4)*80);
-    enemyCreate(game, ENEMY_TWISTER_MONSTER, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
-  }
-
-  // Add some pickups
-  for (var i = 0; i < 40; i++) {
-    pickupCreate(game, PICKUP_WATERMELON, Math.random()*map.x*80, Math.random()*(map.y-2)*80);
-  }
-  */
-
   // Create player
-  // TODO:
-  player = groupPlayer.create(100, 450, 'player');
+  player = groupPlayer.create(map.playerStartX*80.0 + 40.0, map.playerStartY*80.0 + 40.0, 'player');
   player.setGravity(0, 400);
   player.setCollideWorldBounds(true);
   player.setBounce(0.0, 0.0);
 
-  // TODO:
+  // Follow player
+  // TODO: Does this need to change?
   game.physics.world.setBounds(0, 0, map.x*80, map.y*80);
   game.cameras.main.startFollow(player);
   game.cameras.main.setBounds(0, 0, map.x*80, map.y*80);
 }
 
 // Create single coordinates
+// TODO: This needs to be tweaked a lot
 function mapCreateSingleTile(game, map, px, py, list) {
   if (px < 0 || py < 0 || px >= map.x && py >= map.y) throw new 'Invalid coordinates: ' + x + ', ' + y;
+
+  const layer = LAYERS.get(map.tiles[px+py*map.x]);
 
   // TODO: Suppurt different layer types
   const onLeft = px == 0 || map.tiles[(px-1)+py*map.x] == 1;
@@ -182,41 +83,41 @@ function mapCreateSingleTile(game, map, px, py, list) {
   if (map.tiles[px+py*map.x] == 1) {
     // top left part
     if (onLeft) {
-      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_full'));
+      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_full').setDepth(layer.zBlock));
     } else {
-      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_left'));
+      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_left').setDepth(layer.zBlock));
     }
     // top right part
     if (onRight) {
-      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_full'));
+      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_full').setDepth(layer.zBlock));
     } else {
-      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_right'));
+      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_right').setDepth(layer.zBlock));
     }
     // bottom left
     if (onLeft && onBottom) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_full'));
+      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_full').setDepth(layer.zBlock));
     } else if (onLeft) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottom'));
+      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottom').setDepth(layer.zBlock));
     } else if(onBottom) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_left'));
+      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_left').setDepth(layer.zBlock));
     } else {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottomleft'));
+      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottomleft').setDepth(layer.zBlock));
     }
     // bottom right
     if (onRight && onBottom) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_full'));
+      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_full').setDepth(layer.zBlock));
     } else if (onRight) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottom'));
+      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottom').setDepth(layer.zBlock));
     } else if (onBottom) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_right'));
+      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_right').setDepth(layer.zBlock));
     } else {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottomright'));
+      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottomright').setDepth(layer.zBlock));
     }
 
     // Add top layer
     if (!onTop) {
       var image = game.add.sprite(cx, cy - 2.0 * dy, 'ground_top');
-      image.setDepth(1);
+      image.setDepth(layer.zTop);
       list.push(image);
     }
 
