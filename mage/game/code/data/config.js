@@ -303,3 +303,12 @@ PICKUPS.set(
     heal: 40
   }
 );
+
+
+//////////////////////////////////
+// All the different decoration //
+//////////////////////////////////
+
+// TODO:
+
+var DECORATIONS = new Map();

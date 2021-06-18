@@ -42,6 +42,9 @@ function resLoadResources(game) {
   game.load.image('ground_r0', 'imgs/ground/ground_r0.png');
   game.load.image('ground_r1', 'imgs/ground/ground_r1.png');
 
+  // Load UI images not defined in config
+  game.load.image('ui_eraser_all', 'imgs/ui/eraser_all.png');
+
   // Sound
   game.load.audio('test_music', 'sound/music.mp3', true);
 }
