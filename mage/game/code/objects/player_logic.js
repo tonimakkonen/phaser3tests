@@ -54,7 +54,7 @@ function playerHandleLogic(game, curTime) {
 
   // Shoot (move elsewhere)
   if (game.input.activePointer.leftButtonDown() && curTime - lastShot > 250) {
-    shotShoot(game, true, SHOT_ICE, player.x, player.y, dx, dy);
+    shotShoot(game, true, SHOT_FIRE, player.x, player.y, dx, dy);
     lastShot = curTime;
   }
 

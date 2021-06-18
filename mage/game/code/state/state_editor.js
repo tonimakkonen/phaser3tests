@@ -87,7 +87,7 @@ var edTiles = [];           // tiles for each tile
 var edEnemies = [];         //  enemies for each tile
 var edPickups = [];         //  pickups for each tile
 var edDecorations = [];     //  decorations for each tile
-var edConfirmBox = null;
+var edConfirmBox = null;    // confirm objects
 var edConfirmText = null;
 
 ////////////////////////
@@ -179,8 +179,6 @@ function editorClose() {
   edToolBoxObjects = [];
   edLeftSelect = null;
   edRightSelect = null;
-  edPlayerStart.destroy();
-  edPlayerStart = null;
   editorDestroyAllMapObjects();
 }
 
@@ -465,6 +463,8 @@ function editorDestroyAllMapObjects() {
       editorDestroyTile(mapBlueprint, px, py);
     }
   }
+  edPlayerStart.destroy();
+  edPlayerStart = null;
   edTiles = [];
   edEnemies.forEach(o => { if (o) o.destroy(); });
   edEnemies = [];

@@ -65,6 +65,7 @@ const GRAPH_WATERMELON_PICKUP = 201;
 
 const GRAPH_ICE_SHOT          = 301;
 const GRAPH_ELECTRIC_SHOT     = 302;
+const GRAPH_FIRE_SHOT         = 303;
 
 var GRAPHS = new Map();
 
@@ -161,6 +162,15 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_FIRE_SHOT,
+  {
+    location: 'imgs/shots/fire.png',
+    name: 'shot_fire',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
 
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
@@ -196,8 +206,9 @@ LAYERS.set(
 //////////////////////////////////
 
 
-const SHOT_ICE = 1;
+const SHOT_ICE      = 1;
 const SHOT_ELECTRIC = 2;
+const SHOT_FIRE     = 3;
 
 
 var SHOTS = new Map();
@@ -224,6 +235,17 @@ SHOTS.set(
     type: DAMAGE_TYPE_ELECTRIC,
     velocity: 600,
     grav: 0.0
+  }
+)
+
+SHOTS.set(
+  SHOT_FIRE,
+  {
+    graph: GRAPH_FIRE_SHOT,
+    damage: 20,
+    type: DAMAGE_TYPE_FIRE,
+    velocity: 600,
+    grav: 0.5
   }
 )
 
@@ -256,7 +278,8 @@ ENEMIES.set(
   {
     graph: GRAPH_BURNING_MONSTER,
     moveBounce: { maxSpeed: 80, alpha: 1, jumpTime: 1, jumpSpeed: 240},
-    health: 50
+    health: 50,
+    shoot1: { type: SHOT_FIRE, time: 1000, towards: true }
   }
 );
 
