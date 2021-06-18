@@ -1,6 +1,10 @@
 
 "use strict";
 
+const EDITOR_STATE_EDIT     = 1;
+const EDITOR_STATE_TOOL     = 2;
+const EDITOR_STATE_CONFIRM  = 3;
+
 const EDITOR_TOOL_ERASE         = 1;
 const EDITOR_TOOL_GROUND        = 2;
 const EDITOR_TOOL_PLAYER_START  = 3;
@@ -61,14 +65,17 @@ var edCamX = 0;
 var edCamY = 0;
 
 // Tool options currently selected
+var edState = EDITOR_STATE_EDIT;
+var edConfirmOption = null;
+var edClickSafety = 0;
+
 var edToolLeft = EDITOR_TOOL_GROUND;
-var edToolRight = EDITOR_TOOL_ERASE;
 var edToolLeftOption = LAYER_GROUND;
-var edToolRightOption = 0;
+var edToolRight = EDITOR_TOOL_ERASE;
+var edToolRightOption = EDITOR_ERASE_ALL;
 var edLeftSelectPos = {x: 0, y: 1}; // TODO
 var edRightSelectPos = {x: 2, y: 0};
-var edInConfirm = false; // if we are about to confirm a big operation
-var edConfirmOption = null; // what are we about to confirm
+
 
 // Temp phaser3 objects
 var edGrid = null;          // grid
@@ -83,9 +90,16 @@ var edDecorations = [];     //  decorations for each tile
 var edConfirmBox = null;
 var edConfirmText = null;
 
+////////////////////////
+// Life cycle methods //
+////////////////////////
 
 // Start editor
 function stateStartEditor(game) {
+
+  // Ensure we don't have accidental clicks and start with plain mode
+  edClickSafety = game.time.now;
+  edState = EDITOR_STATE_EDIT;
 
   // Create the blueprint map if not present
   if (mapBlueprint == null) {
@@ -101,6 +115,8 @@ function stateStartEditor(game) {
   edLeftSelect = editorAddToolBox(game.add.rectangle(edLeftSelectPos.x * 80.0 + 40.0 + 80.0, edLeftSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0xff0000), 0.5);
   edRightSelect = editorAddToolBox(game.add.rectangle(edRightSelectPos.x * 80.0 + 40.0 + 80.0, edRightSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0x00ff00), 0.5);
   EDITOR_MENU.forEach(mo => editorAddMenuOption(game, mo) );
+
+  edToolBoxObjects.forEach(o => o.setVisible(false) );
 }
 
 function editorAddMenuOption(game, mo) {
@@ -147,34 +163,12 @@ function stateHandleEditor(game) {
   if (edCamY > mapBlueprint.y * 80) edCamY = mapBlueprint.y * 80;
   game.cameras.main.centerOn(edCamX, edCamY);
 
-  // Handle confirmation
-  if (edInConfirm) {
-    edToolBoxObjects.forEach(o => o.setVisible(false));
-    if (inputLeftClick) {
-      if(game.input.mousePointer.y > 600.0 - 40.0 && game.input.mousePointer.y < 600.0 + 40.0) {
-        if (edConfirmOption.type == EDITOR_CONFIRM_NEW) {
-          editorDestroyAllMapObjects();
-          mapBlueprint = mapCreateEmpty(edConfirmOption.x*16, edConfirmOption.y*9);
-          editorCreateAllFromMap(game, mapBlueprint);
-          editorUpdateGrid(game, mapBlueprint);
-        }
-      }
-      edConfirmBox.destroy();
-      edConfirmBox = null;
-      edConfirmText.destroy();
-      edConfirmText = null;
-      edInConfirm = false;
-    }
-    return GAME_MODE_MAP_EDITOR;
-  }
-
-  // In tool menu or not
-  if (inputTab.isDown) {
-    edToolBoxObjects.forEach(o => o.setVisible(true));
-    return editorHandleTab(game);
-  } else {
-    edToolBoxObjects.forEach(o => o.setVisible(false));
+  if (edState == EDITOR_STATE_CONFIRM) {
+    return editorHandleConfirm(game);
+  } else if (edState == EDITOR_STATE_EDIT) {
     return editorHandleEdit(game);
+  } else if (edState == EDITOR_STATE_TOOL) {
+    return editorHandleTab(game);
   }
 }
 
@@ -190,7 +184,39 @@ function editorClose() {
   editorDestroyAllMapObjects();
 }
 
+////////////
+// States //
+////////////
+
+function editorHandleConfirm(game) {
+  // TODO: This needs to be better
+  if (inputLeftClick) {
+    if(game.input.mousePointer.y > 600.0 - 40.0 && game.input.mousePointer.y < 600.0 + 40.0) {
+      if (edConfirmOption.type == EDITOR_CONFIRM_NEW) {
+        editorDestroyAllMapObjects();
+        mapBlueprint = mapCreateEmpty(edConfirmOption.x*16, edConfirmOption.y*9);
+        editorCreateAllFromMap(game, mapBlueprint);
+        editorUpdateGrid(game, mapBlueprint);
+      }
+    }
+    edConfirmBox.destroy();
+    edConfirmBox = null;
+    edConfirmText.destroy();
+    edConfirmText = null;
+    edState = EDITOR_STATE_EDIT;
+    edClickSafety = game.time.now;
+  }
+  return GAME_MODE_MAP_EDITOR;
+}
+
 function editorHandleTab(game) {
+
+  if (inputTabClick) {
+    edToolBoxObjects.forEach(o => o.setVisible(false) );
+    edState = EDITOR_STATE_EDIT;
+    return GAME_MODE_MAP_EDITOR;
+  }
+
   const wx = game.input.mousePointer.x - 80.0;
   const wy = game.input.mousePointer.y - 80.0;
   const gx = Math.floor(wx / 80.0);
@@ -219,7 +245,8 @@ function editorHandleTab(game) {
       } else if (toolOn.special == EDITOR_SPECIAL_CONFIRM) {
         edConfirmBox = game.add.rectangle(settingWidth / 2.0, 600.0, settingWidth, 80, 0x000000).setDepth(10).setScrollFactor(0.0, 0.0);
         edConfirmText = game.add.text(settingWidth / 2.0, 600.0, toolOn.option.info).setOrigin(0.5).setDepth(10).setScrollFactor(0.0, 0.0);
-        edInConfirm = true;
+        edToolBoxObjects.forEach(o => o.setVisible(false) );
+        edState = EDITOR_STATE_CONFIRM;
         edConfirmOption = toolOn.option;
       } else if (toolOn.special == EDITOR_SPECIAL_EXPORT) {
         editorDownloadFile();
@@ -236,12 +263,20 @@ function editorHandleTab(game) {
       edRightSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
     }
   }
-
-
   return GAME_MODE_MAP_EDITOR;
 }
 
 function editorHandleEdit(game) {
+
+  if (inputTabClick) {
+    edToolBoxObjects.forEach(o => o.setVisible(true) );
+    edState = EDITOR_STATE_TOOL;
+    return GAME_MODE_MAP_EDITOR;
+  }
+
+  // Do not apply tool in safety period
+  if (game.time.now - edClickSafety < 1000) return GAME_MODE_MAP_EDITOR;
+
   const wx = game.cameras.main.worldView.x + game.input.mousePointer.x;
   const wy = game.cameras.main.worldView.y + game.input.mousePointer.y;
   const gx = Math.floor(wx / 80.0);

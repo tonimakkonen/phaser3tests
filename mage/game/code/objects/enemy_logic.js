@@ -65,7 +65,7 @@ function enemyHandleLogic(game, enemy, curTime) {
   const dy1 = dy / len;
 
   // If too far away, just freeze enemies
-  if (Math.abs(dx) > 80*16 || Math.abs(dy) > 80*16) {
+  if (Math.abs(dx) > 80*16 || Math.abs(dy) > 80*9) {
     enemy.setGravity(0, 0);
     enemy.setVelocity(0, 0);
     return true;

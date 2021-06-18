@@ -8,8 +8,11 @@ var inputW;
 var inputSpace;
 var inputTab;
 
+// TODO: This needs to be better
 var inputLeftClickLast = false;
-var inputLeftClick = false; // If we click on left button
+var inputLeftClick = false;
+var inputTabClickLast = false;
+var inputTabClick = false;
 
 function inputInitialize(game) {
 
@@ -32,6 +35,8 @@ function inputInitialize(game) {
 }
 
 function inputUpdate(game) {
+
+  // TODO: Has to be a better way
   const curValue = game.input.activePointer.leftButtonDown();
   if (curValue && !inputLeftClickLast) {
     inputLeftClick = true;
@@ -39,4 +44,12 @@ function inputUpdate(game) {
     inputLeftClick = false;
   }
   inputLeftClickLast = curValue;
+
+  const curTab = inputTab.isDown;
+  if (curTab && !inputTabClickLast) {
+    inputTabClick = true;
+  } else {
+    inputTabClick = false;
+  }
+  inputTabClickLast = curTab;
 }
