@@ -1,10 +1,6 @@
 
 "use strict";
 
-// In this file we handle map tile creation
-
-
-
 // Create single coordinates
 // TODO: This needs to be tweaked a lot
 function mapCreateSingleTile(game, map, px, py, list) {
@@ -14,65 +10,28 @@ function mapCreateSingleTile(game, map, px, py, list) {
   if (tile == 0) return;
 
   const layer = LAYERS.get(tile);
-  if (!layer) throw 'Bad layer type: ' + tile;
+  if (!layer) throw 'Bad layer index ' + tile;
 
-  // Center coordinates
-  const cx = px*80 + 40;
-  const cy = py*80 + 40;
-  const dx = 20;
-  const dy = 20;
+  const cl = mapContinueSame(map, tile, px, py, -1, 0);
+  const cr = mapContinueSame(map, tile, px, py, +1, 0);
+  const ct = mapContinueSame(map, tile, px, py, 0, -1);
+  const cb = mapContinueSame(map, tile, px, py, 0, +1);
+  const ctl = mapContinueSame(map, tile, px, py, -1, -1);
+  const ctr = mapContinueSame(map, tile, px, py, +1, -1);
+  const cbl = mapContinueSame(map, tile, px, py, -1, +1);
+  const cbr = mapContinueSame(map, tile, px, py, +1, +1);
 
-  // TODO: Suppurt different layer types
-  const onLeft = px == 0 || map.tiles[(px-1)+py*map.x] == 1;
-  const onRight = px == map.x -1 || map.tiles[(px+1)+py*map.x] == 1;
-  const onTop = py == 0 || map.tiles[px+(py-1)*map.x] == 1;
-  const onBottom = py == map.y - 1 || map.tiles[px+(py+1)*map.x] == 1;
+  if (layer.type == LAYER_TYPE_TOP) {
+    mapHandleTop(game, layer, list, px, py, cl, cr, ct, cb);
+  }  else if (layer.type == LAYER_TYPE_SYMMETRIC) {
+    mapHandleSymmetric(game, layer, list, px, py, cl, cr, ct, cb, ctl, ctr, cbl, cbr);
+  } else {
+    throw 'Unkown layer type: ' + layer.type;
+  }
 
-
-  if (map.tiles[px+py*map.x] == 1) {
-    // top left part
-    if (onLeft) {
-      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_full').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_left').setDepth(layer.zBlock));
-    }
-    // top right part
-    if (onRight) {
-      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_full').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_right').setDepth(layer.zBlock));
-    }
-    // bottom left
-    if (onLeft && onBottom) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_full').setDepth(layer.zBlock));
-    } else if (onLeft) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottom').setDepth(layer.zBlock));
-    } else if(onBottom) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_left').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottomleft').setDepth(layer.zBlock));
-    }
-    // bottom right
-    if (onRight && onBottom) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_full').setDepth(layer.zBlock));
-    } else if (onRight) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottom').setDepth(layer.zBlock));
-    } else if (onBottom) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_right').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottomright').setDepth(layer.zBlock));
-    }
-
-    // Add top layer
-    if (!onTop) {
-      var image = game.add.sprite(cx, cy - 2.0 * dy, 'ground_top');
-      image.setDepth(layer.zTop);
-      list.push(image);
-    }
-
+/*
     // Randoms
     // TODO: Remove random
-    /*
     const rx = Math.random()*10.0 - 5.0;
     const ry = Math.random()*10.0 - 5.0;
     if (Math.random() < 0.15) {
@@ -84,26 +43,97 @@ function mapCreateSingleTile(game, map, px, py, list) {
       im.rotation = Math.random()*Math.PI;
       list.push(im);
     }
-    */
   }
+  */
 }
 
-function mapHandleTopLayer(game, map, px, py, ) {
-
+function mapHandleTop(game, layer, list, px, py, cl, cr, ct, cb) {
+  const cx = px * 80.0 + 40.0;
+  const cy = py * 80.0 + 40.0;
+  const dx = 20.0;
+  const dy = 20.0;
+  // top left part
+  if (cl) mapAddThing(game, layer.name + '_full', cx - dx, cy - dy, layer.zBlock, list);
+  else mapAddThing(game, layer.name + '_left', cx - dx, cy - dy, layer.zBlock, list);
+  // top right part
+  if (cr) mapAddThing(game, layer.name + '_full', cx + dx, cy - dy, layer.zBlock, list);
+  else mapAddThing(game, layer.name + '_right', cx + dx, cy - dy, layer.zBlock, list);
+  // bottom left
+  if (cl && cb) mapAddThing(game, layer.name + '_full', cx - dx, cy + dy, layer.zBlock, list);
+  else if (cl) mapAddThing(game, layer.name + '_bottom', cx - dx, cy + dy, layer.zBlock, list);
+  else if (cb) mapAddThing(game, layer.name + '_left', cx - dx, cy + dy, layer.zBlock, list);
+  else mapAddThing(game, layer.name + '_bottomleft', cx - dx, cy + dy, layer.zBlock, list);
+  // bottom right
+  if (cr && cb) mapAddThing(game, layer.name + '_full', cx + dx, cy + dy, layer.zBlock, list);
+  else if (cr) mapAddThing(game, layer.name + '_bottom', cx + dx, cy + dy, layer.zBlock, list);
+  else if (cb) mapAddThing(game, layer.name + '_right', cx + dx, cy + dy, layer.zBlock, list);
+  else mapAddThing(game, layer.name + '_bottomright', cx + dx, cy + dy, layer.zBlock, list);
+  // Add top layer
+  if (!ct) mapAddThing(game, layer.name + '_top', cx, cy - 2.0*dy, layer.zTop, list);
 }
 
-function mapHandleSymmetricLayer() {
-
+function mapHandleSymmetric(game, layer, list, px, py, cl, cr, ct, cb, ctl, ctr, cbl, cbr) {
+  // Add all 4 blocks for this one tile
+  mapAddThing(game, layer.name + '_' + mapSymmetricTopLeftName(cl, ct, ctl), px*80.0 + 20.0, py*80.0 + 20.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + mapSymmetricTopRightName(cr, ct, ctr), px*80.0 + 60.0, py*80.0 + 20.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + mapSymmetricBottomLeftName(cl, cb, cbl), px*80.0 + 20.0, py*80.0 + 60.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + mapSymmetricBottomRightName(cr, cb, cbr), px*80.0 + 60.0, py*80.0 + 60.0, layer.zBlock, list);
+  // Consider all 12 possible extension blocks...
+  // TODO:
 }
 
-// Continue this same tile to whatever direction
+function mapSymmetricTopLeftName(cl, ct, ctl) {
+  if (cl && ct && ctl) return 'full';
+  if (cl && ct && !ctl) return 'ctl';
+  if (!cl && ct) return 'left';
+  if (cl && !ct) return 'top';
+  if (!cl && !ct) return 'topleft';
+  throw 'Bad logic';
+}
+
+function mapSymmetricTopRightName(cr, ct, ctr) {
+  if (cr && ct && ctr) return 'full';
+  if (cr && ct && !ctr) return 'ctr';
+  if (!cr && ct) return 'right';
+  if (cr && !ct) return 'top';
+  if (!cr && !ct) return 'topright';
+  throw 'Bad logic';
+}
+
+function mapSymmetricBottomLeftName(cl, cb, cbl) {
+  if (cl && cb && cbl) return 'full';
+  if (cl && cb && !cbl) return 'cbl';
+  if (!cl && cb) return 'left';
+  if (cl && !cb) return 'bottom';
+  if (!cl && !cb) return 'bottomleft';
+  throw 'Bad logic';
+}
+
+function mapSymmetricBottomRightName(cr, cb, cbr) {
+  if (cr && cb && cbr) return 'full';
+  if (cr && cb && !cbr) return 'cbr';
+  if (!cr && cb) return 'right';
+  if (cr && !cb) return 'bottom';
+  if (!cr && !cb) return 'bottomright';
+  throw 'Bad logic';
+}
+
+// Add a new static sprite to the map, set the depth, and add to list
+function mapAddThing(game, name, x, y, depth, list) {
+  const newObject = game.add.sprite(x, y, name);
+  newObject.setDepth(depth);
+  list.push(newObject);
+}
+
+
+// Continue this same tile to whatever direction. Assume dx, dy are sensible
 // This happens if..
 // * the same tile is in that direction
 // * the map boundary
 // * a tile that has a higher z value
+// return
 function mapContinueSame(map, tile, px, py, dx, dy) {
   if (px < 0 || px < 0 || px >= map.x || py >= map.y) throw 'Bad px, py: ' + px + ', ' + py;
-  if ((dx != -1 && dx != 1) || (dy != -1 && dy != 1)) throw 'Bad dx, dy: ' + dx + ', ' + dy;
   const nx = px + dx;
   const ny = py + dy;
   // oustide

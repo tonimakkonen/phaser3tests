@@ -19,15 +19,15 @@ function mapInitialize(game, map) {
   // Add BG images
   // TODO: Make this more generic
 
-  var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
-  bg.setScrollFactor(0.0, 0.0);
+  //var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
+  //bg.setScrollFactor(0.0, 0.0);
 
-  var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
-  bg2.setScrollFactor(0.15, 0.15);
-  bg2 = game.add.image(settingWidth*1.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
-  bg2.setScrollFactor(0.15, 0.15);
-  bg2 = game.add.image(settingWidth*2.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
-  bg2.setScrollFactor(0.15, 0.15);
+  //var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
+  //bg2.setScrollFactor(0.15, 0.15);
+  //bg2 = game.add.image(settingWidth*1.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
+  //bg2.setScrollFactor(0.15, 0.15);
+  //bg2 = game.add.image(settingWidth*2.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
+  //bg2.setScrollFactor(0.15, 0.15);
 
   // Add Tiles
   var dummy = [];
@@ -61,80 +61,6 @@ function mapInitialize(game, map) {
   game.physics.world.setBounds(0, 0, map.x*80, map.y*80);
   game.cameras.main.startFollow(player);
   game.cameras.main.setBounds(0, 0, map.x*80, map.y*80);
-}
-
-// Create single coordinates
-// TODO: This needs to be tweaked a lot
-function mapCreateSingleTile(game, map, px, py, list) {
-  if (px < 0 || py < 0 || px >= map.x && py >= map.y) throw new 'Invalid coordinates: ' + x + ', ' + y;
-
-  const layer = LAYERS.get(map.tiles[px+py*map.x]);
-
-  // TODO: Suppurt different layer types
-  const onLeft = px == 0 || map.tiles[(px-1)+py*map.x] == 1;
-  const onRight = px == map.x -1 || map.tiles[(px+1)+py*map.x] == 1;
-  const onTop = py == 0 || map.tiles[px+(py-1)*map.x] == 1;
-  const onBottom = py == map.y - 1 || map.tiles[px+(py+1)*map.x] == 1;
-  const cx = px*80 + 40;
-  const cy = py*80 + 40;
-  const dx = 20;
-  const dy = 20;
-
-  if (map.tiles[px+py*map.x] == 1) {
-    // top left part
-    if (onLeft) {
-      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_full').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx - dx, cy - dy, 'ground_left').setDepth(layer.zBlock));
-    }
-    // top right part
-    if (onRight) {
-      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_full').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx + dx, cy - dy, 'ground_right').setDepth(layer.zBlock));
-    }
-    // bottom left
-    if (onLeft && onBottom) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_full').setDepth(layer.zBlock));
-    } else if (onLeft) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottom').setDepth(layer.zBlock));
-    } else if(onBottom) {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_left').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx - dx, cy + dy, 'ground_bottomleft').setDepth(layer.zBlock));
-    }
-    // bottom right
-    if (onRight && onBottom) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_full').setDepth(layer.zBlock));
-    } else if (onRight) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottom').setDepth(layer.zBlock));
-    } else if (onBottom) {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_right').setDepth(layer.zBlock));
-    } else {
-      list.push(game.add.sprite(cx + dx, cy + dy, 'ground_bottomright').setDepth(layer.zBlock));
-    }
-
-    // Add top layer
-    if (!onTop) {
-      var image = game.add.sprite(cx, cy - 2.0 * dy, 'ground_top');
-      image.setDepth(layer.zTop);
-      list.push(image);
-    }
-
-    // Randoms
-    // TODO: Remove random
-    const rx = Math.random()*10.0 - 5.0;
-    const ry = Math.random()*10.0 - 5.0;
-    if (Math.random() < 0.15) {
-      var im = game.add.sprite(cx + rx, cy + ry, 'ground_r0');
-      im.rotation = Math.random()*Math.PI;
-      list.push(im);
-    } else if (Math.random() < 0.15) {
-      var im = game.add.sprite(cx + rx, cy + ry, 'ground_r1');
-      im.rotation = Math.random()*Math.PI;
-      list.push(im);
-    }
-  }
 }
 
 // Create "blocks" responsible for blocking the player
