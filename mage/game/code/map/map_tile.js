@@ -1,6 +1,10 @@
 
 "use strict";
 
+const TILE_END = 0;
+const TILE_CONTINUE = 1;
+const TILE_EXTEND = 2;
+
 // Create single coordinates
 // TODO: This needs to be tweaked a lot
 function mapCreateSingleTile(game, map, px, py, list) {
@@ -53,32 +57,33 @@ function mapHandleTop(game, layer, list, px, py, cl, cr, ct, cb) {
   const dx = 20.0;
   const dy = 20.0;
   // top left part
-  if (cl) mapAddThing(game, layer.name + '_full', cx - dx, cy - dy, layer.zBlock, list);
+  if (cl != TILE_END) mapAddThing(game, layer.name + '_full', cx - dx, cy - dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_left', cx - dx, cy - dy, layer.zBlock, list);
   // top right part
-  if (cr) mapAddThing(game, layer.name + '_full', cx + dx, cy - dy, layer.zBlock, list);
+  if (cr != TILE_END) mapAddThing(game, layer.name + '_full', cx + dx, cy - dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_right', cx + dx, cy - dy, layer.zBlock, list);
   // bottom left
-  if (cl && cb) mapAddThing(game, layer.name + '_full', cx - dx, cy + dy, layer.zBlock, list);
-  else if (cl) mapAddThing(game, layer.name + '_bottom', cx - dx, cy + dy, layer.zBlock, list);
-  else if (cb) mapAddThing(game, layer.name + '_left', cx - dx, cy + dy, layer.zBlock, list);
+  if (cl != TILE_END && cb != TILE_END) mapAddThing(game, layer.name + '_full', cx - dx, cy + dy, layer.zBlock, list);
+  else if (cl != TILE_END) mapAddThing(game, layer.name + '_bottom', cx - dx, cy + dy, layer.zBlock, list);
+  else if (cb != TILE_END) mapAddThing(game, layer.name + '_left', cx - dx, cy + dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_bottomleft', cx - dx, cy + dy, layer.zBlock, list);
   // bottom right
-  if (cr && cb) mapAddThing(game, layer.name + '_full', cx + dx, cy + dy, layer.zBlock, list);
-  else if (cr) mapAddThing(game, layer.name + '_bottom', cx + dx, cy + dy, layer.zBlock, list);
-  else if (cb) mapAddThing(game, layer.name + '_right', cx + dx, cy + dy, layer.zBlock, list);
+  if (cr != TILE_END && cb != TILE_END) mapAddThing(game, layer.name + '_full', cx + dx, cy + dy, layer.zBlock, list);
+  else if (cr != TILE_END) mapAddThing(game, layer.name + '_bottom', cx + dx, cy + dy, layer.zBlock, list);
+  else if (cb != TILE_END) mapAddThing(game, layer.name + '_right', cx + dx, cy + dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_bottomright', cx + dx, cy + dy, layer.zBlock, list);
   // Add top layer
-  if (!ct) mapAddThing(game, layer.name + '_top', cx, cy - 2.0*dy, layer.zTop, list);
+  if (!(ct != TILE_END)) mapAddThing(game, layer.name + '_top', cx, cy - 2.0*dy, layer.zTop, list);
 }
 
 function mapHandleSymmetric(game, layer, list, px, py, cl, cr, ct, cb, ctl, ctr, cbl, cbr) {
   // Add all 4 blocks for this one tile
-  mapAddThing(game, layer.name + '_' + mapSymmetricTopLeftName(cl, ct, ctl), px*80.0 + 20.0, py*80.0 + 20.0, layer.zBlock, list);
-  mapAddThing(game, layer.name + '_' + mapSymmetricTopRightName(cr, ct, ctr), px*80.0 + 60.0, py*80.0 + 20.0, layer.zBlock, list);
-  mapAddThing(game, layer.name + '_' + mapSymmetricBottomLeftName(cl, cb, cbl), px*80.0 + 20.0, py*80.0 + 60.0, layer.zBlock, list);
-  mapAddThing(game, layer.name + '_' + mapSymmetricBottomRightName(cr, cb, cbr), px*80.0 + 60.0, py*80.0 + 60.0, layer.zBlock, list);
-  // Consider all 12 possible extension blocks...
+  mapAddThing(game, layer.name + '_' + mapSymmetricTopLeftName(cl != TILE_END, ct != TILE_END, ctl != TILE_END), px*80.0 + 20.0, py*80.0 + 20.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + mapSymmetricTopRightName(cr != TILE_END, ct != TILE_END, ctr != TILE_END), px*80.0 + 60.0, py*80.0 + 20.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + mapSymmetricBottomLeftName(cl != TILE_END, cb != TILE_END, cbl != TILE_END), px*80.0 + 20.0, py*80.0 + 60.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + mapSymmetricBottomRightName(cr != TILE_END, cb != TILE_END, cbr != TILE_END), px*80.0 + 60.0, py*80.0 + 60.0, layer.zBlock, list);
+  // Handle extensions into other tile spaces
+
   // TODO:
 }
 
@@ -137,14 +142,14 @@ function mapContinueSame(map, tile, px, py, dx, dy) {
   const nx = px + dx;
   const ny = py + dy;
   // oustide
-  if (nx < 0 || ny < 0 || nx >= map.x || ny >= map.y) return true;
+  if (nx < 0 || ny < 0 || nx >= map.x || ny >= map.y) return TILE_CONTINUE;
   const ot = map.tiles[nx + ny*map.x];
-  if (ot == 0) return false; // empty
-  if (ot == tile) return true; // same tile
+  if (ot == 0) return TILE_END; // empty
+  if (ot == tile) return TILE_CONTINUE; // same tile
   // check z value
   const ttd = LAYERS.get(tile);
   const otd = LAYERS.get(ot);
   if (!ttd) throw 'Bad layer type?: ' + tile;
   if (!otd) throw 'Bad layer type?: ' + ot;
-  return ttd.zInternal < otd.zInternal;
+  return ttd.zInternal < otd.zInternal ? TILE_EXTEND : TILE_END;
 }

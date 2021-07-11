@@ -59,7 +59,8 @@ EDITOR_MENU.add({x: 0, y: 6, special: EDITOR_SPECIAL_TRY, text: 'Try'});
 EDITOR_MENU.add({x: 2, y: 6, special: EDITOR_SPECIAL_EXPORT, text: 'Export'});
 EDITOR_MENU.add({x: 3, y: 6, special: EDITOR_SPECIAL_IMPORT, text: 'Import'});
 
-// Pickups
+// This flag is set by file loading
+var edDoUpdate = false;
 
 // Current camera position
 var edCamX = 0;
@@ -152,6 +153,13 @@ function editorAddToolBox(tbo, alpha) {
 
 // Run editor
 function stateHandleEditor(game) {
+
+  // If just loaded map
+  if (edDoUpdate) {
+    editorDestroyAllMapObjects();
+    editorCreateAllFromMap(game, mapBlueprint);
+    edDoUpdate = false;
+  }
 
   // Movement is always on
   if (inputA.isDown) edCamX -= 20;
@@ -347,13 +355,13 @@ function editorUploadFile(file) {
     const json = event.target.result;
     try {
       mapBlueprint = JSON.parse(json);
+      storageSaveMap();
+      edDoUpdate = true; // This will trigger update next turn
     } catch (err) {
       alert('Failed to open file. Maybe wrong json format?')
       return;
     }
-    editorDestroyAllMapObjects();
-    editorCreateAllFromMap(gameSingleton, mapBlueprint); // Note, we need game singleton here
-    console.log('Done loading map from file:');
+
   });
   reader.readAsText(file);
 }
@@ -459,13 +467,11 @@ function editorCreateAllFromMap(game, map) {
 
 // Destroy all map objects
 function editorDestroyAllMapObjects() {
-  for (var px = 0; px < mapBlueprint.x; px++) {
-    for (var py = 0; py < mapBlueprint.y; py++) {
-      editorDestroyTile(mapBlueprint, px, py);
-    }
-  }
   edPlayerStart.destroy();
   edPlayerStart = null;
+  edTiles.forEach(o => {
+    o.forEach(s => s.destroy());
+  });
   edTiles = [];
   edEnemies.forEach(o => { if (o) o.destroy(); });
   edEnemies = [];
