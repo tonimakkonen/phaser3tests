@@ -70,6 +70,19 @@ function mapCreateDummy() {
     pickups[index] = PICKUP_WATERMELON;
   }
 
+  // Add some BG tiles
+  var dy = Math.floor(Math.random()*10);
+  for (var x = 0; x < mapX; x++) {
+    dy += Math.random()*4.5 - 2;
+    dy = Math.floor(dy);
+    if (dy < 2) dy = 2;
+    if (dy > 14) dy = 14;
+    for (var y = 0; y < dy; y++) {
+      const ay = mapY - 1 - y;
+      if (tiles[x + ay*mapX] == 0) tiles[x + ay*mapX] = LAYER_CAVE;
+    }
+  }
+
   return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: 0 }
 
 }

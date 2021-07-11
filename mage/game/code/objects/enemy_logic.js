@@ -59,7 +59,7 @@ function enemyHandleLogic(game, enemy, curTime) {
   // Towards player
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
-  const len = Math.sqrt(dx*dx + dy*dy);
+  var len = Math.sqrt(dx*dx + dy*dy);
   if (len == 0) len = 1.0; // NaN guard
   const dx1 = dx / len;
   const dy1 = dy / len;
