@@ -19,8 +19,9 @@ function mapInitialize(game, map) {
   // Add BG images
   // TODO: Make this more generic
 
-  //var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
-  //bg.setScrollFactor(0.0, 0.0);
+  var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
+  bg.setScrollFactor(0.0, 0.0);
+  bg.setDepth(-10.0);
 
   //var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
   //bg2.setScrollFactor(0.15, 0.15);

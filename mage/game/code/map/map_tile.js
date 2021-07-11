@@ -1,6 +1,9 @@
 
 "use strict";
 
+// TODO:
+// Top layer continuation
+
 const TILE_END = 0;
 const TILE_CONTINUE = 1;
 const TILE_EXTEND = 2;
@@ -9,13 +12,12 @@ const TILE_EXTEND = 2;
 // TODO: This needs to be tweaked a lot
 function mapCreateSingleTile(game, map, px, py, list) {
   if (px < 0 || py < 0 || px >= map.x && py >= map.y) throw new 'Bad px, py: ' + px + ', ' + py;
-
   const tile = map.tiles[px+py*map.x];
   if (tile == 0) return;
-
   const layer = LAYERS.get(tile);
   if (!layer) throw 'Bad layer index ' + tile;
 
+  // Do we continue the same layer to these directions?
   const cl = mapContinueSame(map, tile, px, py, -1, 0);
   const cr = mapContinueSame(map, tile, px, py, +1, 0);
   const ct = mapContinueSame(map, tile, px, py, 0, -1);
@@ -25,6 +27,7 @@ function mapCreateSingleTile(game, map, px, py, list) {
   const cbl = mapContinueSame(map, tile, px, py, -1, +1);
   const cbr = mapContinueSame(map, tile, px, py, +1, +1);
 
+  // Handle different layer types
   if (layer.type == LAYER_TYPE_TOP) {
     mapHandleTop(game, layer, list, px, py, cl, cr, ct, cb);
   }  else if (layer.type == LAYER_TYPE_SYMMETRIC) {
@@ -77,14 +80,43 @@ function mapHandleTop(game, layer, list, px, py, cl, cr, ct, cb) {
 }
 
 function mapHandleSymmetric(game, layer, list, px, py, cl, cr, ct, cb, ctl, ctr, cbl, cbr) {
-  // Add all 4 blocks for this one tile
-  mapAddThing(game, layer.name + '_' + mapSymmetricTopLeftName(cl != TILE_END, ct != TILE_END, ctl != TILE_END), px*80.0 + 20.0, py*80.0 + 20.0, layer.zBlock, list);
-  mapAddThing(game, layer.name + '_' + mapSymmetricTopRightName(cr != TILE_END, ct != TILE_END, ctr != TILE_END), px*80.0 + 60.0, py*80.0 + 20.0, layer.zBlock, list);
-  mapAddThing(game, layer.name + '_' + mapSymmetricBottomLeftName(cl != TILE_END, cb != TILE_END, cbl != TILE_END), px*80.0 + 20.0, py*80.0 + 60.0, layer.zBlock, list);
-  mapAddThing(game, layer.name + '_' + mapSymmetricBottomRightName(cr != TILE_END, cb != TILE_END, cbr != TILE_END), px*80.0 + 60.0, py*80.0 + 60.0, layer.zBlock, list);
-  // Handle extensions into other tile spaces
+  // Add all 4 blocks for this one tile, and all extension. This is probably not fully correct logic...
+  const tl = mapSymmetricTopLeftName(cl != TILE_END, ct != TILE_END, ctl != TILE_END);
+  const tr = mapSymmetricTopRightName(cr != TILE_END, ct != TILE_END, ctr != TILE_END);
+  const bl = mapSymmetricBottomLeftName(cl != TILE_END, cb != TILE_END, cbl != TILE_END);
+  const br = mapSymmetricBottomRightName(cr != TILE_END, cb != TILE_END, cbr != TILE_END);
+  mapAddThing(game, layer.name + '_' + tl, px*80.0 + 20.0, py*80.0 + 20.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + tr, px*80.0 + 60.0, py*80.0 + 20.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + bl, px*80.0 + 20.0, py*80.0 + 60.0, layer.zBlock, list);
+  mapAddThing(game, layer.name + '_' + br, px*80.0 + 60.0, py*80.0 + 60.0, layer.zBlock, list);
+  if (cl == TILE_EXTEND) {
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(tl, true), px*80.0 - 20.0, py*80.0 + 20.0, layer.zBlock, list);
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(bl, true), px*80.0 - 20.0, py*80.0 + 60.0, layer.zBlock, list);
+  }
+  if (cr == TILE_EXTEND) {
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(tr, true), px*80.0 + 100.0, py*80.0 + 20.0, layer.zBlock, list);
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(br, true), px*80.0 + 100.0, py*80.0 + 60.0, layer.zBlock, list);
+  }
+  if (ct == TILE_EXTEND) {
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(tl, false), px*80.0 + 20.0, py*80.0 - 20.0, layer.zBlock, list);
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(tr, false), px*80.0 + 60.0, py*80.0 - 20.0, layer.zBlock, list);
+  }
+  if (cb == TILE_EXTEND) {
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(bl, false), px*80.0 + 20.0, py*80.0 + 100.0, layer.zBlock, list);
+    mapAddThing(game, layer.name + '_' + mapGetSymmetricExtension(br, false), px*80.0 + 60.0, py*80.0 + 100.0, layer.zBlock, list);
+  }
+  // Handle extension
+
 
   // TODO:
+}
+
+function mapGetSymmetricExtension(name, horizontal) {
+  if (name == 'ctl') return horizontal ? 'top' : 'left';
+  if (name == 'ctr') return horizontal ? 'top' : 'right';
+  if (name == 'cbl') return horizontal ? 'bottom' : 'left';
+  if (name == 'cbr') return horizontal ? 'bottom' : 'right';
+  return name;
 }
 
 function mapSymmetricTopLeftName(cl, ct, ctl) {
