@@ -1,4 +1,6 @@
 
+"use strict";
+
 // Create a dummy map
 function mapCreateDummy() {
   var mapY = 18;

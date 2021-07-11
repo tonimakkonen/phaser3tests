@@ -23,6 +23,8 @@ function resLoadResources(game) {
     (value, key) => {
       if (value.type == LAYER_TYPE_TOP) {
         resLoadTopLayer(game, value);
+      } else if (value.type == LAYER_TYPE_SYMMETRIC) {
+        resLoadSymmetricLayer(game, value);
       } else {
         throw new 'Unkown layer type: ' + value;
       }
@@ -72,6 +74,22 @@ function resLoadTopLayer(game, value) {
   resLoadImageFromBase(game, value.name, value.locationBase, 'bottomright');
   resLoadImageFromBase(game, value.name, value.locationBase, 'bottom');
   resLoadImageFromBase(game, value.name, value.locationBase, 'top');
+}
+
+function resLoadSymmetricLayer(game, value) {
+  resLoadImageFromBase(game, value.name, value.locationBase, 'full');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'left');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'right');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'top');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'bottom');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'topleft');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'topright');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'bottomleft');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'bottomright');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'ctl');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'ctr');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'cbl');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'cbr');
 }
 
 function resLoadImageFromBase(game, nameBase, urlBase, part) {

@@ -177,10 +177,12 @@ GRAPHS.set(
 /////////////////////////////////////////////////////////
 
 
-const LAYER_TYPE_TOP = 1;
+const LAYER_TYPE_TOP        = 1;  // layers with a top thingy (e.g. grass)
+const LAYER_TYPE_SYMMETRIC  = 2;  // symmetric layers
 
 
-const LAYER_GROUND = 1;
+const LAYER_GROUND  = 1;
+const LAYER_CAVE    = 2;
 
 
 // Z location of all game objects
@@ -196,10 +198,25 @@ LAYERS.set(
     name: 'ground',
     locationBase: 'imgs/ground/ground',
     block: true,
+    zInternal: 1,
     zBlock: 0,
     zTop: 2.0
   }
 );
+
+LAYERS.set(
+  LAYER_CAVE,
+  {
+    type: LAYER_TYPE_SYMMETRIC,
+    name: 'cave',
+    locationBase: 'imgs/ground/cave',
+    block: false,
+    zInternal: 0.5,
+    zBlock: -0.5
+  }
+);
+
+
 
 //////////////////////////////////
 // All the different shot types //

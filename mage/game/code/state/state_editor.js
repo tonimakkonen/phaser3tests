@@ -40,6 +40,7 @@ EDITOR_MENU.add({x: 9, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDI
 
 // Second row, ground options
 EDITOR_MENU.add({x: 0, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, image: 'ground_full'});
+EDITOR_MENU.add({x: 1, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_CAVE, image: 'cave_full'});
 
 // Decorations
 
@@ -474,13 +475,20 @@ function editorDestroyAllMapObjects() {
   edDecorations = [];
 }
 
-// Redo all tiles around this tile wrt. to the ground
+// Redo tiles for this and adjacent tiles
 function editorRedoTiles(game, map, px, py) {
-  editorRedoTile(game, map, px, py);
-  if (px > 0) editorRedoTile(game, map, px - 1, py);
-  if (px < map.x - 1) editorRedoTile(game, map, px + 1, py);
-  if (py > 0) editorRedoTile(game, map, px, py - 1);
-  if (py < map.y - 1) editorRedoTile(game, map, px, py + 1);
+  for (var dx = -1; dx <= 1; dx++) {
+    for (var dy = -1; dy <= 1; dy++) {
+      editorRedoTile(game, map, px + dx, py + dy); // can handle outside map
+    }
+  }
+}
+
+// redo all tiles for a given position on the map
+function editorRedoTile(game, map, px, py) {
+  if (px < 0 || py < 0 || px > map.x - 1 || py > map.y - 1) return;
+  editorDestroyTile(map, px, py);
+  mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x]);
 }
 
 // Destroy all ground tiles from a given position
@@ -488,12 +496,6 @@ function editorDestroyTile(map, px, py) {
   var list = edTiles[px + py*map.x]; // list of list
   list.forEach(s => s.destroy());
   list.splice(0, list.length);
-}
-
-// redo all tiles for a given position
-function editorRedoTile(game, map, px, py) {
-  editorDestroyTile(map, px, py);
-  mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x]);
 }
 
 function editorUpdateEnemy(game, map, px, py) {
