@@ -183,6 +183,7 @@ const LAYER_TYPE_SYMMETRIC  = 2;  // symmetric layers
 
 const LAYER_GROUND  = 1;
 const LAYER_CAVE    = 2;
+const LAYER_ROCK    = 3;
 
 
 // Z location of all game objects
@@ -198,7 +199,7 @@ LAYERS.set(
     name: 'ground',
     locationBase: 'imgs/ground/ground',
     block: true,
-    zInternal: 1,
+    zInternal: 0,
     zBlock: 0,
     zTop: 2.0
   }
@@ -211,8 +212,20 @@ LAYERS.set(
     name: 'cave',
     locationBase: 'imgs/ground/cave',
     block: false,
-    zInternal: 0.5,
+    zInternal: -0.5,
     zBlock: -0.5
+  }
+);
+
+LAYERS.set(
+  LAYER_ROCK,
+  {
+    type: LAYER_TYPE_SYMMETRIC,
+    name: 'rock',
+    locationBase: 'imgs/ground/rock',
+    block: true,
+    zInternal: 0.1,
+    zBlock: 0.1
   }
 );
 
