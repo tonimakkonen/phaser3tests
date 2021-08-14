@@ -199,8 +199,8 @@ LAYERS.set(
     name: 'ground',
     locationBase: 'imgs/ground/ground',
     block: true,
-    zInternal: 0,
-    zBlock: 0,
+    zInternal: -0.3,
+    zBlock: -0.3,
     zTop: 2.0
   }
 );
@@ -224,8 +224,8 @@ LAYERS.set(
     name: 'rock',
     locationBase: 'imgs/ground/rock',
     block: true,
-    zInternal: 0.1,
-    zBlock: 0.1
+    zInternal: -0.1,
+    zBlock: -0.1
   }
 );
 

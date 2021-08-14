@@ -164,5 +164,8 @@ function addToListIfLongerThanOne(list, start, end) {
 }
 
 function mapIsBlocked(value) {
-  return value == 1;
+  if (value == 0) return false;
+  var layer = LAYERS.get(value);
+  if (!layer) throw 'Unknown layer: ' + layer;
+  return layer.block;
 }
