@@ -57,6 +57,8 @@ function mapInitialize(game, map) {
   player.setCollideWorldBounds(true);
   player.setBounce(0.0, 0.0);
 
+  // Create map ending
+
   // Follow player
   // TODO: Does this need to change?
   game.physics.world.setBounds(0, 0, map.x*80, map.y*80);

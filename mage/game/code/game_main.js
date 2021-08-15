@@ -47,10 +47,6 @@ var player = null;
 var lastShot = 0; // TODO
 var playerHealth = 100.0;
 
-// TODO: Where do these need to be?
-var uiHealthBar = null;
-
-
 // Current map blueprint
 // Used by editor or by
 var mapBlueprint = null;

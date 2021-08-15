@@ -36,6 +36,10 @@ function mapCreateSingleTile(game, map, px, py, list) {
     throw 'Unkown layer type: ' + layer.type;
   }
 
+  // Create decorations
+
+  
+
 /*
     // Randoms
     // TODO: Remove random

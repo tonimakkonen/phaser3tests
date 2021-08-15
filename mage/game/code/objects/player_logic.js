@@ -1,7 +1,11 @@
 
 "use strict";
 
-// Handle player movement
+// Player variables
+
+var player = null;
+var lastShot = 0; // TODO
+var playerHealth = 100.0;
 
 function playerHandleLogic(game, curTime) {
 
@@ -72,6 +76,10 @@ function playerDealDamage(game, amount, type) {
     player.destroy();
     player = null;
     playerHealth = 0.0;
+  }
+  if (playerHealth > 100.0) {
+    console.log('blaa');
+    playerHealth = 100.0;
   }
   uiUpdateHealthBar(game);
 }

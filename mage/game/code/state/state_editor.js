@@ -395,12 +395,12 @@ function editorApplyPlayerStart(game, map, px, py) {
 }
 
 function editorApplyEnemy(game, map, px, py, option) {
-  if (mapIsBlocking(map.tiles[px + py*map.x])) return false;
+  if (mapIsBlocked(map.tiles[px + py*map.x])) return false;
   return editorSetEnemy(game, map, px, py, option);
 }
 
 function editorApplyPickup(game, map, px, py, option) {
-  if (mapIsBlocking(map.tiles[px + py*map.x])) return false;
+  if (mapIsBlocked(map.tiles[px + py*map.x])) return false;
   return editorSetPickup(game, map, px, py, option);
 }
 
@@ -412,7 +412,7 @@ function editorSetTile(game, map, px, py, value) {
   if (map.tiles[px + py*map.x] != value) {
     map.tiles[px + py*map.x] = value;
     editorRedoTiles(game, map, px, py);
-    if (mapIsBlocking(value)) {
+    if (mapIsBlocked(value)) {
       editorSetEnemy(game, map, px, py, 0);
       editorSetPickup(game, map, px, py, 0);
     }
