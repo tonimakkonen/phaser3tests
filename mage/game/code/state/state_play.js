@@ -50,6 +50,7 @@ function stateHandlePlay(game) {
   playerHandleLogic(game, game.time.now);
 
   // Handle all enemy logic
+  // TODO: Does it need to be like this?
   for (var i = listEnemies.length - 1; i >= 0; i--) {
     var enemy = listEnemies[i];
     const alive = enemyHandleLogic(game, enemy, game.time.now);
