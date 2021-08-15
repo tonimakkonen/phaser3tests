@@ -53,19 +53,20 @@ const GRAPH_TYPE_ANIM_3 = 3;
 ////////////////////
 
 
-const GRAPH_PLAYER            = 1;
+const GRAPH_PLAYER               = 1;
 
-const GRAPH_FOREST_MONSTER    = 101;
-const GRAPH_BURNING_MONSTER   = 102;
-const GRAPH_ELECTRIC_MONSTER  = 103;
-const GRAPH_STORM_MONSTER     = 104;
-const GRAPH_TWISTER_MONSTER   = 105;
+const GRAPH_FOREST_MONSTER       = 101;
+const GRAPH_BURNING_MONSTER      = 102;
+const GRAPH_ELECTRIC_MONSTER     = 103;
+const GRAPH_STORM_MONSTER        = 104;
+const GRAPH_TWISTER_MONSTER      = 105;
+const GRAPH_SHINING_TREE_MONSTER = 106;
 
-const GRAPH_WATERMELON_PICKUP = 201;
+const GRAPH_WATERMELON_PICKUP    = 201;
 
-const GRAPH_ICE_SHOT          = 301;
-const GRAPH_ELECTRIC_SHOT     = 302;
-const GRAPH_FIRE_SHOT         = 303;
+const GRAPH_ICE_SHOT             = 301;
+const GRAPH_ELECTRIC_SHOT        = 302;
+const GRAPH_FIRE_SHOT            = 303;
 
 var GRAPHS = new Map();
 
@@ -128,6 +129,15 @@ GRAPHS.set(
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 45,
     sizeY: 70
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SHINING_TREE_MONSTER,
+  {
+    location: 'imgs/monsters/shining_tree.png',
+    name: 'enemy_shining_tree_monster',
+    type: GRAPH_TYPE_SINGLE
   }
 );
 
@@ -284,12 +294,13 @@ SHOTS.set(
 // All different enemy types //
 ///////////////////////////////
 
-
-const ENEMY_FOREST_MONSTER    = 1;
-const ENEMY_BURNING_MONSTER   = 2;
-const ENEMY_ELECTRIC_MONSTER  = 3;
-const ENEMY_STORM_MONSTER     = 4;
-const ENEMY_TWISTER_MONSTER   = 5;
+// TODO: Simplify names?
+const ENEMY_FOREST_MONSTER         = 1;
+const ENEMY_BURNING_MONSTER        = 2;
+const ENEMY_ELECTRIC_MONSTER       = 3;
+const ENEMY_STORM_MONSTER          = 4;
+const ENEMY_TWISTER_MONSTER        = 5;
+const ENEMY_SHINING_TREE_MONSTER   = 6;
 
 
 var ENEMIES = new Map();
@@ -342,6 +353,16 @@ ENEMIES.set(
     gravity: 50,
     health: 40,
     shoot1: { type: SHOT_ICE, time: 1000, towards: true }
+  }
+);
+
+ENEMIES.set(
+  ENEMY_SHINING_TREE_MONSTER,
+  {
+    graph: GRAPH_SHINING_TREE_MONSTER,
+    immovable: true, // TODO: Make this into effect
+    health: 1000,
+    spawn: { type: ENEMY_FOREST_MONSTER, time: 5000 }
   }
 );
 

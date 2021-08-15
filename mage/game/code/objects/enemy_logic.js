@@ -21,19 +21,18 @@ function enemyCreate(game, enemyType, x, y) {
   newEnemy.xLastJump = 0;
   newEnemy.xLastShot1 = 0.0;
   newEnemy.xLastShot2 = 0.0;
-
+  newEnemy.xLastSpawn = 0.0;
 
   newEnemy.setCollideWorldBounds(true);
 
   // Set properties based on movement modes
+  // Some enemies have no movement
   if (info.moveBounce) {
     newEnemy.setBounce(0.4, 0.4);
   } else if (info.moveWalk) {
     newEnemy.setBounce(0.1, 0.1);
   } else if (info.moveFloat) {
     newEnemy.setBounce(0.8, 0.8);
-  } else {
-    throw 'No movement type defined: ' + info;
   }
 
   // For any constant animations, just set it playing here
@@ -64,7 +63,8 @@ function enemyHandleLogic(game, enemy, curTime) {
   const dx1 = dx / len;
   const dy1 = dy / len;
 
-  // If too far away, just freeze enemies
+  // If too far away, just freeze enemies and do nothing
+  // TODO: Tweak this based on camera
   if (Math.abs(dx) > 80*16 || Math.abs(dy) > 80*9) {
     enemy.setGravity(0, 0);
     enemy.setVelocity(0, 0);
@@ -88,6 +88,9 @@ function enemyHandleLogic(game, enemy, curTime) {
   // Handle firing
   if (enemy.xInfo.shoot1) enemyHandleShot(game, enemy, enemy.xInfo.shoot1, 1, dx1, dy1);
   if (enemy.xInfo.shoot2) enemyHandleShot(game, enemy, enemy.xInfo.shoot2, 2, dx1, dy1);
+
+  // handle spawning
+  if (enemy.xInfo.spawn) enemyhandleSpawn(game, enemy, enemy.xInfo.spawn);
 
 
   return true;
@@ -157,14 +160,23 @@ function enemyHandleJump(game, enemy, move, dx, dy) {
 }
 
 function enemyDealDamage(game, enemy, amount, type) {
-
+  // TODO: Make use of this
 }
 
 function enemyHandleShot(game, enemy, info, type, dx1, dy1) {
-  var last = type == 1 ? enemy.xLastShot1 : enemy.xLastShot2;
+  const last = type == 1 ? enemy.xLastShot1 : enemy.xLastShot2;
   const now = game.time.now;
   if (now >= last + info.time) {
     shotShoot(game, false, info.type, enemy.x, enemy.y, dx1, dy1);
     type == 1 ? enemy.xLastShot1 = now : enemy.xLastShot2 = now;
+  }
+}
+
+function enemyhandleSpawn(game, enemy, info) {
+  const last = enemy.xLastSpawn;
+  const now = game.time.now;
+  if (now >= last + info.time) {
+    enemyCreate(game, info.type, enemy.x, enemy.y);
+    enemy.xLastSpawn = now;
   }
 }
