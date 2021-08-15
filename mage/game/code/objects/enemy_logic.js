@@ -1,6 +1,22 @@
 
 "use strict";
 
+// Destroy all enemies
+function enemyDestroyAll() {
+  listEnemies.forEach(o => { enemyDestroy(o); });
+  listEnemies = [];
+}
+
+// Remove enemy and all related objects from phaser3
+function enemyDestroy(enemy) {
+  enemy.destroy();
+}
+
+// Kill and enemy handle possibly
+function enemyKill(game) {
+  // TODO: drops, splatter, etc..
+}
+
 function enemyCreate(game, enemyType, x, y) {
 
   var info = ENEMIES.get(enemyType);
@@ -47,8 +63,8 @@ function enemyCreate(game, enemyType, x, y) {
 function enemyHandleLogic(game, enemy, curTime) {
 
   if (enemy.xHealth <= 0.0) {
-    console.log('killed enemy');
-    return false; // Kill this enemy
+    enemyKill(enemy);
+    return false; // Calling method handles removing from list
   }
 
   // TODO: Do better

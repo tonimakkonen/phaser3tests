@@ -1,4 +1,8 @@
 
+function pickupDestroyAll() {
+  // TODO
+}
+
 function pickupCreate(game, pickupType, x, y) {
   var info = PICKUPS.get(pickupType);
   if (!info) throw 'Unknown pickup type: ' + pickupType;
