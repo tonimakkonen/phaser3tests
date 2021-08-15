@@ -43,9 +43,7 @@ var listEnemies = []; // List of all enemies
 
 
 // TODO: Think about player properties
-var player = null;
-var lastShot = 0; // TODO
-var playerHealth = 100.0;
+
 
 // Current map blueprint
 // Used by editor or by

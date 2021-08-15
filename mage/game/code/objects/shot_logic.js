@@ -22,6 +22,11 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy) {
       newShot.setBounce(info.bounce.amount, info.bounce.amount);
   }
 
+  // Handle animation
+  if (graph.type == GRAPH_TYPE_ANIM_3) {
+    newShot.anims.play(graph.name + '_anim');
+  }
+
 }
 
 function shotHitPlayer(game, shot) {

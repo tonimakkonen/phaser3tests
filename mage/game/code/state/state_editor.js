@@ -51,7 +51,7 @@ EDITOR_MENU.add({x: 1, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BURNING_MONS
 EDITOR_MENU.add({x: 2, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_ELECTRIC_MONSTER, image: 'enemy_electric_monster'});
 EDITOR_MENU.add({x: 3, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_STORM_MONSTER, image: 'enemy_storm_monster'});
 EDITOR_MENU.add({x: 4, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_TWISTER_MONSTER, image: 'enemy_twister_monster'});
-EDITOR_MENU.add({x: 5, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SHINING_TREE_MONSTER, image: 'enemy_shining_tree_monster'});
+EDITOR_MENU.add({x: 5, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SHINING_TREE_MONSTER, image: 'enemy_shining_tree_monster', scale: 0.25});
 
 // Pickups
 EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
@@ -127,7 +127,9 @@ function editorAddMenuOption(game, mo) {
   const cx = mo.x * 80.0 + 40.0 + 80.0;
   const cy = mo.y * 80.0 + 40.0 + 80.0;
   if (mo.image) {
-    editorAddToolBox(game.add.image(cx, cy, mo.image), 0.75);
+    var image = game.add.image(cx, cy, mo.image);
+    if (mo.scale) image.setScale(mo.scale);
+    editorAddToolBox(image, 0.75);
   } else if (mo.text) {
     var text = game.add.text(cx, cy, mo.text).setOrigin(0.5);
     editorAddToolBox(text, 0.75);

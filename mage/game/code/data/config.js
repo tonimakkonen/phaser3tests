@@ -26,11 +26,11 @@ const GAME_MODE_MAP_EDITOR  = 3;
 // Various stuff //
 ///////////////////
 
-const DAMAGE_TYPE_NONE      = 0;
-const DAMAGE_TYPE_BLUNT     = 1;
-const DAMAGE_TYPE_FIRE      = 2;
-const DAMAGE_TYPE_FROST     = 3;
-const DAMAGE_TYPE_ELECTRIC  = 4;
+const DAMAGE_TYPE_NONE  = 0;
+const DAMAGE_TYPE_AIR   = 1;
+const DAMAGE_TYPE_WATER = 2;
+const DAMAGE_TYPE_FIRE  = 3;
+const DAMAGE_TYPE_EARTH = 4;
 
 
 //////////////////////////////////////////////////
@@ -67,6 +67,7 @@ const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_ICE_SHOT             = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
 const GRAPH_FIRE_SHOT            = 303;
+const GRAPH_TREE_SHOT            = 304;
 
 var GRAPHS = new Map();
 
@@ -181,6 +182,18 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_TREE_SHOT,
+  {
+    location: 'imgs/shots/tree.png',
+    name: 'shot_tree',
+    type: GRAPH_TYPE_ANIM_3,
+    sizeX: 20,
+    sizeY: 20
+  }
+);
+
+
 
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
@@ -249,6 +262,7 @@ LAYERS.set(
 const SHOT_ICE      = 1;
 const SHOT_ELECTRIC = 2;
 const SHOT_FIRE     = 3;
+const SHOT_TREE     = 4;
 
 
 var SHOTS = new Map();
@@ -260,7 +274,7 @@ SHOTS.set(
   {
     graph: GRAPH_ICE_SHOT,
     damage: 10,
-    type: DAMAGE_TYPE_FROST,
+    type: DAMAGE_TYPE_WATER,
     velocity: 400,
     grav: 1.0,
     bounce: { count: 5, amount: 0.9 }
@@ -272,7 +286,7 @@ SHOTS.set(
   {
     graph: GRAPH_ELECTRIC_SHOT,
     damage: 20,
-    type: DAMAGE_TYPE_ELECTRIC,
+    type: DAMAGE_TYPE_AIR,
     velocity: 600,
     grav: 0.0
   }
@@ -286,6 +300,18 @@ SHOTS.set(
     type: DAMAGE_TYPE_FIRE,
     velocity: 600,
     grav: 0.5
+  }
+)
+
+SHOTS.set(
+  SHOT_TREE,
+  {
+    graph: GRAPH_TREE_SHOT,
+    damage: 25,
+    type: DAMAGE_TYPE_EARTH,
+    velocity: 250,
+    grav: 0.8,
+    duration: 2000
   }
 )
 
@@ -309,7 +335,9 @@ ENEMIES.set(
   ENEMY_FOREST_MONSTER,
   {
     graph: GRAPH_FOREST_MONSTER,
-    moveWalk: { maxSpeed: 40, alpha: 1},
+    moveWalk: { maxSpeed: 60, alpha: 1},
+    moveJump: { delay: 3000, velocity: 300 }, // TODO: Add randomness
+    shoot1: { type: SHOT_TREE, time: 1000, towards: true, randomAngle: 40.0, topBias: 20.0 },
     health: 100
   }
 );

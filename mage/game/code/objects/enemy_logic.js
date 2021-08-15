@@ -22,6 +22,7 @@ function enemyCreate(game, enemyType, x, y) {
   newEnemy.xLastShot1 = 0.0;
   newEnemy.xLastShot2 = 0.0;
   newEnemy.xLastSpawn = 0.0;
+  newEnemy.xlastAnim = null;
 
   newEnemy.setCollideWorldBounds(true);
 
@@ -147,13 +148,27 @@ function enemyHandleBounceMove(game, enemy, move, dx, dy) {
 }
 
 function enemyHandleWalkMove(game, enemy, move, dx, dy) {
-  // TODO:
-  enemy.setGravity(dx > 0 ? 100 : -100, 400);
+  // Use this factor to slow down movement close to player
+  var accFactor = dx / 50.0;
+  if (accFactor < -1.0) accFactor = -1.0;
+  if (accFactor > 1.0) accFactor = 1.0;
+  const desire = accFactor * move.maxSpeed * move.alpha;
+  const vx = enemy.body.velocity.x;
+  const acc = desire - move.alpha * vx;
+  enemy.setGravity(acc, 300); // TODO: gravity!
+
+  // Walking animation for walking enemies
+  // TODO: Should this be here??
+  const desiredAnim = enemy.xGraph.name + (dx < 0 ? '_left' : '_right');
+  if (enemy.xlastAnim != desiredAnim) {
+    enemy.anims.play(desiredAnim);
+    enemy.xlastAnim = desiredAnim;
+  }
 }
 
 // Handle jump
 function enemyHandleJump(game, enemy, move, dx, dy) {
-  if (dy < 0 && enemy.body.blocked.down && game.time.now - enemy.xLastJump > move.delay) { // only jump if above
+  if (dy < 0 && enemy.body.blocked.down && game.time.now - enemy.xLastJump > move.delay) { // only jump if player is above
     enemy.setVelocityY(-move.velocity);
     enemy.xLastJump = game.time.now;
   }
@@ -167,6 +182,7 @@ function enemyHandleShot(game, enemy, info, type, dx1, dy1) {
   const last = type == 1 ? enemy.xLastShot1 : enemy.xLastShot2;
   const now = game.time.now;
   if (now >= last + info.time) {
+    // TODO: hande random angles etc.
     shotShoot(game, false, info.type, enemy.x, enemy.y, dx1, dy1);
     type == 1 ? enemy.xLastShot1 = now : enemy.xLastShot2 = now;
   }
