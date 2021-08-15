@@ -32,6 +32,8 @@ function playDestroyPhaserObjects(game) {
 
   // Destroy all non-static content
   enemyDestroyAll();
+  pickupDestroyAll();
+  shotDestroyAll();
 
   // Destroy UI
   uiDestroy();

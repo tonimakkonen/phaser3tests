@@ -58,12 +58,12 @@ function playerHandleLogic(game, curTime) {
 
   // Shoot (move elsewhere)
   if (game.input.activePointer.leftButtonDown() && curTime - lastShot > 250) {
-    shotShoot(game, true, SHOT_FIRE, player.x, player.y, dx, dy);
+    shotShoot(game, true, SHOT_ELECTRIC, player.x, player.y, dx, dy);
     lastShot = curTime;
   }
 
-  if (game.input.activePointer.rightButtonDown() && curTime - lastShot > 250) {
-    shotShoot(game, true, SHOT_ELECTRIC, player.x, player.y, dx, dy);
+  if (game.input.activePointer.rightButtonDown() && curTime - lastShot > 1000) {
+    shotShoot(game, true, SHOT_FIRE_STORM, player.x, player.y, dx, dy);
     lastShot = curTime;
   }
 

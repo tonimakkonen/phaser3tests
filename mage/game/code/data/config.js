@@ -9,7 +9,6 @@
 var VERSION = 1;
 
 // Typical HD (720p) resolution. Should work on most devices
-// TODO: Change setting to config
 var settingWidth = 1280;
 var settingHeight = 720;
 
@@ -20,6 +19,7 @@ const GAME_MODE_NONE        = 0; // dummy mode, sets up game
 const GAME_MODE_MAIN_MENU   = 1;
 const GAME_MODE_PLAYING     = 2;
 const GAME_MODE_MAP_EDITOR  = 3;
+const GAME_MODE_ON_MAP      = 4; // between levels
 
 
 ///////////////////
@@ -61,6 +61,7 @@ const GRAPH_ELECTRIC_MONSTER     = 103;
 const GRAPH_STORM_MONSTER        = 104;
 const GRAPH_TWISTER_MONSTER      = 105;
 const GRAPH_SHINING_TREE_MONSTER = 106;
+const GRAPH_MAGMA_MONSTER        = 107;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 
@@ -68,6 +69,7 @@ const GRAPH_ICE_SHOT             = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
 const GRAPH_FIRE_SHOT            = 303;
 const GRAPH_TREE_SHOT            = 304;
+const GRAPH_FIRE_STORM_SHOT      = 305;
 
 var GRAPHS = new Map();
 
@@ -142,6 +144,15 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_MAGMA_MONSTER,
+  {
+    location: 'imgs/monsters/magma_monster.png',
+    name: 'enemy_magma_monster',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
 // Pickups
 
 GRAPHS.set(
@@ -193,7 +204,14 @@ GRAPHS.set(
   }
 );
 
-
+GRAPHS.set(
+  GRAPH_FIRE_STORM_SHOT,
+  {
+    location: 'imgs/shots/fire_storm.png',
+    name: 'shot_fire_storm',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
 
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
@@ -259,10 +277,11 @@ LAYERS.set(
 //////////////////////////////////
 
 
-const SHOT_ICE      = 1;
-const SHOT_ELECTRIC = 2;
-const SHOT_FIRE     = 3;
-const SHOT_TREE     = 4;
+const SHOT_ICE        = 1;
+const SHOT_ELECTRIC   = 2;
+const SHOT_FIRE       = 3;
+const SHOT_TREE       = 4;
+const SHOT_FIRE_STORM = 5;
 
 
 var SHOTS = new Map();
@@ -315,6 +334,18 @@ SHOTS.set(
   }
 )
 
+SHOTS.set(
+  SHOT_FIRE_STORM,
+  {
+    graph: GRAPH_FIRE_STORM_SHOT,
+    damage: 25,
+    type: DAMAGE_TYPE_FIRE,
+    velocity: 400,
+    grav: 0.5,
+    spawn: { type: SHOT_FIRE, amount: 20, velocity: 0.5}
+  }
+)
+
 
 ///////////////////////////////
 // All different enemy types //
@@ -327,6 +358,7 @@ const ENEMY_ELECTRIC_MONSTER       = 3;
 const ENEMY_STORM_MONSTER          = 4;
 const ENEMY_TWISTER_MONSTER        = 5;
 const ENEMY_SHINING_TREE_MONSTER   = 6;
+const ENEMY_MAGMA_MONSTER          = 7;
 
 
 var ENEMIES = new Map();
@@ -391,6 +423,16 @@ ENEMIES.set(
     immovable: true, // TODO: Make this into effect
     health: 1000,
     spawn: { type: ENEMY_FOREST_MONSTER, time: 5000 }
+  }
+);
+
+ENEMIES.set(
+  ENEMY_MAGMA_MONSTER,
+  {
+    graph: GRAPH_MAGMA_MONSTER,
+    health: 250,
+    moveWalk: { maxSpeed: 30, alpha: 1},
+    shoot1: { type: SHOT_FIRE_STORM, time: 1000, towards: true }
   }
 );
 

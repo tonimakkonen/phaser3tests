@@ -1,6 +1,6 @@
 
 function pickupDestroyAll() {
-  // TODO
+  groupPickups.clear(true);
 }
 
 function pickupCreate(game, pickupType, x, y) {
