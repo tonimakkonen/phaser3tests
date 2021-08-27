@@ -67,6 +67,7 @@ function mapInitialize(game, map, mapObjectList) {
 
   // Follow player
   // TODO: Does this need to change?
+  // TODO: Maybe this should be in ppay?
   game.physics.world.setBounds(0, 0, map.x*80, map.y*80);
   game.cameras.main.startFollow(player);
   game.cameras.main.setBounds(0, 0, map.x*80, map.y*80);

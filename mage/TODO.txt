@@ -1,4 +1,19 @@
 
+1. Spell selection
+-> Create spell in config, create in play menu
+
+2. Enemy shooting settings
+ - add options to shoot more up, randomness
+ - range
+
+3. Mana bar usage
+
+4. Player persistence over plays, start dealing with this..
+
+---
+
+
+
 - Lumimaasto
 
 - Vesihirviö
@@ -12,7 +27,6 @@
 
 - Kentän läpipääseminen
 - Valikko kenttien välissä
-- Mahdollisuus aloittaa uudelleen, jos kuolee
 
 --
 
@@ -21,3 +35,7 @@
 - Spells as a whole
 
 - Mana bar changes
+
+- Refactor terrain
+
+- Refactor enemy movement
