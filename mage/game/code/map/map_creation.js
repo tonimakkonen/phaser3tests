@@ -11,7 +11,7 @@ function mapCreateEmpty(x, y) {
     playerStartX: 0,
     playerStartY: 0,
     exitX: 1,
-    exitT: 0
+    exitY: 0
   };
 }
 
@@ -24,6 +24,7 @@ function mapInitialize(game, map, mapObjectList) {
   var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
   bg.setScrollFactor(0.0, 0.0);
   bg.setDepth(-10.0);
+  mapObjectList.push(bg);
 
   //var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
   //bg2.setScrollFactor(0.15, 0.15);
@@ -61,7 +62,8 @@ function mapInitialize(game, map, mapObjectList) {
   player.setBounce(0.0, 0.0);
 
   // Create map ending
-  //var exit = game.add.
+  var exit = groupExits.create(map.exitX*80.0 + 40.0, map.exitY*80.0 + 40.0, 'exit_door1');
+  mapObjectList.push(exit);
 
   // Follow player
   // TODO: Does this need to change?
