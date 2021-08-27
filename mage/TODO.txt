@@ -14,9 +14,10 @@
 - Valikko kenttien välissä
 - Mahdollisuus aloittaa uudelleen, jos kuolee
 
-- Health & Mana
+--
 
+- Tab menu when playing and selecting spells
 
-----
+- Spells as a whole
 
-15.8.2021
+- Mana bar changes

@@ -86,7 +86,7 @@ function mapCreateDummy() {
   }
 
 
-  return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: 0 }
+  return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: 0, exitX: mapX-1, exitY: 10 }
 
 }
 

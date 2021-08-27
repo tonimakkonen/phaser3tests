@@ -9,7 +9,9 @@ function mapCreateEmpty(x, y) {
     enemies: new Array(x*y).fill(0),
     pickups: new Array(x*y).fill(0),
     playerStartX: 0,
-    playerStartY: 0
+    playerStartY: 0,
+    exitX: 1,
+    exitT: 0
   };
 }
 
@@ -59,6 +61,7 @@ function mapInitialize(game, map, mapObjectList) {
   player.setBounce(0.0, 0.0);
 
   // Create map ending
+  //var exit = game.add.
 
   // Follow player
   // TODO: Does this need to change?
