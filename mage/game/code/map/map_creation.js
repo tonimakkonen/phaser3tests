@@ -170,6 +170,19 @@ function addToListIfLongerThanOne(list, start, end) {
   }
 }
 
+// TODO: Move to utils method?
+
+
+
+//function mapIsBlocked(map, px, py) {
+//  return mapIsBlocked(map.tiles, map.x, map.y, px, py);
+//}
+
+function mapIsTileBlocked(tiles, sizeX, sizeY, px, py) {
+  if (px < 0 || py < 0 || px >= sizeX || py >= sizeY) return true;
+  return mapIsBlocked(tiles[px + py*sizeX]);
+}
+
 function mapIsBlocked(value) {
   if (value == 0) return false;
   var layer = LAYERS.get(value);
