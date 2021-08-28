@@ -63,6 +63,7 @@ const GRAPH_SHINING_TREE_MONSTER = 106;
 const GRAPH_MAGMA_MONSTER        = 107;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
+const GRAPH_MUSHROOM_PICKUP      = 202;
 
 const GRAPH_ICE_SHOT             = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
@@ -161,6 +162,15 @@ GRAPHS.set(
   {
     location: 'imgs/pickups/watermelon.png',
     name: 'pickup_watermelon',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_MUSHROOM_PICKUP,
+  {
+    location: 'imgs/pickups/mushroom.png',
+    name: 'pickup_mushroom',
     type: GRAPH_TYPE_SINGLE
   }
 );
@@ -454,6 +464,7 @@ ENEMIES.set(
 
 
 const PICKUP_WATERMELON = 1;
+const PICKUP_MUSHROOM   = 2;
 
 var PICKUPS = new Map();
 
@@ -463,6 +474,15 @@ PICKUPS.set(
     graph: GRAPH_WATERMELON_PICKUP,
     heal: 40,
     mana: 40
+  }
+);
+
+PICKUPS.set(
+  PICKUP_MUSHROOM,
+  {
+    graph: GRAPH_MUSHROOM_PICKUP,
+    moveY: 25,
+    mana: 100
   }
 );
 

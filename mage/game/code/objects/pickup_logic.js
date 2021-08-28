@@ -8,7 +8,10 @@ function pickupCreate(game, pickupType, x, y) {
   if (!info) throw 'Unknown pickup type: ' + pickupType;
   var graph = GRAPHS.get(info.graph);
   if (!graph) throw 'Unkown graph: ' + info;
-  var newPickup = groupPickups.create(x, y, graph.name);
+  var posX = x;
+  var posY = y;
+  if (info.moveY) posY += info.moveY;
+  var newPickup = groupPickups.create(posX, posY, graph.name);
   newPickup.xType = pickupType;
   newPickup.xInfo = info;
 }
