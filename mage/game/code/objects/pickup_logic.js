@@ -14,10 +14,11 @@ function pickupCreate(game, pickupType, x, y) {
 }
 
 function pickupCollect(game, pickup) {
-  if (pickup.xInfo.heal) {
-    if (playerHealth < 100.0) {
-      pickup.destroy();
-      playerHeal(game, pickup.xInfo.heal);
-    }
+  const canHeal = pickup.xInfo.heal && playerHealth < 100.0;
+  const canIncreaseMana = pickup.xInfo.mana && playerMana < 100.0;
+  if (canHeal || canIncreaseMana) {
+    if (canHeal) playerHeal(game, pickup.xInfo.heal);
+    if (canIncreaseMana) playerUpdateMana(game, pickup.xInfo.mana);
+    pickup.destroy();
   }
 }

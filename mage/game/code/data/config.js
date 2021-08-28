@@ -26,11 +26,10 @@ const GAME_MODE_ON_MAP      = 4; // between levels
 // Various stuff //
 ///////////////////
 
-const DAMAGE_TYPE_NONE  = 0;
-const DAMAGE_TYPE_AIR   = 1;
-const DAMAGE_TYPE_WATER = 2;
-const DAMAGE_TYPE_FIRE  = 3;
-const DAMAGE_TYPE_EARTH = 4;
+const MAGIC_TYPE_AIR   = 1;
+const MAGIC_TYPE_WATER = 2;
+const MAGIC_TYPE_FIRE  = 3;
+const MAGIC_TYPE_EARTH = 4;
 
 
 //////////////////////////////////////////////////
@@ -306,10 +305,9 @@ SHOTS.set(
   {
     graph: GRAPH_ICE_SHOT,
     damage: 10,
-    type: DAMAGE_TYPE_WATER,
+    type: MAGIC_TYPE_WATER,
     velocity: 400,
-    grav: 1.0,
-    bounce: { count: 5, amount: 0.9 }
+    grav: 1.0
   }
 )
 
@@ -318,9 +316,10 @@ SHOTS.set(
   {
     graph: GRAPH_ELECTRIC_SHOT,
     damage: 20,
-    type: DAMAGE_TYPE_AIR,
+    type: MAGIC_TYPE_AIR,
     velocity: 600,
-    grav: 0.0
+    grav: 0.0,
+    bounce: { count: 5, amount: 0.9 }
   }
 )
 
@@ -329,7 +328,7 @@ SHOTS.set(
   {
     graph: GRAPH_FIRE_SHOT,
     damage: 20,
-    type: DAMAGE_TYPE_FIRE,
+    type: MAGIC_TYPE_FIRE,
     velocity: 600,
     grav: 0.5
   }
@@ -340,7 +339,7 @@ SHOTS.set(
   {
     graph: GRAPH_TREE_SHOT,
     damage: 25,
-    type: DAMAGE_TYPE_EARTH,
+    type: MAGIC_TYPE_EARTH,
     velocity: 250,
     grav: 0.8,
     duration: 2000
@@ -352,7 +351,7 @@ SHOTS.set(
   {
     graph: GRAPH_FIRE_STORM_SHOT,
     damage: 25,
-    type: DAMAGE_TYPE_FIRE,
+    type: MAGIC_TYPE_FIRE,
     velocity: 400,
     grav: 0.5,
     spawn: { type: SHOT_FIRE, amount: 20, velocity: 0.5}
@@ -462,7 +461,8 @@ PICKUPS.set(
   PICKUP_WATERMELON,
   {
     graph: GRAPH_WATERMELON_PICKUP,
-    heal: 40
+    heal: 40,
+    mana: 40
   }
 );
 

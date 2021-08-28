@@ -1,4 +1,7 @@
 
+Major stuff
+-----------
+
 1. Spell selection
 -> Create spell in config, create in play menu
 
@@ -10,7 +13,20 @@
 
 4. Player persistence over plays, start dealing with this..
 
+
+
 ---
+
+Minor refactoring:
+------------------
+
+- constant names,
+
+- what methods take the game object
+
+
+Other
+-----
 
 
 
