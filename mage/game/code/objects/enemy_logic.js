@@ -65,6 +65,22 @@ function enemyHandleLogic(game, enemy, curTime) {
     return false; // Calling method handles removing from list
   }
 
+  // frozed enemies
+  if (enemy.xFreeze) {
+    if (game.time.now > enemy.xFreeze) {
+      enemy.xFreeze = undefined;
+      enemy.clearTint();
+    } else {
+      // Do not reload shots while frozen
+      enemy.xLastShot1 = game.time.now;
+      enemy.xLastShot2 = game.time.now;
+      if (enemy.xInfo.immovable) return true;
+      // TODO: what coefficient?
+      enemy.setGravity(-enemy.body.velocity.x, 400);
+      return true;
+    }
+  }
+
   // TODO: Do better
   if (player == null) {
     return true;
@@ -166,7 +182,7 @@ function enemyHandleFloatMove(game, enemy, curTime, move, dx, dy) {
 
 function enemyHandleBounceMove(game, enemy, move, dx, dy) {
   // TODO:
-  enemy.setGravity(0, 400);
+  enemy.setGravity(-enemy.body.velocity.x, 400);
 }
 
 function enemyHandleWalkMove(game, enemy, move, dx, dy) {
@@ -200,6 +216,14 @@ function enemyPunch(game, enemy, px, py, shot) {
   const vx = enemy.body.velocity.x;
   const vy = enemy.body.velocity.y;
   enemy.setVelocity(vx + px / enemyMass, vy + py / enemyMass);
+}
+
+function enemyFreeze(game, enemy, amount) {
+  if (!enemy.xFreeze) enemy.xFreeze = game.time.now;
+  var enemyMass = 1.0;
+  if(enemy.xInfo.mass) enemyMass = enemy.xInfo.mass;
+  enemy.xFreeze += amount / enemyMass;
+  enemy.setTint(0x0000ff);
 }
 
 function enemyUpdateHealth(game, enemy, amount) {

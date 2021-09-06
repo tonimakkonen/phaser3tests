@@ -71,8 +71,8 @@ SPELLS.set(
     image: 'spell_dummy',
     type: MAGIC_TYPE_WATER,
     shoot: SHOT_ICE,
-    cost: 20,
-    reload: 500
+    cost: 25,
+    reload: 1000
   }
 )
 

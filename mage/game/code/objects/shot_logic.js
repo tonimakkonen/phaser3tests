@@ -49,6 +49,7 @@ function shotHitPlayer(game, shot) {
     const py = shot.body.velocity.y * shot.xInfo.punch;
     playerPunch(game, px, py, shot);
   }
+  // TODO: Can player be freezed
   shotDestroy(game, shot);
 }
 
@@ -60,6 +61,9 @@ function shotHitEnemy(game, shot, enemy) {
     const px = shot.body.velocity.x * shot.xInfo.punch;
     const py = shot.body.velocity.y * shot.xInfo.punch;
     enemyPunch(game, enemy, px, py, shot);
+  }
+  if (shot.xInfo.freeze) {
+    enemyFreeze(game, enemy, shot.xInfo.freeze);
   }
   shotDestroy(game, shot);
 }

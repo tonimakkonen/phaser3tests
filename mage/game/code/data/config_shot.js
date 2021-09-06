@@ -30,10 +30,11 @@ SHOTS.set(
   SHOT_ICE,
   {
     graph: GRAPH_ICE_SHOT,
-    damage: 35,
+    damage: 25,
     type: MAGIC_TYPE_WATER,
     velocity: 600,
-    grav: 0.2
+    grav: 0.2,
+    freeze: 5000.0
   }
 )
 

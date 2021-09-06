@@ -81,7 +81,8 @@ ENEMIES.set(
     graph: GRAPH_SHINING_TREE_MONSTER,
     immovable: true,
     health: 1000,
-    spawn: { type: ENEMY_FOREST_MONSTER, time: 5000 }
+    spawn: { type: ENEMY_FOREST_MONSTER, time: 5000 },
+    mass: 10.0
   }
 );
 
