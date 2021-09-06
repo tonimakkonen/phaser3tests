@@ -69,7 +69,8 @@ function stateHandlePlay(game) {
     }
   }
 
-  // Handle shot logic
+  // Handle UI
+  uiHandleLogic(game);
 
   // Handle state changes
   if (playState == PLAY_STATE_PLAYING) {

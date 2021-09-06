@@ -48,8 +48,12 @@ function resLoadResources(game) {
   game.load.image('ui_eraser_all', 'imgs/ui/eraser_all.png');
   game.load.image('ui_eraser_obj', 'imgs/ui/eraser_obj.png');
 
+  // Load spell images (not defined in config)
+  game.load.image('spell_dummy', 'imgs/spells/spell_dummy.png');
+  game.load.image('spell_fire_ball', 'imgs/spells/spell_fire_ball.png');
+
   // Sound
-  game.load.audio('test_music', 'sound/music.mp3', true);
+  //game.load.audio('test_music', 'sound/music.mp3', true);
 }
 
 // Load single image

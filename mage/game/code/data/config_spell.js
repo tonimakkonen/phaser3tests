@@ -1,20 +1,60 @@
 
 "use strict";
 
-// All the selectable spells are here
-// TODO: Maybe add images?
-// TODO: More properties
+// All the selectable spells are here and some minor util methods
 
 const SPELL_FIRE_BALL      = 1;
 const SPELL_BALL_LIGHTNING = 2;
 const SPELL_FIRE_STORM     = 3;
+const SPELL_SUMMON_STICK   = 4;
+const SPELL_HALE           = 5;
+
+const SPELLS_MAX_X = 3;
+const SPELLS_MAX_Y = 2;
 
 var SPELLS = new Map();
+
+// Wind spells
+
+SPELLS.set(
+  SPELL_BALL_LIGHTNING,
+  {
+    name: 'Ball lightning',
+    posX: 0,
+    posY: 1,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_AIR,
+    shoot: SHOT_ELECTRIC,
+    cost: 15,
+    reload: 500
+  }
+)
+
+// Water
+
+SPELLS.set(
+  SPELL_HALE,
+  {
+    name: 'Ice ball',
+    posX: 1,
+    posY: 0,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_WATER,
+    shoot: SHOT_ICE,
+    cost: 5,
+    reload: 250
+  }
+)
+
+// Fire spells
 
 SPELLS.set(
   SPELL_FIRE_BALL,
   {
-    name: 'Minor fire ball',
+    name: 'Fire ball',
+    posX: 2,
+    posY: 0,
+    image: 'spell_fire_ball',
     type: MAGIC_TYPE_FIRE,
     shoot: SHOT_FIRE,
     cost: 5,
@@ -23,23 +63,45 @@ SPELLS.set(
 )
 
 SPELLS.set(
-  SPELL_BALL_LIGHTNING,
-  {
-    name: 'Ball lightning',
-    type: MAGIC_TYPE_AIR,
-    shoot: SHOT_ELECTRIC,
-    cost: 15,
-    reload: 500
-  }
-)
-
-SPELLS.set(
   SPELL_FIRE_STORM,
   {
     name: 'Fire storm',
+    posX: 2,
+    posY: 1,
+    image: 'spell_dummy',
     type: MAGIC_TYPE_FIRE,
     shoot: SHOT_FIRE_STORM,
     cost: 25,
     reload: 1000
   }
 )
+
+// Earth spells
+
+SPELLS.set(
+  SPELL_SUMMON_STICK,
+  {
+    name: 'Summon stick',
+    posX: 3,
+    posY: 0,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_EARTH,
+    shoot: SHOT_TREE,
+    cost: 5,
+    reload: 200
+  }
+)
+
+// Util methods related to spells
+
+const SPELLS_GRID = new Array((SPELLS_MAX_X + 1) * (SPELLS_MAX_Y + 1)).fill(null);
+
+SPELLS.forEach((spell) => {
+  const index = spell.posX + spell.posY * (SPELLS_MAX_X + 1);
+  SPELLS_GRID[index] = spell;
+});
+
+function spellFromGrid(gx, gy) {
+  if (gx >= 0 && gx <= SPELLS_MAX_X && gy >= 0 && gy <= SPELLS_MAX_Y) return SPELLS_GRID[gx + gy*(SPELLS_MAX_X + 1)];
+  return null;
+}

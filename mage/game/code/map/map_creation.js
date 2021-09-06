@@ -21,6 +21,7 @@ function mapInitialize(game, map, mapObjectList) {
   // Add BG images
   // TODO: Make this more generic
 
+
   var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
   bg.setScrollFactor(0.0, 0.0);
   bg.setDepth(-10.0);

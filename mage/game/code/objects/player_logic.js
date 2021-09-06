@@ -9,10 +9,9 @@ var playerMana = 100.0;
 var playerLastRegen = null;
 
 var playerLeftSpell = SPELLS.get(SPELL_BALL_LIGHTNING);
-var playerRightSpell = SPELLS.get(SPELL_FIRE_STORM);
+var playerRightSpell = null;
 var playerLeftSpellLast = 0;
 var playerRightSpellLast = 0;
-
 
 
 function playerHandleLogic(game, curTime) {
@@ -64,12 +63,14 @@ function playerHandleLogic(game, curTime) {
   dx = dx / len;
   dy = dy / len;
 
-  // Shoot
-  if(game.input.activePointer.leftButtonDown()) {
-    playerLeftSpellLast = playerHandleSpell(game, playerLeftSpell, playerLeftSpellLast, dx, dy);
-  }
-  if (game.input.activePointer.rightButtonDown()) {
-    playerRightSpellLast = playerHandleSpell(game, playerRightSpell, playerRightSpellLast, dx, dy);
+  // Shoot (if we're not in tab menu)
+  if (!inputTab.isDown) {
+    if(game.input.activePointer.leftButtonDown()) {
+      playerLeftSpellLast = playerHandleSpell(game, playerLeftSpell, playerLeftSpellLast, dx, dy);
+    }
+    if (game.input.activePointer.rightButtonDown()) {
+      playerRightSpellLast = playerHandleSpell(game, playerRightSpell, playerRightSpellLast, dx, dy);
+    }
   }
 
   // Regeneration
@@ -79,6 +80,17 @@ function playerHandleLogic(game, curTime) {
   playerHeal(game, dt * 2.0 / 1000.0); // 2 per sec
   playerUpdateMana(game, dt * 5.0 / 1000.0); // 5 per sec
   playerLastRegen = game.time.now;
+}
+
+// Choose a spell if is different than the last one
+function playerChooseSpell(game, spell, isLeft) {
+  if (isLeft) {
+    playerLeftSpell = spell;
+    playerLeftSpellLast = game.time.now;
+  } else {
+    playerRightSpell = spell;
+    playerRightSpell = game.time.now;
+  }
 }
 
 function playerHandleSpell(game, spell, last, dx, dy) {

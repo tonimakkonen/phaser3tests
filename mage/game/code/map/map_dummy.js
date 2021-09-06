@@ -169,7 +169,6 @@ function mapDummyCount(mean) {
       k += 1;
       p *= Math.random();
   } while (p > L);
-  //console.log('Generated ' + (k-1) + ' from mean ' + mean);
   return k - 1;
 }
 
@@ -186,12 +185,10 @@ function mapSetRandomlyOnWalkableTiles(tiles, array, sizeX, sizeY, type, count) 
 }
 
 function mapSetRandomlyOnWalkableTilesAboveGround(tiles, array, sizeX, sizeY, type, extra, count) {
-  console.log('count = ' + count);
   var created = 0;
   for (var i = 0; i < count*100; i++) {
     const pos = mapPickAboveGround(tiles, sizeX, sizeY, extra);
     if (pos.index >= 0 && array[pos.index] == 0) {
-      console.log('creating at ' + pos);
       array[pos.index] = type;
       created += 1;
       if (created >= count) return;
