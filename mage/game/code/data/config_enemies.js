@@ -57,7 +57,7 @@ ENEMIES.set(
     graph: GRAPH_STORM_MONSTER,
     moveFloat: { maxSpeed: 200, alpha: 1, minDistance: 260, maxDistance: 340, sway: 0.2, above: true, margin: 20},
     health: 80,
-    shoot1: { type: SHOT_ICE, time: 1000, towards: true },
+    shoot1: { type: SHOT_WATER, time: 1000, towards: true },
     mass: 1.5
   }
 );

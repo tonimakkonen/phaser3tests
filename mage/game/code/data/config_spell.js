@@ -7,8 +7,9 @@ const SPELL_FIRE_BALL      = 1;
 const SPELL_BALL_LIGHTNING = 2;
 const SPELL_FIRE_STORM     = 3;
 const SPELL_SUMMON_STICK   = 4;
-const SPELL_HALE           = 5;
-const SPELL_AIR_PUNCH      = 6;
+const SPELL_WATER          = 5;
+const SPELL_ICE            = 6;
+const SPELL_AIR_PUNCH      = 7;
 
 const SPELLS_MAX_X = 3;
 const SPELLS_MAX_Y = 2;
@@ -48,16 +49,30 @@ SPELLS.set(
 // Water
 
 SPELLS.set(
-  SPELL_HALE,
+  SPELL_WATER,
   {
-    name: 'Ice ball',
+    name: 'Water ball',
     posX: 1,
     posY: 0,
     image: 'spell_dummy',
     type: MAGIC_TYPE_WATER,
-    shoot: SHOT_ICE,
+    shoot: SHOT_WATER,
     cost: 5,
     reload: 250
+  }
+)
+
+SPELLS.set(
+  SPELL_ICE,
+  {
+    name: 'Frost shot',
+    posX: 1,
+    posY: 1,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_WATER,
+    shoot: SHOT_ICE,
+    cost: 20,
+    reload: 500
   }
 )
 

@@ -65,12 +65,13 @@ const GRAPH_MAGMA_MONSTER        = 107;
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM_PICKUP      = 202;
 
-const GRAPH_ICE_SHOT             = 301;
+const GRAPH_WATER_SHOT           = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
 const GRAPH_FIRE_SHOT            = 303;
 const GRAPH_TREE_SHOT            = 304;
 const GRAPH_FIRE_STORM_SHOT      = 305;
 const GRAPH_AIR_PUNCH_SHOT       = 306;
+const GRAPH_ICE_SHOT             = 307;
 
 const GRAPH_EXIT_DOOR1           = 401;
 
@@ -179,10 +180,10 @@ GRAPHS.set(
 // Shots
 
 GRAPHS.set(
-  GRAPH_ICE_SHOT,
+  GRAPH_WATER_SHOT,
   {
-    location: 'imgs/shots/ice.png',
-    name: 'shot_ice',
+    location: 'imgs/shots/water.png',
+    name: 'shot_water',
     type: GRAPH_TYPE_SINGLE
   }
 );
@@ -233,6 +234,15 @@ GRAPHS.set(
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 25,
     sizeY: 25
+  }
+);
+
+GRAPHS.set(
+  GRAPH_ICE_SHOT,
+  {
+    location: 'imgs/shots/ice.png',
+    name: 'shot_ice',
+    type: GRAPH_TYPE_SINGLE
   }
 );
 
