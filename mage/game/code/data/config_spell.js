@@ -8,6 +8,7 @@ const SPELL_BALL_LIGHTNING = 2;
 const SPELL_FIRE_STORM     = 3;
 const SPELL_SUMMON_STICK   = 4;
 const SPELL_HALE           = 5;
+const SPELL_AIR_PUNCH      = 6;
 
 const SPELLS_MAX_X = 3;
 const SPELLS_MAX_Y = 2;
@@ -15,6 +16,20 @@ const SPELLS_MAX_Y = 2;
 var SPELLS = new Map();
 
 // Wind spells
+
+SPELLS.set(
+  SPELL_AIR_PUNCH,
+  {
+    name: 'Air punch',
+    posX: 0,
+    posY: 0,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_AIR,
+    shoot: SHOT_AIR_PUNCH,
+    cost: 10,
+    reload: 400
+  }
+)
 
 SPELLS.set(
   SPELL_BALL_LIGHTNING,

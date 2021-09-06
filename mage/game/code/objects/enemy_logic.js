@@ -193,6 +193,15 @@ function enemyDealDamage(game, enemy, amount, shot) {
   enemyUpdateHealth(game, enemy, -amount, shot);
 }
 
+function enemyPunch(game, enemy, px, py, shot) {
+  if (enemy.xInfo.immovable) return;
+  var enemyMass = 1.0;
+  if(enemy.xInfo.mass) enemyMass = enemy.xInfo.mass;
+  const vx = enemy.body.velocity.x;
+  const vy = enemy.body.velocity.y;
+  enemy.setVelocity(vx + px / enemyMass, vy + py / enemyMass);
+}
+
 function enemyUpdateHealth(game, enemy, amount) {
   // Note that play state loop will handle destroying enemies
   enemy.xHealth += amount;

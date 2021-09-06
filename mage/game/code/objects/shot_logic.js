@@ -37,14 +37,31 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy) {
 
 }
 
+// TODO: Some duplicate code here in these two functions
+// TODO: Consider doing player group..
+
 function shotHitPlayer(game, shot) {
+  if (shot.xDestroyed) return; // avoid duplicate hits
+  shot.xDestroyed = true;
+  if (shot.xInfo.damage) playerDealDamage(game, shot.xInfo.damage, shot);
+  if(shot.xInfo.punch) {
+    const px = shot.body.velocity.x * shot.xInfo.punch;
+    const py = shot.body.velocity.y * shot.xInfo.punch;
+    playerPunch(game, px, py, shot);
+  }
   shotDestroy(game, shot);
-  playerDealDamage(game, shot.xInfo.damage, shot);
 }
 
 function shotHitEnemy(game, shot, enemy) {
+  if (shot.xDestroyed) return; // avoid duplicate hits
+  shot.xDestroyed = true;
+  if (shot.xInfo.damage) enemyDealDamage(game, enemy, shot.xInfo.damage, shot);
+  if(shot.xInfo.punch) {
+    const px = shot.body.velocity.x * shot.xInfo.punch;
+    const py = shot.body.velocity.y * shot.xInfo.punch;
+    enemyPunch(game, enemy, px, py, shot);
+  }
   shotDestroy(game, shot);
-  enemyDealDamage(game, enemy, shot.xInfo.damage, shot);
 }
 
 function shotHitWall(game, shot, wall) {

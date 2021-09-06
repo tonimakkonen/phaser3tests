@@ -112,8 +112,15 @@ function playerHeal(game, amount) {
 }
 
 function playerDealDamage(game, amount, shot) {
-  // TODO: Consider type, kick effect etc?
   playerUpdateHealth(game, -amount);
+}
+
+function playerPunch(game, px, py, shot) {
+  if(player == null) return;
+  const playerMass = 1.0;
+  const vx = player.body.velocity.x;
+  const vy = player.body.velocity.y;
+  player.setVelocity(vx + px / playerMass, vy + py / playerMass);
 }
 
 
