@@ -2,6 +2,7 @@
 "use strict";
 
 // All the selectable spells are here and some minor util methods
+// This includes certain effect spells
 
 const SPELL_FIRE_BALL      = 1;
 const SPELL_BALL_LIGHTNING = 2;
@@ -10,9 +11,12 @@ const SPELL_SUMMON_STICK   = 4;
 const SPELL_WATER          = 5;
 const SPELL_ICE            = 6;
 const SPELL_AIR_PUNCH      = 7;
+const SPELL_RAIN           = 8;
 
 const SPELLS_MAX_X = 3;
 const SPELLS_MAX_Y = 2;
+
+const EFFECT_TYPE_SKY = 1;
 
 var SPELLS = new Map();
 
@@ -73,6 +77,20 @@ SPELLS.set(
     shoot: SHOT_ICE,
     cost: 25,
     reload: 1000
+  }
+)
+
+SPELLS.set(
+  SPELL_RAIN,
+  {
+    name: 'Rain',
+    posX: 1,
+    posY: 2,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_WATER,
+    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 15, time: 4000},
+    cost: 100,
+    reload: 1500
   }
 )
 

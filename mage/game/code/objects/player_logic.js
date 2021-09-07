@@ -101,7 +101,8 @@ function playerHandleSpell(game, spell, last, dx, dy) {
   if (curTime < last + reloadTime) return last;
   const manaCost = spell.cost;
   if (playerUseManaIfCan(game, manaCost)) {
-    shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy);
+    if (spell.shoot) shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy);
+    if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
     return curTime;
   }
   return last;

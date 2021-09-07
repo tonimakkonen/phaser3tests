@@ -57,7 +57,9 @@ function playEnterExit(game, exit) {
 
 function stateHandlePlay(game) {
 
+  // TODO: Do not pass game.time.now
   playerHandleLogic(game, game.time.now);
+  shotHandleLogic(game);
 
   // Handle all enemy logic
   // TODO: Does it need to be like this?
