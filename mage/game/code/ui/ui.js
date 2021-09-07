@@ -149,8 +149,15 @@ function uiUpdateManaBar(game) {
 
 function uiDestroy(game) {
   if (uiBarBg != null) uiBarBg.destroy();
+  uiBarBg = null;
   if (uiHealthBar != null) uiHealthBar.destroy();
+  uiHealthBar = null;
   if (uiManaBar != null) uiManaBar.destroy();
+  uiManaBar = null;
+  if (uiLeftSpell != null) uiLeftSpell.destroy();
+  uiLeftSpell = null;
+  if (uiRightSpell != null) uiRightSpell.destroy();
+  uiRightSpell = null;
   uiSpellSelections.forEach(o => o.destroy());
   uiSpellSelections = [];
 }

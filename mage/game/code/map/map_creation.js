@@ -21,7 +21,6 @@ function mapInitialize(game, map, mapObjectList) {
   // Add BG images
   // TODO: Make this more generic
 
-
   var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
   bg.setScrollFactor(0.0, 0.0);
   bg.setDepth(-10.0);
@@ -57,6 +56,7 @@ function mapInitialize(game, map, mapObjectList) {
   }
 
   // Create player
+  // TODO: Move to player logic file
   player = groupPlayer.create(map.playerStartX*80.0 + 40.0, map.playerStartY*80.0 + 40.0, 'player');
   player.setGravity(0, 400);
   player.setCollideWorldBounds(true);

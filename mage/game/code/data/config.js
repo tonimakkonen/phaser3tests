@@ -72,6 +72,7 @@ const GRAPH_TREE_SHOT            = 304;
 const GRAPH_FIRE_STORM_SHOT      = 305;
 const GRAPH_AIR_PUNCH_SHOT       = 306;
 const GRAPH_ICE_SHOT             = 307;
+const GRAPH_SMALL_WATER_SHOT     = 308;
 
 const GRAPH_EXIT_DOOR1           = 401;
 
@@ -184,6 +185,15 @@ GRAPHS.set(
   {
     location: 'imgs/shots/water.png',
     name: 'shot_water',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SMALL_WATER_SHOT,
+  {
+    location: 'imgs/shots/small_water.png',
+    name: 'shot_small_water',
     type: GRAPH_TYPE_SINGLE
   }
 );

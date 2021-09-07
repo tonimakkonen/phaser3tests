@@ -1,28 +1,39 @@
 
 "use strict";
 
-const SHOT_WATER      = 1;
-const SHOT_ELECTRIC   = 2;
-const SHOT_FIRE       = 3;
-const SHOT_TREE       = 4;
-const SHOT_FIRE_STORM = 5;
-const SHOT_AIR_PUNCH  = 6;
-const SHOT_ICE        = 7;
+const SHOT_WATER       = 1;
+const SHOT_ELECTRIC    = 2;
+const SHOT_FIRE        = 3;
+const SHOT_TREE        = 4;
+const SHOT_FIRE_STORM  = 5;
+const SHOT_AIR_PUNCH   = 6;
+const SHOT_ICE         = 7;
+const SHOT_SMALL_WATER = 8;
 
 
 var SHOTS = new Map();
-
-// TODO: Gravity and velocity
 
 SHOTS.set(
   SHOT_WATER,
   {
     graph: GRAPH_WATER_SHOT,
-    damage: 15,
+    damage: 10,
     type: MAGIC_TYPE_WATER,
-    velocity: 400,
+    spawn: { type: SHOT_SMALL_WATER, amount: 4, velocity: 0.5},
+    velocity: 500,
     grav: 1.0,
     punch: 0.3
+  }
+)
+
+SHOTS.set(
+  SHOT_SMALL_WATER,
+  {
+    graph: GRAPH_SMALL_WATER_SHOT,
+    damage: 3,
+    type: MAGIC_TYPE_WATER,
+    velocity: 400,
+    grav: 1.0
   }
 )
 

@@ -13,6 +13,7 @@ var playStaticMapObjects = [];
 function stateStartPlay(game) {
   // TODO: Move to player logic
   playerHealth = 100.0;
+  playerMana = 100.0;
 
   playInitMap(game);
   uiCreate(game);
