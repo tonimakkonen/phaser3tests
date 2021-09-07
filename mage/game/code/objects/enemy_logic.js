@@ -236,10 +236,38 @@ function enemyHandleShot(game, enemy, info, type, dx1, dy1) {
   const last = type == 1 ? enemy.xLastShot1 : enemy.xLastShot2;
   const now = game.time.now;
   if (now >= last + info.time) {
-    // TODO: hande random angles etc.
-    shotShoot(game, false, info.type, enemy.x, enemy.y, dx1, dy1);
+    const [dx, dy] = enemyGetShotDirection(info, dx1, dy1);
+    shotShoot(game, false, info.type, enemy.x, enemy.y, dx, dy);
     type == 1 ? enemy.xLastShot1 = now : enemy.xLastShot2 = now;
   }
+}
+
+function enemyGetShotDirection(shotInfo, dx1, dy1) {
+  console.log('orig = ' + dx1 + ", " + dy1);
+  var dx = dx1;
+  var dy = dy1;
+  if (shotInfo.topBias) {
+      dy -= shotInfo.topBias;
+      const len = Math.sqrt(dx*dx + dy*dy);
+      if (len == 0) {
+        dx = 0;
+        dy = -1;
+      } else {
+        dx = dx / len;
+        dy = dy / len;
+      }
+  }
+  if (shotInfo.randomAngle) {
+    const alpha = (Math.random() - 0.5) * shotInfo.randomAngle * Math.PI / 180.0;
+    const ox = -dy;
+    const oy = dx;
+    const cos = Math.cos(alpha);
+    const sin = Math.sin(alpha);
+    dx = dx*cos + ox*sin;
+    dy = dy*cos + oy*sin;
+  }
+  console.log('final = ' + dx + ", " + dy);
+  return [dx, dy];
 }
 
 function enemyhandleSpawn(game, enemy, info) {

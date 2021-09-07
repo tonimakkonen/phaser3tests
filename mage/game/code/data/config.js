@@ -61,6 +61,7 @@ const GRAPH_STORM_MONSTER        = 104;
 const GRAPH_TWISTER_MONSTER      = 105;
 const GRAPH_SHINING_TREE_MONSTER = 106;
 const GRAPH_MAGMA_MONSTER        = 107;
+const GRAPH_SAND_MONSTER         = 108;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM_PICKUP      = 202;
@@ -73,6 +74,7 @@ const GRAPH_FIRE_STORM_SHOT      = 305;
 const GRAPH_AIR_PUNCH_SHOT       = 306;
 const GRAPH_ICE_SHOT             = 307;
 const GRAPH_SMALL_WATER_SHOT     = 308;
+const GRAPH_ROCK_SHOT            = 309;
 
 const GRAPH_EXIT_DOOR1           = 401;
 
@@ -155,6 +157,17 @@ GRAPHS.set(
     location: 'imgs/monsters/magma_monster.png',
     name: 'enemy_magma_monster',
     type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SAND_MONSTER,
+  {
+    location: 'imgs/monsters/sand_monster.png',
+    name: 'enemy_sand_monster',
+    type: GRAPH_TYPE_LEFT_RIGHT,
+    sizeX: 60,
+    sizeY: 60
   }
 );
 
@@ -252,6 +265,15 @@ GRAPHS.set(
   {
     location: 'imgs/shots/ice.png',
     name: 'shot_ice',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_ROCK_SHOT,
+  {
+    location: 'imgs/shots/rock.png',
+    name: 'shot_rock',
     type: GRAPH_TYPE_SINGLE
   }
 );

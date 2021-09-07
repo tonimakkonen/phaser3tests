@@ -12,6 +12,7 @@ const SPELL_WATER          = 5;
 const SPELL_ICE            = 6;
 const SPELL_AIR_PUNCH      = 7;
 const SPELL_RAIN           = 8;
+const SPELL_ROCK           = 9;
 
 const SPELLS_MAX_X = 3;
 const SPELLS_MAX_Y = 2;
@@ -88,7 +89,7 @@ SPELLS.set(
     posY: 2,
     image: 'spell_dummy',
     type: MAGIC_TYPE_WATER,
-    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 15, time: 4000},
+    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 5, time: 4000},
     cost: 100,
     reload: 1500
   }
@@ -129,7 +130,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_SUMMON_STICK,
   {
-    name: 'Summon stick',
+    name: 'Stick',
     posX: 3,
     posY: 0,
     image: 'spell_dummy',
@@ -137,6 +138,20 @@ SPELLS.set(
     shoot: SHOT_TREE,
     cost: 5,
     reload: 200
+  }
+)
+
+SPELLS.set(
+  SPELL_ROCK,
+  {
+    name: 'Rock',
+    posX: 3,
+    posY: 1,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_EARTH,
+    shoot: SHOT_ROCK,
+    cost: 15,
+    reload: 500
   }
 )
 

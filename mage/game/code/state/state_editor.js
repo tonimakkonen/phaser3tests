@@ -55,6 +55,7 @@ EDITOR_MENU.add({x: 3, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_STORM_MONSTE
 EDITOR_MENU.add({x: 4, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_TWISTER_MONSTER, image: 'enemy_twister_monster'});
 EDITOR_MENU.add({x: 5, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SHINING_TREE_MONSTER, image: 'enemy_shining_tree_monster', scale: 0.25});
 EDITOR_MENU.add({x: 6, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MAGMA_MONSTER, image: 'enemy_magma_monster', scale: 0.75});
+EDITOR_MENU.add({x: 7, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SAND_MONSTER, image: 'enemy_sand_monster'});
 
 // Pickups
 EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});

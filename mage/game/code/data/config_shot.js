@@ -9,6 +9,7 @@ const SHOT_FIRE_STORM  = 5;
 const SHOT_AIR_PUNCH   = 6;
 const SHOT_ICE         = 7;
 const SHOT_SMALL_WATER = 8;
+const SHOT_ROCK        = 9;
 
 
 var SHOTS = new Map();
@@ -22,7 +23,7 @@ SHOTS.set(
     spawn: { type: SHOT_SMALL_WATER, amount: 4, velocity: 0.5},
     velocity: 500,
     grav: 1.0,
-    punch: 0.3
+    punch: 0.2
   }
 )
 
@@ -53,7 +54,7 @@ SHOTS.set(
   SHOT_ELECTRIC,
   {
     graph: GRAPH_ELECTRIC_SHOT,
-    damage: 20,
+    damage: 25,
     type: MAGIC_TYPE_AIR,
     velocity: 600,
     grav: 0.0,
@@ -68,8 +69,7 @@ SHOTS.set(
     damage: 20,
     type: MAGIC_TYPE_FIRE,
     velocity: 600,
-    grav: 0.5,
-    punch: 0.1
+    grav: 0.5
   }
 )
 
@@ -79,8 +79,8 @@ SHOTS.set(
     graph: GRAPH_TREE_SHOT,
     damage: 25,
     type: MAGIC_TYPE_EARTH,
-    velocity: 250,
-    grav: 0.8,
+    velocity: 350,
+    grav: 0.9,
     duration: 2000,
     punch: 0.1
   }
@@ -108,5 +108,18 @@ SHOTS.set(
     velocity: 600,
     grav: 0.0,
     punch: 0.7
+  }
+)
+
+SHOTS.set(
+  SHOT_ROCK,
+  {
+    graph: GRAPH_ROCK_SHOT,
+    damage: 30,
+    type: MAGIC_TYPE_EARTH,
+    velocity: 500,
+    bounce: { count: 50, amount: 0.7 },
+    grav: 1.0,
+    punch: 0.6
   }
 )
