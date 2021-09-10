@@ -2,16 +2,11 @@
 Major stuff
 -----------
 
-1. Spell selection
--> Create spell in config, create in play menu
+1. Player persistence over plays, start dealing with this..
 
-2. Enemy shooting settings
- - add options to shoot more up, randomness
- - range
+2. Decorations
 
-3. Mana bar usage
-
-4. Player persistence over plays, start dealing with this..
+3. Different BGs
 
 
 
@@ -30,6 +25,8 @@ Other
 
 
 
+
+
 - Lumimaasto
 
 - Vesihirviö
@@ -38,19 +35,12 @@ Other
 
 - "Koristeet" kivet, juuret, puut yms.
 
-- Taian valinta
 - Uusien taikojen oppiminen
 
 - Kentän läpipääseminen
 - Valikko kenttien välissä
 
 --
-
-- Tab menu when playing and selecting spells
-
-- Spells as a whole
-
-- Mana bar changes
 
 - Refactor terrain
 

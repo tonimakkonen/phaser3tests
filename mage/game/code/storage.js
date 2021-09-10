@@ -1,15 +1,21 @@
 
+"use strict";
+
 function storageLoad() {
-  var versionInStorage = localStorage.getItem('version');
+
+  console.log('Local version: ' + VERSION);
+
+  const versionInStorage = localStorage.getItem('version');
+
   if (!versionInStorage) {
     console.log('No local storage data');
     localStorage.clear();
   } else {
     if (versionInStorage != VERSION) {
-      console.log('Wrong version in local storage, clearing');
+      console.log('Wrong version in local storage, clearing: ' + versionInStorage);
       localStorage.clear();
     } else {
-      // Hoping this doesn't break anything
+      console.log('Loading local storage');
       mapBlueprint =  JSON.parse(localStorage.getItem('mapBlueprint'));
     }
   }

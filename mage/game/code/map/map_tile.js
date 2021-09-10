@@ -11,7 +11,18 @@ const TILE_EXTEND = 2;
 // Create single coordinates
 // TODO: This needs to be tweaked a lot
 function mapCreateSingleTile(game, map, px, py, list) {
+
   if (px < 0 || py < 0 || px >= map.x && py >= map.y) throw new 'Bad px, py: ' + px + ', ' + py;
+
+  // Create decorations
+  if (map.decorations[px + py*map.x] != 0) {
+    const deco = DECORATIONS.get(map.decorations[px + py*map.x]);
+    if (!deco) throw 'Unkown decoration: ' + deco;
+    mapHandleDecoration(game, deco, px, py, list);
+  }
+
+
+  // TODO: The tile thingy needs to be refactored
   const tile = map.tiles[px+py*map.x];
   if (tile == 0) return;
   const layer = LAYERS.get(tile);
@@ -35,27 +46,19 @@ function mapCreateSingleTile(game, map, px, py, list) {
   } else {
     throw 'Unkown layer type: ' + layer.type;
   }
+}
 
-  // Create decorations
+function mapHandleDecoration(game, deco, px, py, list) {
+  // TODO: Handle animations and similar (if needed)
+  // TODO: Depth
+  const graph = GRAPHS.get(deco.graph);
+  if (!graph) throw 'Unkown graph for decoration: ' + deco.graph;
+  const cx = (px + 0.5) * 80.0;
+  const cy = (py + 0.5) * 80.0;
 
-
-
-/*
-    // Randoms
-    // TODO: Remove random
-    const rx = Math.random()*10.0 - 5.0;
-    const ry = Math.random()*10.0 - 5.0;
-    if (Math.random() < 0.15) {
-      var im = game.add.sprite(cx + rx, cy + ry, 'ground_r0');
-      im.rotation = Math.random()*Math.PI;
-      list.push(im);
-    } else if (Math.random() < 0.15) {
-      var im = game.add.sprite(cx + rx, cy + ry, 'ground_r1');
-      im.rotation = Math.random()*Math.PI;
-      list.push(im);
-    }
-  }
-  */
+  const im = game.add.image(cx, cy, graph.name);
+  im.setDepth(2.0);
+  list.push(im);
 }
 
 function mapHandleTop(game, layer, list, px, py, cl, cr, ct, cb) {
@@ -161,7 +164,7 @@ function mapSymmetricBottomRightName(cr, cb, cbr) {
 
 // Add a new static sprite to the map, set the depth, and add to list
 function mapAddThing(game, name, x, y, depth, list) {
-  const newObject = game.add.sprite(x, y, name);
+  const newObject = game.add.image(x, y, name);
   newObject.setDepth(depth);
   list.push(newObject);
 }

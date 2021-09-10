@@ -5,9 +5,12 @@ function mapCreateEmpty(x, y) {
   return {
     x: x,
     y: y,
+    background: BACKGROUND_MOUNTAINS,
     tiles: new Array(x*y).fill(0),
     enemies: new Array(x*y).fill(0),
     pickups: new Array(x*y).fill(0),
+    decorations: new Array(x*y).fill(0),
+    decorationSeed: new Array(x*y).fill(0),
     playerStartX: 0,
     playerStartY: 0,
     exitX: 1,
@@ -19,8 +22,7 @@ function mapCreateEmpty(x, y) {
 function mapInitialize(game, map, mapObjectList) {
 
   // Add BG images
-  // TODO: Make this more generic
-
+  // TODO: Use the BG definition
   var bg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
   bg.setScrollFactor(0.0, 0.0);
   bg.setDepth(-10.0);

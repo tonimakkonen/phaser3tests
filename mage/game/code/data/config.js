@@ -6,11 +6,11 @@
 ///////////////////////
 
 // Used for local storage. Update this with big changes to storage.
-var VERSION = 1;
+const VERSION = 2;
 
 // Typical HD (720p) resolution. Should work on most devices
-var settingWidth = 1280;
-var settingHeight = 720;
+const settingWidth = 1280;
+const settingHeight = 720;
 
 // TODO: Add map tile width and height
 
@@ -77,6 +77,9 @@ const GRAPH_SMALL_WATER_SHOT     = 308;
 const GRAPH_ROCK_SHOT            = 309;
 
 const GRAPH_EXIT_DOOR1           = 401;
+
+const GRAPH_ROCK1_DECORATION     = 501;
+const GRAPH_ROCK2_DECORATION     = 502;
 
 var GRAPHS = new Map();
 
@@ -289,6 +292,26 @@ GRAPHS.set(
   }
 );
 
+// Decorations
+
+GRAPHS.set(
+  GRAPH_ROCK1_DECORATION,
+  {
+    location: 'imgs/decorations/rock1.png',
+    name: 'decoration_rock1',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
+GRAPHS.set(
+  GRAPH_ROCK2_DECORATION,
+  {
+    location: 'imgs/decorations/rock2.png',
+    name: 'decoration_rock2',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
@@ -379,6 +402,42 @@ PICKUPS.set(
 // All the different decoration //
 //////////////////////////////////
 
-// TODO:
+const DECORATION_ROCK1 = 1;
+const DECORATION_ROCK2 = 2;
 
 var DECORATIONS = new Map();
+
+DECORATIONS.set(
+  DECORATION_ROCK1,
+  {
+    graph: GRAPH_ROCK1_DECORATION,
+    dx: 10,
+    dy: 10,
+    maxAngle: 180
+  }
+)
+
+DECORATIONS.set(
+  DECORATION_ROCK2,
+  {
+    graph: GRAPH_ROCK2_DECORATION,
+    dx: 10,
+    dy: 10,
+    maxAngle: 180
+  }
+)
+
+///////////////////////////////////
+// All the different backgrounds //
+///////////////////////////////////
+
+const BACKGROUND_MOUNTAINS = 1;
+
+var BACKGROUNDS = new Map();
+
+BACKGROUNDS.set(
+  BACKGROUND_MOUNTAINS,
+  {
+    dummy: 'todo' // TODO:
+  }
+)

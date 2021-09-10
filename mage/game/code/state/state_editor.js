@@ -46,20 +46,22 @@ EDITOR_MENU.add({x: 1, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_CAVE, image
 EDITOR_MENU.add({x: 2, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_ROCK, image: 'rock_full'});
 
 // Decorations
+EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_DECORATION, option: DECORATION_ROCK1, image: 'decoration_rock1'});
+EDITOR_MENU.add({x: 1, y: 2, tool: EDITOR_TOOL_DECORATION, option: DECORATION_ROCK2, image: 'decoration_rock2'});
 
 // Enemies
-EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FOREST_MONSTER, image: 'enemy_forest_monster'});
-EDITOR_MENU.add({x: 1, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BURNING_MONSTER, image: 'enemy_burning_monster'});
-EDITOR_MENU.add({x: 2, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_ELECTRIC_MONSTER, image: 'enemy_electric_monster'});
-EDITOR_MENU.add({x: 3, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_STORM_MONSTER, image: 'enemy_storm_monster'});
-EDITOR_MENU.add({x: 4, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_TWISTER_MONSTER, image: 'enemy_twister_monster'});
-EDITOR_MENU.add({x: 5, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SHINING_TREE_MONSTER, image: 'enemy_shining_tree_monster', scale: 0.25});
-EDITOR_MENU.add({x: 6, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MAGMA_MONSTER, image: 'enemy_magma_monster', scale: 0.75});
-EDITOR_MENU.add({x: 7, y: 2, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SAND_MONSTER, image: 'enemy_sand_monster'});
+EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FOREST_MONSTER, image: 'enemy_forest_monster'});
+EDITOR_MENU.add({x: 1, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BURNING_MONSTER, image: 'enemy_burning_monster'});
+EDITOR_MENU.add({x: 2, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_ELECTRIC_MONSTER, image: 'enemy_electric_monster'});
+EDITOR_MENU.add({x: 3, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_STORM_MONSTER, image: 'enemy_storm_monster'});
+EDITOR_MENU.add({x: 4, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_TWISTER_MONSTER, image: 'enemy_twister_monster'});
+EDITOR_MENU.add({x: 5, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SHINING_TREE_MONSTER, image: 'enemy_shining_tree_monster', scale: 0.25});
+EDITOR_MENU.add({x: 6, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MAGMA_MONSTER, image: 'enemy_magma_monster', scale: 0.75});
+EDITOR_MENU.add({x: 7, y: 3, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SAND_MONSTER, image: 'enemy_sand_monster'});
 
 // Pickups
-EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
-EDITOR_MENU.add({x: 1, y: 3, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM, image: 'pickup_mushroom'});
+EDITOR_MENU.add({x: 0, y: 4, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
+EDITOR_MENU.add({x: 1, y: 4, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM, image: 'pickup_mushroom'});
 
 // Special options
 EDITOR_MENU.add({x: 0, y: 6, special: EDITOR_SPECIAL_TRY, text: 'Try'});
@@ -383,11 +385,11 @@ function editorUploadFile(file) {
 ///////////
 
 function editorApplyErase(game, map, px, py, type) {
-  // TODO: Various options
   var changes = false;
-  if (type == EDITOR_ERASE_ALL) changes = editorSetTile(game, map, px, py, 0) && changes;
-  changes = editorSetEnemy(game, map, px, py, 0) && changes;
-  changes = editorSetPickup(game, map, px, py, 0) && changes;
+  if (type == EDITOR_ERASE_ALL) changes = editorSetTile(game, map, px, py, 0) || changes;
+  changes = editorSetEnemy(game, map, px, py, 0) || changes;
+  changes = editorSetPickup(game, map, px, py, 0) || changes;
+  changes = editorSetDecoration(game, map, px, py, 0) || changes;
   return changes;
 }
 
@@ -426,8 +428,11 @@ function editorApplyPickup(game, map, px, py, option) {
 }
 
 function editorApplyDecoration(game, map, px, py, option) {
-  return false;
+  // TODO: Handle decoration options (some need to be on ground etc)
+  return editorSetDecoration(game, map, px, py, option);
 }
+
+// TODO: Double tile update with decorations?
 
 function editorSetTile(game, map, px, py, value) {
   if (map.tiles[px + py*map.x] != value) {
@@ -437,6 +442,20 @@ function editorSetTile(game, map, px, py, value) {
       editorSetEnemy(game, map, px, py, 0);
       editorSetPickup(game, map, px, py, 0);
     }
+    // TODO: handle decorations also
+    return true;
+  }
+  return false;
+}
+
+function editorSetDecoration(game, map, px, py, value) {
+  const index = px + py*map.x;
+  if (map.decorations[index] != value) {
+    map.decorations[index] = value;
+    if (value == 0) {
+      map.decorationSeed[index] = 0;
+    }
+    editorRedoTile(game, map, px, py);
     return true;
   }
   return false;
@@ -460,6 +479,7 @@ function editorSetPickup(game, map, px, py, value) {
   return false;
 }
 
+
 //////////////////////
 // Map modification //
 //////////////////////
@@ -480,7 +500,6 @@ function editorCreateAllFromMap(game, map) {
       mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x]);
       editorUpdateEnemy(game, map, px, py);
       editorUpdatePickup(game, map, px, py);
-      editorUpdateDecoration(game, map, px, py);
     }
   }
   edPlayerStart = game.add.image(mapBlueprint.playerStartX*80.0 + 40, mapBlueprint.playerStartY*80.0 + 40.0, 'player');
@@ -536,11 +555,6 @@ function editorUpdateEnemy(game, map, px, py) {
 
 function editorUpdatePickup(game, map, px, py) {
   editorUpdateSingle(game, map, edPickups, map.pickups, PICKUPS, px, py);
-}
-
-function editorUpdateDecoration(game, map, px, py) {
-  // TODO: Use map features for this
-  //editorUpdateSingle(game, map, edDecorations, map.decorations, DECORATIONS, px, py);
 }
 
 function editorUpdateSingle(game, map, existing, mapList, type, px, py) {

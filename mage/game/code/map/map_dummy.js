@@ -10,6 +10,8 @@ function mapCreateDummy(sizeX, difficulty) {
   var tiles = new Array(mapX*mapY).fill(0);
   var enemies = new Array(mapX*mapY).fill(0);
   var pickups = new Array(mapX*mapY).fill(0);
+  var decorations = new Array(mapX*mapY).fill(0);
+  var decorationSeed = new Array(mapX*mapY).fill(0);
   // TODO: decorations
 
   // create floor
@@ -150,11 +152,21 @@ function mapCreateDummy(sizeX, difficulty) {
     }
   }
 
-
-
   // Finally clear up stuff
 
-  return { x: mapX, y: mapY, tiles: tiles, enemies: enemies, pickups: pickups, playerStartX: 0, playerStartY: startY, exitX: mapX-1, exitY: exitY }
+  return {
+    x: mapX,
+    y: mapY,
+    background: BACKGROUND_MOUNTAINS,
+    tiles: tiles,
+    enemies: enemies,
+    pickups: pickups,
+    decorations: decoration,
+    decorationSeed: decorationSeed,
+    playerStartX: 0,
+    playerStartY: startY,
+    exitX: mapX-1,
+    exitY: exitY }
 
 }
 
