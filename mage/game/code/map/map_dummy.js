@@ -161,7 +161,7 @@ function mapCreateDummy(sizeX, difficulty) {
     tiles: tiles,
     enemies: enemies,
     pickups: pickups,
-    decorations: decoration,
+    decorations: decorations,
     decorationSeed: decorationSeed,
     playerStartX: 0,
     playerStartY: startY,

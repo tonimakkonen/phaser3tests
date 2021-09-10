@@ -14,6 +14,7 @@ const ENEMY_TWISTER_MONSTER        = 5;
 const ENEMY_SHINING_TREE_MONSTER   = 6;
 const ENEMY_MAGMA_MONSTER          = 7;
 const ENEMY_SAND_MONSTER           = 8;
+const ENEMY_BAT_MONSTER            = 9;
 
 
 var ENEMIES = new Map();
@@ -107,5 +108,16 @@ ENEMIES.set(
     shoot1: { type: SHOT_ROCK, time: 2000, randomAngle: 45.0, topBias: 0.6 },
     health: 120,
     mass: 1.0
+  }
+);
+
+ENEMIES.set(
+  ENEMY_BAT_MONSTER,
+  {
+    graph: GRAPH_BAT_MONSTER,
+    moveFloat: { maxSpeed: 150, alpha: 2, minDistance: 80, maxDistance: 320, constantSway: 600, towards: true},
+    health: 25,
+    //shoot1: { type: SHOT_FIRE_STORM, time: 2500 },
+    mass: 0.4
   }
 );

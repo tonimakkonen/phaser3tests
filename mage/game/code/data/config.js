@@ -62,6 +62,7 @@ const GRAPH_TWISTER_MONSTER      = 105;
 const GRAPH_SHINING_TREE_MONSTER = 106;
 const GRAPH_MAGMA_MONSTER        = 107;
 const GRAPH_SAND_MONSTER         = 108;
+const GRAPH_BAT_MONSTER          = 109;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM_PICKUP      = 202;
@@ -80,6 +81,9 @@ const GRAPH_EXIT_DOOR1           = 401;
 
 const GRAPH_ROCK1_DECORATION     = 501;
 const GRAPH_ROCK2_DECORATION     = 502;
+const GRAPH_TREE1_DECORATION     = 503;
+const GRAPH_TREE2_DECORATION     = 504;
+const GRAPH_TREE3_DECORATION     = 505;
 
 var GRAPHS = new Map();
 
@@ -171,6 +175,17 @@ GRAPHS.set(
     type: GRAPH_TYPE_LEFT_RIGHT,
     sizeX: 60,
     sizeY: 60
+  }
+);
+
+GRAPHS.set(
+  GRAPH_BAT_MONSTER,
+  {
+    location: 'imgs/monsters/bat_monster.png',
+    name: 'enemy_bat_monster',
+    type: GRAPH_TYPE_ANIM_3,
+    sizeX: 30,
+    sizeY: 30
   }
 );
 
@@ -312,6 +327,33 @@ GRAPHS.set(
   }
 )
 
+GRAPHS.set(
+  GRAPH_TREE1_DECORATION,
+  {
+    location: 'imgs/decorations/tree1.png',
+    name: 'decoration_tree1',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
+GRAPHS.set(
+  GRAPH_TREE2_DECORATION,
+  {
+    location: 'imgs/decorations/tree2.png',
+    name: 'decoration_tree2',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
+GRAPHS.set(
+  GRAPH_TREE3_DECORATION,
+  {
+    location: 'imgs/decorations/tree3.png',
+    name: 'decoration_tree3',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
@@ -416,6 +458,9 @@ PICKUPS.set(
 
 const DECORATION_ROCK1 = 1;
 const DECORATION_ROCK2 = 2;
+const DECORATION_TREE1 = 3;
+const DECORATION_TREE2 = 4;
+const DECORATION_TREE3 = 5;
 
 var DECORATIONS = new Map();
 
@@ -423,10 +468,7 @@ DECORATIONS.set(
   DECORATION_ROCK1,
   {
     graph: GRAPH_ROCK1_DECORATION,
-    z: 2.0,
-    dx: 10,
-    dy: 10,
-    maxAngle: 180
+    z: 2.0
   }
 )
 
@@ -434,10 +476,31 @@ DECORATIONS.set(
   DECORATION_ROCK2,
   {
     graph: GRAPH_ROCK2_DECORATION,
-    z: 2.0,
-    dx: 10,
-    dy: 10,
-    maxAngle: 180
+    z: 2.0
+  }
+)
+
+DECORATIONS.set(
+  DECORATION_TREE1,
+  {
+    graph: GRAPH_TREE1_DECORATION,
+    z: -0.05
+  }
+)
+
+DECORATIONS.set(
+  DECORATION_TREE2,
+  {
+    graph: GRAPH_TREE2_DECORATION,
+    z: -0.05
+  }
+)
+
+DECORATIONS.set(
+  DECORATION_TREE3,
+  {
+    graph: GRAPH_TREE3_DECORATION,
+    z: -0.05
   }
 )
 

@@ -174,8 +174,21 @@ function enemyHandleFloatMove(game, enemy, curTime, move, dx, dy) {
     throw 'No float mode defined: ' + move;
   }
 
-  desireX += move.sway * acc * Math.cos(3.14 * (curTime / 1000.0 + enemy.xRandom));
-  desireY += move.sway * acc * Math.sin(3.14 * (curTime / 1000.0 + enemy.xRandom));
+  var swayDir = enemy.xRandom * 2.0 - 1;
+  if (swayDir < 0 && swayDir > -0.25) swayDir = -0.25;
+  if (swayDir > 0 && swayDir < 0.25) swayDir = 0.25;
+
+  if (move.sway) {
+    desireX += move.sway * acc * Math.cos(3.14 * (curTime / 1000.0 + enemy.xRandom));
+    desireY += move.sway * acc * Math.sin(3.14 * (curTime / 1000.0 + enemy.xRandom));
+  }
+
+  if (move.constantSway) {
+    const csx = move.constantSway * Math.cos(swayDir * 3.14 * (curTime / 1000.0 + enemy.xRandom));
+    const csy = move.constantSway * Math.sin(swayDir * 3.14 * (curTime / 1000.0 + enemy.xRandom));
+    desireX += csx;
+    desireY += csy;
+  }
 
   enemy.setGravity(desireX - move.alpha * vx, desireY - move.alpha * vy);
 }

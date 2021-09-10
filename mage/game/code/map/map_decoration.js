@@ -10,6 +10,6 @@ function mapHandleDecoration(game, deco, px, py, list) {
   const cy = (py + 0.5) * 80.0;
 
   const im = game.add.image(cx, cy, graph.name);
-  im.setDepth(2.0);
+  im.setDepth(deco.z);
   list.push(im);
 }

@@ -34,15 +34,13 @@ function resLoadResources(game) {
   // Images
 
   // bg images
-  game.load.image('bg0', 'imgs/bg0.png');
-  game.load.image('bg1', 'imgs/bg1.png');
-  game.load.image('bg2', 'imgs/bg2.png');
-  game.load.image('bg3', 'imgs/bg3.png');
-  game.load.image('bg_forest', 'imgs/bg_forest.png');
-
-  // TODO: Make this more generic
-  game.load.image('ground_r0', 'imgs/ground/ground_r0.png');
-  game.load.image('ground_r1', 'imgs/ground/ground_r1.png');
+  // TODO: Define these
+  game.load.image('bg0', 'imgs/bg_sky.jpg');
+  //game.load.image('bg0', 'imgs/bg0.png');
+  //game.load.image('bg1', 'imgs/bg1.png');
+  //game.load.image('bg2', 'imgs/bg2.png');
+  //game.load.image('bg3', 'imgs/bg3.png');
+  //game.load.image('bg_forest', 'imgs/bg_forest.png');
 
   // Load UI images not defined in config
   game.load.image('ui_eraser_all', 'imgs/ui/eraser_all.png');
