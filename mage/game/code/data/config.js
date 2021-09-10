@@ -519,13 +519,31 @@ DECORATIONS.set(
 // All the different backgrounds //
 ///////////////////////////////////
 
-const BACKGROUND_MOUNTAINS = 1;
+// TODO: Load differently..
+
+const BACKGROUND_EMPTY     = 1;
+const BACKGROUND_MOUNTAINS = 2;
+const BACKGROUND_NIGHT     = 3;
 
 var BACKGROUNDS = new Map();
 
 BACKGROUNDS.set(
+  BACKGROUND_EMPTY,
+  {}
+)
+
+BACKGROUNDS.set(
   BACKGROUND_MOUNTAINS,
   {
-    dummy: 'todo' // TODO:
+    name: 'bg_mountains',
+    location: 'imgs/bg_mountains.jpg'
+  }
+)
+
+BACKGROUNDS.set(
+  BACKGROUND_NIGHT,
+  {
+    name: 'bg_night',
+    location: 'imgs/bg_sky.jpg' // TODO: rename
   }
 )

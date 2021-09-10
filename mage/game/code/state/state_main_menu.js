@@ -7,7 +7,7 @@ var mmBg = null;;
 function stateStartMainMenu(game) {
 
   // TODO: Change the BG
-  mmBg = game.add.image(settingWidth/2, settingHeight/2, 'bg0');
+  mmBg = game.add.image(settingWidth/2, settingHeight/2, 'bg_night');
 
   mmAddNewText(game, 'Start on random map (easy)');
   mmAddNewText(game, 'Start on random map (difficult)');

@@ -36,8 +36,17 @@ function resLoadResources(game) {
   // Images
 
   // bg images
+  BACKGROUNDS.forEach(
+    (value, key) => {
+      if (value.name) {
+        console.log(value);
+        console.log(value.location);
+        game.load.image(value.name, value.location)
+      }
+    }
+  )
   // TODO: Define these
-  game.load.image('bg0', 'imgs/bg_sky.jpg');
+  //game.load.image('bg_mountains', 'imgs/bg_mountains.jpg');
   //game.load.image('bg0', 'imgs/bg0.png');
   //game.load.image('bg1', 'imgs/bg1.png');
   //game.load.image('bg2', 'imgs/bg2.png');
@@ -53,6 +62,7 @@ function resLoadResources(game) {
   game.load.image('spell_fire_ball', 'imgs/spells/spell_fire_ball.png');
 
   // Sound
+  // TODO:
   //game.load.audio('test_music', 'sound/music.mp3', true);
 }
 
