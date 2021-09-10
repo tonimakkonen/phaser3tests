@@ -320,15 +320,14 @@ GRAPHS.set(
 const LAYER_TYPE_TOP        = 1;  // layers with a top thingy (e.g. grass)
 const LAYER_TYPE_SYMMETRIC  = 2;  // symmetric layers
 
-
 const LAYER_GROUND  = 1;
 const LAYER_CAVE    = 2;
 const LAYER_ROCK    = 3;
-
+const LAYER_SNOW    = 4;
 
 // Z location of all game objects
+// TODO: Is here good?
 const Z_ACTION = 1.0;
-
 
 var LAYERS = new Map();
 
@@ -341,7 +340,7 @@ LAYERS.set(
     block: true,
     zInternal: -0.3,
     zBlock: -0.3,
-    zTop: 2.0
+    zTop: 2.1
   }
 );
 
@@ -364,8 +363,21 @@ LAYERS.set(
     name: 'rock',
     locationBase: 'imgs/ground/rock',
     block: true,
-    zInternal: -0.1,
-    zBlock: -0.1
+    zInternal: -0.4,
+    zBlock: -0.4
+  }
+);
+
+LAYERS.set(
+  LAYER_SNOW,
+  {
+    type: LAYER_TYPE_TOP,
+    name: 'snow',
+    locationBase: 'imgs/ground/snow',
+    block: true,
+    zInternal: -0.2,
+    zBlock: -0.2,
+    zTop: 2.1
   }
 );
 
@@ -411,6 +423,7 @@ DECORATIONS.set(
   DECORATION_ROCK1,
   {
     graph: GRAPH_ROCK1_DECORATION,
+    z: 2.0,
     dx: 10,
     dy: 10,
     maxAngle: 180
@@ -421,6 +434,7 @@ DECORATIONS.set(
   DECORATION_ROCK2,
   {
     graph: GRAPH_ROCK2_DECORATION,
+    z: 2.0,
     dx: 10,
     dy: 10,
     maxAngle: 180
