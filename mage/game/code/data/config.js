@@ -6,7 +6,7 @@
 ///////////////////////
 
 // Used for local storage. Update this with big changes to storage.
-const VERSION = 2;
+const VERSION = '2021_09_10';
 
 // Typical HD (720p) resolution. Should work on most devices
 const settingWidth = 1280;

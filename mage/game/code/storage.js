@@ -3,19 +3,19 @@
 
 function storageLoad() {
 
-  console.log('Local version: ' + VERSION);
+  console.log('Current game version: ' + VERSION);
 
   const versionInStorage = localStorage.getItem('version');
 
   if (!versionInStorage) {
     console.log('No local storage data');
-    localStorage.clear();
+    localStorage.clear(); // Clear to be sure
   } else {
     if (versionInStorage != VERSION) {
-      console.log('Wrong version in local storage, clearing: ' + versionInStorage);
+      console.log('Wrong version in local storage, clearing. Old version: ' + versionInStorage);
       localStorage.clear();
     } else {
-      console.log('Loading local storage');
+      console.log('Loading local storage. If this fails, clear local storage.');
       mapBlueprint =  JSON.parse(localStorage.getItem('mapBlueprint'));
     }
   }
@@ -23,6 +23,6 @@ function storageLoad() {
 }
 
 function storageSaveMap() {
-  console.log('saving map');
+  console.log('saving map to local storage');
   localStorage.setItem('mapBlueprint', JSON.stringify(mapBlueprint));
 }
