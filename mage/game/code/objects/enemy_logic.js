@@ -243,7 +243,6 @@ function enemyHandleShot(game, enemy, info, type, dx1, dy1) {
 }
 
 function enemyGetShotDirection(shotInfo, dx1, dy1) {
-  console.log('orig = ' + dx1 + ", " + dy1);
   var dx = dx1;
   var dy = dy1;
   if (shotInfo.topBias) {
@@ -266,7 +265,6 @@ function enemyGetShotDirection(shotInfo, dx1, dy1) {
     dx = dx*cos + ox*sin;
     dy = dy*cos + oy*sin;
   }
-  console.log('final = ' + dx + ", " + dy);
   return [dx, dy];
 }
 

@@ -89,7 +89,7 @@ SPELLS.set(
     posY: 2,
     image: 'spell_dummy',
     type: MAGIC_TYPE_WATER,
-    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 5, time: 4000},
+    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 15, time: 5000},
     cost: 100,
     reload: 1500
   }
