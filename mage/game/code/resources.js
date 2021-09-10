@@ -25,6 +25,8 @@ function resLoadResources(game) {
         resLoadTopLayer(game, value);
       } else if (value.type == LAYER_TYPE_SYMMETRIC) {
         resLoadSymmetricLayer(game, value);
+      } else if (value.type == LAYER_TYPE_SINGLE) {
+        resLoadSingleLayer(game, value);
       } else {
         throw new 'Unkown layer type: ' + value;
       }
@@ -57,6 +59,10 @@ function resLoadResources(game) {
 // Load single image
 function resLoadSingle(game, value) {
   game.load.image(value.name, value.location);
+}
+
+function resLoadSingleLayer(game, value) {
+  game.load.image(value.name, value.locationBase);
 }
 
 // Load image with 4 frames for left right

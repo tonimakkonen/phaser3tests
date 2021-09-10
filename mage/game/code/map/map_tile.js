@@ -45,12 +45,18 @@ function mapCreateSingleTile(game, map, px, py, list) {
     mapHandleTop(game, layer, list, px, py, cont);
   }  else if (layer.type == LAYER_TYPE_SYMMETRIC) {
     mapHandleSymmetric(game, layer, list, px, py, cont);
+  } else if (layer.type == LAYER_TYPE_SINGLE) {
+    mapHandleSingle(game, layer, list, px, py, cont);
   } else {
     throw 'Unkown layer type: ' + layer.type;
   }
 }
 
-
+function mapHandleSingle(game, layer, list, px, py, cont) {
+  const cx = px * 80.0 + 40.0;
+  const cy = py * 80.0 + 40.0;
+  mapAddThing(game, layer.name, cx, cy, layer.zBlock, list);
+}
 
 function mapHandleTop(game, layer, list, px, py, cont) {
   const cx = px * 80.0 + 40.0;

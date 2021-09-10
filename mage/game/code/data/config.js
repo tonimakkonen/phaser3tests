@@ -358,18 +358,17 @@ GRAPHS.set(
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
 
+const Z_ACTION = 1.0;
 
-const LAYER_TYPE_TOP        = 1;  // layers with a top thingy (e.g. grass)
-const LAYER_TYPE_SYMMETRIC  = 2;  // symmetric layers
+const LAYER_TYPE_TOP        = 1;
+const LAYER_TYPE_SYMMETRIC  = 2;
+const LAYER_TYPE_SINGLE     = 3;
 
 const LAYER_GROUND  = 1;
 const LAYER_CAVE    = 2;
 const LAYER_ROCK    = 3;
 const LAYER_SNOW    = 4;
-
-// Z location of all game objects
-// TODO: Is here good?
-const Z_ACTION = 1.0;
+const LAYER_VOID    = 5;
 
 var LAYERS = new Map();
 
@@ -420,6 +419,18 @@ LAYERS.set(
     zInternal: -0.2,
     zBlock: -0.2,
     zTop: 2.1
+  }
+);
+
+LAYERS.set(
+  LAYER_VOID,
+  {
+    type: LAYER_TYPE_SINGLE,
+    name: 'void_layer',
+    locationBase: 'imgs/ground/void.png',
+    block: false,
+    zInternal: 2.5,
+    zBlock: 2.5
   }
 );
 

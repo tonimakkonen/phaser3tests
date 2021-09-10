@@ -45,6 +45,7 @@ EDITOR_MENU.add({x: 0, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, ima
 EDITOR_MENU.add({x: 1, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_CAVE, image: 'cave_full'});
 EDITOR_MENU.add({x: 2, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_ROCK, image: 'rock_full'});
 EDITOR_MENU.add({x: 3, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_SNOW, image: 'snow_full'});
+EDITOR_MENU.add({x: 4, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_VOID, image: 'void_layer'});
 
 // Decorations
 EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_DECORATION, option: DECORATION_ROCK1, image: 'decoration_rock1'});
