@@ -89,6 +89,9 @@ function shotHitPlayer(game, shot) {
     const py = shot.body.velocity.y * shot.xInfo.punch;
     playerPunch(game, px, py, shot);
   }
+  if (shot.xInfo.poison) {
+    playerPoison(game, shot.xInfo.poison);
+  }
   // TODO: Can player be freezed
   shotDestroy(game, shot);
 }
@@ -105,6 +108,7 @@ function shotHitEnemy(game, shot, enemy) {
   if (shot.xInfo.freeze) {
     enemyFreeze(game, enemy, shot.xInfo.freeze);
   }
+  // TODO: Poison enemies
   shotDestroy(game, shot);
 }
 

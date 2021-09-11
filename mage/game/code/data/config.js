@@ -63,6 +63,7 @@ const GRAPH_SHINING_TREE_MONSTER = 106;
 const GRAPH_MAGMA_MONSTER        = 107;
 const GRAPH_SAND_MONSTER         = 108;
 const GRAPH_BAT_MONSTER          = 109;
+const GRAPH_MUSHROOM_MONSTER     = 110;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM_PICKUP      = 202;
@@ -76,6 +77,7 @@ const GRAPH_AIR_PUNCH_SHOT       = 306;
 const GRAPH_ICE_SHOT             = 307;
 const GRAPH_SMALL_WATER_SHOT     = 308;
 const GRAPH_ROCK_SHOT            = 309;
+const GRAPH_POISON_SHOT          = 310;
 
 const GRAPH_EXIT_DOOR1           = 401;
 
@@ -189,6 +191,15 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_MUSHROOM_MONSTER,
+  {
+    location: 'imgs/monsters/mushroom_monster.png',
+    name: 'enemy_mushroom_monster',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
 // Pickups
 
 GRAPHS.set(
@@ -292,6 +303,15 @@ GRAPHS.set(
   {
     location: 'imgs/shots/rock.png',
     name: 'shot_rock',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_POISON_SHOT,
+  {
+    location: 'imgs/shots/poison.png',
+    name: 'shot_poison',
     type: GRAPH_TYPE_SINGLE
   }
 );

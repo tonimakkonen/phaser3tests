@@ -15,6 +15,7 @@ const ENEMY_SHINING_TREE_MONSTER   = 6;
 const ENEMY_MAGMA_MONSTER          = 7;
 const ENEMY_SAND_MONSTER           = 8;
 const ENEMY_BAT_MONSTER            = 9;
+const ENEMY_MUSHROOM_MONSTER       = 10;
 
 
 var ENEMIES = new Map();
@@ -119,5 +120,16 @@ ENEMIES.set(
     health: 25,
     shoot1: { type: SHOT_FIRE, time: 2500 },
     mass: 0.4
+  }
+);
+
+ENEMIES.set(
+  ENEMY_MUSHROOM_MONSTER,
+  {
+    graph: GRAPH_MUSHROOM_MONSTER,
+    immovable: true,
+    shoot1: { type: SHOT_POISON, time: 2000, randomAngle: 45.0, topBias: 0.6 },
+    health: 100,
+    mass: 2.5
   }
 );

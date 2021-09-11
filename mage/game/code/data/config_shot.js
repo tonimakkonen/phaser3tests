@@ -10,6 +10,7 @@ const SHOT_AIR_PUNCH   = 6;
 const SHOT_ICE         = 7;
 const SHOT_SMALL_WATER = 8;
 const SHOT_ROCK        = 9;
+const SHOT_POISON      = 10;
 
 
 var SHOTS = new Map();
@@ -94,7 +95,7 @@ SHOTS.set(
     type: MAGIC_TYPE_FIRE,
     velocity: 400,
     grav: 0.5,
-    spawn: { type: SHOT_FIRE, amount: 20, velocity: 0.5},
+    spawn: { type: SHOT_FIRE, amount: 10, velocity: 0.5},
     punch: 0.2
   }
 )
@@ -121,5 +122,17 @@ SHOTS.set(
     bounce: { count: 50, amount: 0.7 },
     grav: 1.0,
     punch: 0.6
+  }
+)
+
+SHOTS.set(
+  SHOT_POISON,
+  {
+    graph: GRAPH_POISON_SHOT,
+    damage: 5,
+    poison: 5000,
+    type: MAGIC_TYPE_EARTH,
+    velocity: 300,
+    grav: 0.5
   }
 )

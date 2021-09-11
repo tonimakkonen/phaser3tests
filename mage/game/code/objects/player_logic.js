@@ -18,6 +18,13 @@ function playerHandleLogic(game, curTime) {
 
   if (player == null) return;
 
+  if (player.xPoison) {
+    if (game.time.now > player.xPoison) {
+      player.xPoison = undefined;
+      player.clearTint();
+    }
+  }
+
   var ld = inputA.isDown;
   var rd = inputD.isDown;
   var jump = inputSpace.isDown;
@@ -76,8 +83,10 @@ function playerHandleLogic(game, curTime) {
   // Regeneration
   if (playerLastRegen == null) playerLastRegen = game.time.now;
   const dt = game.time.now - playerLastRegen;
+  var healAmount = 2.0;
+  if (player.xPoison) healAmount -= 5;
   // TODO: Make use of more generic player propertioes
-  playerHeal(game, dt * 2.0 / 1000.0); // 2 per sec
+  playerHeal(game, dt * healAmount / 1000.0); // 2 per sec
   playerUpdateMana(game, dt * 5.0 / 1000.0); // 5 per sec
   playerLastRegen = game.time.now;
 }
@@ -124,6 +133,13 @@ function playerPunch(game, px, py, shot) {
   player.setVelocity(vx + px / playerMass, vy + py / playerMass);
 }
 
+function playerPoison(game, amount) {
+  if (player == null) return;
+  if (!player.xFreeze) player.xPoison = game.time.now;
+  var playerMass = 1.0;
+  player.xPoison += amount / playerMass;
+  player.setTint(0x20ff20);
+}
 
 function playerUseManaIfCan(game, cost) {
   if (playerMana >= cost) {
