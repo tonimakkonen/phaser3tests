@@ -86,6 +86,7 @@ const GRAPH_ROCK2_DECORATION     = 502;
 const GRAPH_TREE1_DECORATION     = 503;
 const GRAPH_TREE2_DECORATION     = 504;
 const GRAPH_TREE3_DECORATION     = 505;
+const GRAPH_TREE4_DECORATION     = 506;
 
 var GRAPHS = new Map();
 
@@ -374,6 +375,15 @@ GRAPHS.set(
   }
 )
 
+GRAPHS.set(
+  GRAPH_TREE4_DECORATION,
+  {
+    location: 'imgs/decorations/tree4.png',
+    name: 'decoration_tree4',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
@@ -492,6 +502,7 @@ const DECORATION_ROCK2 = 2;
 const DECORATION_TREE1 = 3;
 const DECORATION_TREE2 = 4;
 const DECORATION_TREE3 = 5;
+const DECORATION_TREE4 = 6;
 
 var DECORATIONS = new Map();
 
@@ -532,6 +543,14 @@ DECORATIONS.set(
   {
     graph: GRAPH_TREE3_DECORATION,
     z: -0.05
+  }
+)
+
+DECORATIONS.set(
+  DECORATION_TREE4,
+  {
+    graph: GRAPH_TREE4_DECORATION,
+    z: -0.025
   }
 )
 
