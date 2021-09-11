@@ -5,7 +5,7 @@ function mapCreateEmpty(x, y) {
   return {
     x: x,
     y: y,
-    background: BACKGROUND_MOUNTAINS,
+    background: BACKGROUND_EMPTY,
     tiles: new Array(x*y).fill(0),
     enemies: new Array(x*y).fill(0),
     pickups: new Array(x*y).fill(0),
@@ -22,21 +22,7 @@ function mapCreateEmpty(x, y) {
 function mapInitialize(game, map, mapObjectList) {
 
   // Add BG images
-  const bg = BACKGROUNDS.get(map.background);
-  if (!bg) throw 'Unknown bg: ' + map.background;
-  if (bg.name) {
-      const bgImage = game.add.image(settingWidth/2, settingHeight/2, bg.name);
-      bgImage.setScrollFactor(0.0, 0.0);
-      bgImage.setDepth(-10.0);
-      mapObjectList.push(bgImage);
-  }
-
-  //var bg2 = game.add.image(settingWidth/2, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
-  //bg2.setScrollFactor(0.15, 0.15);
-  //bg2 = game.add.image(settingWidth*1.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
-  //bg2.setScrollFactor(0.15, 0.15);
-  //bg2 = game.add.image(settingWidth*2.5, settingHeight - 240/2 + 0.15*(map.y*80 - settingHeight), 'bg_forest');
-  //bg2.setScrollFactor(0.15, 0.15);
+  mapCreateBackground(game, map, false, mapObjectList);
 
   // Add Tiles
   for (var px = 0; px < map.x; px++) {

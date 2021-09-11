@@ -39,8 +39,6 @@ function resLoadResources(game) {
   BACKGROUNDS.forEach(
     (value, key) => {
       if (value.name) {
-        console.log(value);
-        console.log(value.location);
         game.load.image(value.name, value.location)
       }
     }

@@ -20,6 +20,7 @@ const EDITOR_SPECIAL_TRY        = 1;
 const EDITOR_SPECIAL_CONFIRM    = 2;
 const EDITOR_SPECIAL_EXPORT     = 3;
 const EDITOR_SPECIAL_IMPORT     = 4;
+const EDITOR_SPECIAL_BG         = 5;
 
 const EDITOR_CONFIRM_NEW = 1;
 
@@ -39,6 +40,10 @@ EDITOR_MENU.add({x: 6, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDI
 EDITOR_MENU.add({x: 7, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 9, y: 3, info: 'Create new 9x3 map?'}, text: 'N: 9x3'});
 EDITOR_MENU.add({x: 8, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 5, info: 'Create new 3x5 map?'}, text: 'N: 3x5'});
 EDITOR_MENU.add({x: 9, y: 0, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 7, info: 'Create new 3x7 map?'}, text: 'N: 3x7'});
+
+EDITOR_MENU.add({x: 10, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_EMPTY, text: 'BG 0'});
+EDITOR_MENU.add({x: 11, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_MOUNTAINS, text: 'BG 1'});
+EDITOR_MENU.add({x: 12, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_NIGHT, text: 'BG 2'});
 
 // Second row, ground options
 EDITOR_MENU.add({x: 0, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, image: 'ground_full'});
@@ -95,6 +100,7 @@ var edRightSelectPos = {x: 2, y: 0};
 
 
 // Temp phaser3 objects
+var edBg = [];              // background
 var edGrid = null;          // grid
 var edToolBoxObjects = [];  // all in tool box (that you open with tab)
 var edLeftSelect = null;    // left select in tool box
@@ -123,6 +129,9 @@ function stateStartEditor(game) {
   if (mapBlueprint == null) {
     mapBlueprint = mapCreateEmpty(40, 20);
   }
+
+  // BG
+  mapCreateBackground(game, mapBlueprint, true, edBg);
 
   // Create all phaser objects related to the map
   editorCreateAllFromMap(game, mapBlueprint);
@@ -177,6 +186,7 @@ function stateHandleEditor(game) {
     editorDestroyAllMapObjects();
     editorCreateAllFromMap(game, mapBlueprint);
     edDoUpdate = false;
+    return GAME_MODE_MAP_EDITOR;
   }
 
   // Movement is always on
@@ -201,6 +211,8 @@ function stateHandleEditor(game) {
 
 // When moving away from editor
 function editorClose() {
+  edBg.forEach(o => o.destroy());
+  edBg = [];
   edGrid.destroy();
   edToolBoxObjects.forEach(o => o.destroy());
   edToolBoxObjects = [];
@@ -277,6 +289,11 @@ function editorHandleTab(game) {
         editorDownloadFile();
       } else if (toolOn.special == EDITOR_SPECIAL_IMPORT) {
         document.getElementById('file-input').click(); // HTML hacks
+      } else if (toolOn.special == EDITOR_SPECIAL_BG) {
+        mapBlueprint.background = toolOn.option;
+        edBg.forEach(o => { o.destroy(); });
+        edBg = [];
+        mapCreateBackground(game, mapBlueprint, true, edBg);
       }
     }
   }

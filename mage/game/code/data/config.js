@@ -519,7 +519,7 @@ DECORATIONS.set(
 // All the different backgrounds //
 ///////////////////////////////////
 
-// TODO: Load differently..
+// TODO: Load differently.. define set of resources etc..
 
 const BACKGROUND_EMPTY     = 1;
 const BACKGROUND_MOUNTAINS = 2;
@@ -529,7 +529,9 @@ var BACKGROUNDS = new Map();
 
 BACKGROUNDS.set(
   BACKGROUND_EMPTY,
-  {}
+  {
+    editorGrey: true // so that you can see when adding "void" block
+  }
 )
 
 BACKGROUNDS.set(
