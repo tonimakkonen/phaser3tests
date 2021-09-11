@@ -27,6 +27,8 @@ function resLoadResources(game) {
         resLoadSymmetricLayer(game, value);
       } else if (value.type == LAYER_TYPE_SINGLE) {
         resLoadSingleLayer(game, value);
+      } else if (value.type == LAYER_TYPE_INVISIBLE) {
+        // do nothing
       } else {
         throw new 'Unkown layer type: ' + value;
       }

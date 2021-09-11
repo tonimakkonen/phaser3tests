@@ -51,6 +51,7 @@ EDITOR_MENU.add({x: 1, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_CAVE, image
 EDITOR_MENU.add({x: 2, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_ROCK, image: 'rock_full'});
 EDITOR_MENU.add({x: 3, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_SNOW, image: 'snow_full'});
 EDITOR_MENU.add({x: 4, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_VOID, image: 'void_layer'});
+EDITOR_MENU.add({x: 5, y: 1, tool: EDITOR_TOOL_GROUND, option: LAYER_INVISIBLE, text: 'IB'});
 
 // Decorations
 EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_DECORATION, option: DECORATION_ROCK1, image: 'decoration_rock1'});
@@ -522,7 +523,7 @@ function editorCreateAllFromMap(game, map) {
   edDecorations = Array(mapBlueprint.tiles.length);
   for (var px = 0; px < map.x; px++) {
     for (var py = 0; py < map.y; py++) {
-      mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x]);
+      mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x], true);
       editorUpdateEnemy(game, map, px, py);
       editorUpdatePickup(game, map, px, py);
     }
@@ -564,7 +565,7 @@ function editorRedoTiles(game, map, px, py) {
 function editorRedoTile(game, map, px, py) {
   if (px < 0 || py < 0 || px > map.x - 1 || py > map.y - 1) return;
   editorDestroyTile(map, px, py);
-  mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x]);
+  mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x], true);
 }
 
 // Destroy all ground tiles from a given position

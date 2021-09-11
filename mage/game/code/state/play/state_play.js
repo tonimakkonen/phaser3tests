@@ -21,7 +21,7 @@ function stateStartPlay(game) {
 }
 
 function playInitMap(game) {
-  mapInitialize(game, mapBlueprint, playStaticMapObjects);
+  mapInitialize(game, mapBlueprint, playStaticMapObjects, false);
   // TODO: Add player following here
 }
 

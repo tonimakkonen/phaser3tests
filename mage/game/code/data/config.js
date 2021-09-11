@@ -393,12 +393,14 @@ const Z_ACTION = 1.0;
 const LAYER_TYPE_TOP        = 1;
 const LAYER_TYPE_SYMMETRIC  = 2;
 const LAYER_TYPE_SINGLE     = 3;
+const LAYER_TYPE_INVISIBLE  = 4; // invisible blocking layer, used for some effect
 
-const LAYER_GROUND  = 1;
-const LAYER_CAVE    = 2;
-const LAYER_ROCK    = 3;
-const LAYER_SNOW    = 4;
-const LAYER_VOID    = 5;
+const LAYER_GROUND    = 1;
+const LAYER_CAVE      = 2;
+const LAYER_ROCK      = 3;
+const LAYER_SNOW      = 4;
+const LAYER_VOID      = 5;
+const LAYER_INVISIBLE = 6;
 
 var LAYERS = new Map();
 
@@ -461,6 +463,15 @@ LAYERS.set(
     block: false,
     zInternal: 2.5,
     zBlock: 2.5
+  }
+);
+
+LAYERS.set(
+  LAYER_INVISIBLE,
+  {
+    type: LAYER_TYPE_INVISIBLE,
+    text: 'IB',
+    block: true
   }
 );
 

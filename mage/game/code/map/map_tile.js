@@ -9,7 +9,7 @@ const TILE_EXTEND = 2;
 
 // Create single coordinates
 // TODO: This needs to be tweaked a lot
-function mapCreateSingleTile(game, map, px, py, list) {
+function mapCreateSingleTile(game, map, px, py, list, inEditor) {
 
   if (px < 0 || py < 0 || px >= map.x && py >= map.y) throw new 'Bad px, py: ' + px + ', ' + py;
 
@@ -47,9 +47,20 @@ function mapCreateSingleTile(game, map, px, py, list) {
     mapHandleSymmetric(game, layer, list, px, py, cont);
   } else if (layer.type == LAYER_TYPE_SINGLE) {
     mapHandleSingle(game, layer, list, px, py, cont);
+  } else if (layer.type == LAYER_TYPE_INVISIBLE) {
+    console.log(inEditor);
+    if (inEditor) mapHandleInvisible(game, layer, list, px, py, cont);
   } else {
     throw 'Unkown layer type: ' + layer.type;
   }
+}
+
+function mapHandleInvisible(game, layer, list, px, py, cont) {
+  const cx = px * 80.0 + 40.0;
+  const cy = py * 80.0 + 40.0;
+  const text = game.add.text(cx, cy, layer.text).setOrigin(0.5);
+  text.setDepth(5.0);
+  list.push(text);
 }
 
 function mapHandleSingle(game, layer, list, px, py, cont) {

@@ -19,7 +19,7 @@ function mapCreateEmpty(x, y) {
 }
 
 // Create all the map objects
-function mapInitialize(game, map, mapObjectList) {
+function mapInitialize(game, map, mapObjectList, inEditor) {
 
   // Add BG images
   mapCreateBackground(game, map, false, mapObjectList);
@@ -27,7 +27,7 @@ function mapInitialize(game, map, mapObjectList) {
   // Add Tiles
   for (var px = 0; px < map.x; px++) {
     for (var py = 0; py < map.y; py++) {
-      mapCreateSingleTile(game, map, px, py, mapObjectList);
+      mapCreateSingleTile(game, map, px, py, mapObjectList, inEditor);
     }
   }
   createMapBlocks(game, map.tiles, map.x, map.y, 80, 80, groupBlocks, mapObjectList);
