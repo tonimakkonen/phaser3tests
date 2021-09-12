@@ -14,6 +14,8 @@ const SPELL_AIR_PUNCH      = 7;
 const SPELL_RAIN           = 8;
 const SPELL_ROCK           = 9;
 const SPELL_FLY            = 10;
+const SPELL_REGENERATE     = 11;
+const SPELL_HELLFIRE       = 12;
 
 const SPELLS_MAX_X = 3;
 const SPELLS_MAX_Y = 2;
@@ -140,6 +142,20 @@ SPELLS.set(
   }
 )
 
+SPELLS.set(
+  SPELL_HELLFIRE,
+  {
+    name: 'Hellfire',
+    posX: 2,
+    posY: 2,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_FIRE,
+    shoot: SHOT_FIRE,
+    cost: 2.5,
+    reload: 25
+  }
+)
+
 // Earth spells
 
 SPELLS.set(
@@ -166,6 +182,20 @@ SPELLS.set(
     type: MAGIC_TYPE_EARTH,
     shoot: SHOT_ROCK,
     cost: 15,
+    reload: 500
+  }
+)
+
+SPELLS.set(
+  SPELL_REGENERATE,
+  {
+    name: 'Regenerate',
+    posX: 3,
+    posY: 2,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_EARTH,
+    heal: 10,
+    cost: 25,
     reload: 500
   }
 )

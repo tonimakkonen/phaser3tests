@@ -92,10 +92,7 @@ function playerHandleLogic(game, curTime) {
   // Regeneration
   if (playerLastRegen == null) playerLastRegen = game.time.now;
   const dt = game.time.now - playerLastRegen;
-  var healAmount = 2.0;
-  if (player.xPoison) healAmount -= 5;
-  // TODO: Make use of more generic player propertioes
-  playerHeal(game, dt * healAmount / 1000.0); // 2 per sec
+  if (player.xPoison) playerDealDamage(game, dt * 3.0 / 1000.0);
   playerUpdateMana(game, dt * 5.0 / 1000.0); // 5 per sec
   playerLastRegen = game.time.now;
 }
@@ -122,6 +119,7 @@ function playerHandleSpell(game, spell, last, dx, dy) {
     if (spell.shoot) shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
     if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
     if (spell.jump) playerAddJump(game, spell.jump);
+    if (spell.heal) playerHeal(game, spell.heal);
     return curTime;
   }
   return last;
