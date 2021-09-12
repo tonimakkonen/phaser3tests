@@ -61,7 +61,7 @@ SHOTS.set(
     type: MAGIC_TYPE_AIR,
     velocity: 600,
     grav: 0.0,
-    bounce: { count: 10, amount: 0.9 },
+    bounce: { count: 10, amount: 1.0 },
     sound: 'sound_electric'
   }
 )
@@ -101,7 +101,8 @@ SHOTS.set(
     velocity: 400,
     grav: 0.5,
     spawn: { type: SHOT_FIRE, amount: 10, velocity: 0.5},
-    punch: 0.2
+    punch: 0.2,
+    sound: 'sound_fire2'
   }
 )
 

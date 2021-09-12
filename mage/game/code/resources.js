@@ -64,6 +64,7 @@ function resLoadResources(game) {
   // Sound
   // TODO: Put in definition
   game.load.audio('sound_fire1', 'sound/shots/fire1.wav', true);
+  game.load.audio('sound_fire2', 'sound/shots/fire2.wav', true);
   game.load.audio('sound_water1', 'sound/shots/water1.wav', true);
   game.load.audio('sound_stick', 'sound/shots/stick.wav', true);
   game.load.audio('sound_rock', 'sound/shots/rock.wav', true);

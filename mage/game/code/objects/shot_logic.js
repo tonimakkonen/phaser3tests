@@ -118,10 +118,16 @@ function shotHitEnemy(game, shot, enemy) {
 }
 
 function shotHitWall(game, shot, wall) {
-  shot.xBounceCount += 1;
-  if (!shot.xInfo.bounce || shot.xInfo.bounce.count < shot.xBounceCount) {
+  if (!shot.xInfo.bounce) {
     shotDestroy(game, shot);
+  } else {
+    const now = game.time.now;
+    if (shot.xLastHitWall == now) return;
+    shot.xLastHitWall = now;
+    shot.xBounceCount += 1;
+    if (shot.xInfo.bounce.count <= shot.xBounceCount) shotDestroy(game, shot);
   }
+
 }
 
 function shotDestroy(game, shot) {
