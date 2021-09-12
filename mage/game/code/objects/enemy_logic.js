@@ -23,6 +23,10 @@ function enemyCreate(game, enemyType, x, y) {
   if (!graph) throw 'Unkown graph: ' + info.graph;
 
   var newEnemy = groupEnemies.create(x, y, graph.name);
+  if (info.immovable) {
+    newEnemy.setImmovable(true);
+    groupPlayerBlocks.add(newEnemy);
+  }
   listEnemies.push(newEnemy);
   newEnemy.setDepth(Z_ACTION);
 

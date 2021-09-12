@@ -34,6 +34,7 @@ var gameMode = GAME_MODE_NONE;
 var gameModeLast = gameMode;
 
 var groupBlocks;
+var groupPlayerBlocks; // some enemies block players
 var groupPlayer;
 var groupEnemies;
 var groupPlayerShots;
@@ -69,6 +70,7 @@ function create() {
 
   // Set up phaser3 wiring
   groupBlocks = this.physics.add.staticGroup();
+  groupPlayerBlocks = this.physics.add.staticGroup();
   groupPlayer = this.physics.add.group();
   groupEnemies = this.physics.add.group();
   groupPlayerShots = this.physics.add.group();
@@ -77,6 +79,7 @@ function create() {
   groupExits = this.physics.add.group();
 
   this.physics.add.collider(groupBlocks, groupPlayer);
+  this.physics.add.collider(groupPlayerBlocks, groupPlayer);
   this.physics.add.collider(groupBlocks, groupEnemies);
   this.physics.add.collider(groupBlocks, groupPickups);
   this.physics.add.collider(groupBlocks, groupPlayerShots, mainShotHitWall, null, this);
