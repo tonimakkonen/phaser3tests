@@ -130,6 +130,8 @@ function update() {
     }
   }
 
+  soundHandleLogic(this);
+
 }
 
 // Just use these function to relay messages to the right place

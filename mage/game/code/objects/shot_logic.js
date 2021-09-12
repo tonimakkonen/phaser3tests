@@ -8,7 +8,7 @@ function shotDestroyAll() {
   groupEnemyShots.clear(true);
 }
 
-function shotShoot(game, isPlayer, shotType, x, y, dx, dy) {
+function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
 
   var info = SHOTS.get(shotType);
   if (!info) throw 'Unknown shot type: ' + shotType;
@@ -35,6 +35,12 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy) {
   // Handle animation
   if (graph.type == GRAPH_TYPE_ANIM_3) {
     newShot.anims.play(graph.name + '_anim');
+  }
+
+  // Handle sound
+  if (allowSound && info.sound) {
+    // TODO: Add position
+    soundRequest(game, info.sound);
   }
 
 }
@@ -69,7 +75,7 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy) {
    if (entry.effect.type == EFFECT_TYPE_SKY) {
       if (game.time.now >= entry.lastShot + entry.effect.reload) {
         const sx = (Math.random()*2.0 - 1) * entry.effect.range + px;
-        shotShoot(game, true, entry.effect.shoot, sx, 0, Math.random()*2.0 - 1, 1);
+        shotShoot(game, true, entry.effect.shoot, sx, 0, Math.random()*2.0 - 1, 1, false);
         entry.lastShot = game.time.now;
       }
    } else {
@@ -127,7 +133,7 @@ function shotDestroy(game, shot) {
       const mult = spawn.velocity ? spawn.velocity : 1.0;
       const dx = Math.cos(a) * mult;
       const dy = Math.sin(a) * mult;
-      shotShoot(game, shot.xIsPlayer, spawn.type, shot.x, shot.y, dx, dy);
+      shotShoot(game, shot.xIsPlayer, spawn.type, shot.x, shot.y, dx, dy, false);
     }
   }
   shot.destroy();

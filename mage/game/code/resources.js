@@ -63,6 +63,7 @@ function resLoadResources(game) {
 
   // Sound
   // TODO:
+  game.load.audio('sound_fire1', 'sound/shots/fire1.wav', true);
   //game.load.audio('test_music', 'sound/music.mp3', true);
 }
 

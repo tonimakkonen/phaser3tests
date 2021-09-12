@@ -70,7 +70,8 @@ SHOTS.set(
     damage: 20,
     type: MAGIC_TYPE_FIRE,
     velocity: 600,
-    grav: 0.5
+    grav: 0.5,
+    sound: 'sound_fire1'
   }
 )
 

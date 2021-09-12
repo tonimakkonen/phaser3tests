@@ -3,6 +3,9 @@
 
 // Player variables
 
+// This is used by a lot of effects
+var playerLocation = { x: 0, y: 0}
+
 var player = null;
 var playerHealth = 100.0;
 var playerMana = 100.0;
@@ -17,6 +20,9 @@ var playerRightSpellLast = 0;
 function playerHandleLogic(game, curTime) {
 
   if (player == null) return;
+
+  playerLocation.x = player.body.x;
+  playerLocation.y = player.body.y;
 
   if (player.xPoison) {
     if (game.time.now > player.xPoison) {
@@ -110,7 +116,7 @@ function playerHandleSpell(game, spell, last, dx, dy) {
   if (curTime < last + reloadTime) return last;
   const manaCost = spell.cost;
   if (playerUseManaIfCan(game, manaCost)) {
-    if (spell.shoot) shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy);
+    if (spell.shoot) shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
     if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
     return curTime;
   }

@@ -81,14 +81,9 @@ function enemyHandleLogic(game, enemy, curTime) {
     }
   }
 
-  // TODO: Do better
-  if (player == null) {
-    return true;
-  }
-
   // Towards player
-  const dx = player.x - enemy.x;
-  const dy = player.y - enemy.y;
+  const dx = playerLocation.x - enemy.x;
+  const dy = playerLocation.y - enemy.y;
   var len = Math.sqrt(dx*dx + dy*dy);
   if (len == 0) len = 1.0; // NaN guard
   const dx1 = dx / len;
@@ -250,7 +245,7 @@ function enemyHandleShot(game, enemy, info, type, dx1, dy1) {
   const now = game.time.now;
   if (now >= last + info.time) {
     const [dx, dy] = enemyGetShotDirection(info, dx1, dy1);
-    shotShoot(game, false, info.type, enemy.x, enemy.y, dx, dy);
+    shotShoot(game, false, info.type, enemy.x, enemy.y, dx, dy, true);
     type == 1 ? enemy.xLastShot1 = now : enemy.xLastShot2 = now;
   }
 }
