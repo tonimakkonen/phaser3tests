@@ -24,7 +24,8 @@ SHOTS.set(
     spawn: { type: SHOT_SMALL_WATER, amount: 4, velocity: 0.5},
     velocity: 500,
     grav: 1.0,
-    punch: 0.2
+    punch: 0.2,
+    sound: 'sound_water1'
   }
 )
 
@@ -84,7 +85,8 @@ SHOTS.set(
     velocity: 350,
     grav: 0.9,
     duration: 2000,
-    punch: 0.1
+    punch: 0.1,
+    sound: 'sound_stick'
   }
 )
 
@@ -122,7 +124,8 @@ SHOTS.set(
     velocity: 500,
     bounce: { count: 50, amount: 0.7 },
     grav: 1.0,
-    punch: 0.6
+    punch: 0.6,
+    sound: 'sound_rock'
   }
 )
 

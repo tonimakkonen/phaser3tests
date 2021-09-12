@@ -62,8 +62,11 @@ function resLoadResources(game) {
   game.load.image('spell_fire_ball', 'imgs/spells/spell_fire_ball.png');
 
   // Sound
-  // TODO:
+  // TODO: Put in definition
   game.load.audio('sound_fire1', 'sound/shots/fire1.wav', true);
+  game.load.audio('sound_water1', 'sound/shots/water1.wav', true);
+  game.load.audio('sound_stick', 'sound/shots/stick.wav', true);
+  game.load.audio('sound_rock', 'sound/shots/rock.wav', true);
   //game.load.audio('test_music', 'sound/music.mp3', true);
 }
 

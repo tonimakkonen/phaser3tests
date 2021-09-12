@@ -3,7 +3,7 @@
 
 var soundRequests = new Map();
 var soundMinDis = 200.0;
-var soundMaxDis = 800.0;
+var soundMaxDis = 1000.0;
 
 function soundRequest(game, key) {
   soundRequestVolume(game, key, 1.0);
