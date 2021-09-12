@@ -13,6 +13,7 @@ const SPELL_ICE            = 6;
 const SPELL_AIR_PUNCH      = 7;
 const SPELL_RAIN           = 8;
 const SPELL_ROCK           = 9;
+const SPELL_FLY            = 10;
 
 const SPELLS_MAX_X = 3;
 const SPELLS_MAX_Y = 2;
@@ -48,6 +49,20 @@ SPELLS.set(
     shoot: SHOT_ELECTRIC,
     cost: 15,
     reload: 500
+  }
+)
+
+SPELLS.set(
+  SPELL_FLY,
+  {
+    name: 'Fly',
+    posX: 0,
+    posY: 2,
+    image: 'spell_dummy',
+    type: MAGIC_TYPE_AIR,
+    jump: 125,
+    cost: 35,
+    reload: 1000
   }
 )
 

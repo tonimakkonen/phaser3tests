@@ -3,8 +3,11 @@
 
 // Player variables
 
+const playerJumpAmount = 250;
+
 // This is used by a lot of effects
 var playerLocation = { x: 0, y: 0}
+
 
 var player = null;
 var playerHealth = 100.0;
@@ -53,10 +56,10 @@ function playerHandleLogic(game, curTime) {
     //player.setVelocityX(0);
   }
 
+  // Handle jumping
   var grav = 400;
-
   if (jump && tdown) {
-    player.setVelocityY(-250);
+    player.setVelocityY(-playerJumpAmount);
   }
   if (jump) {
     if (vy < -120) {
@@ -118,9 +121,22 @@ function playerHandleSpell(game, spell, last, dx, dy) {
   if (playerUseManaIfCan(game, manaCost)) {
     if (spell.shoot) shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
     if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
+    if (spell.jump) playerAddJump(game, spell.jump);
     return curTime;
   }
   return last;
+}
+
+// Handle fly spell effect
+// Note: if we're one the ground, add extra jump
+function playerAddJump(game, amount) {
+  if (player == null) return;
+  const cvx = player.body.velocity.x;
+  const cvy = player.body.velocity.y;
+  var delta = -amount;
+  if (player.body.blocked.down) delta -= playerJumpAmount;
+  console.log(delta);
+  player.setVelocity(cvx, cvy + delta);
 }
 
 function playerHeal(game, amount) {
