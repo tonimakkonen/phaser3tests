@@ -39,8 +39,7 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
 
   // Handle sound
   if (allowSound && info.sound) {
-    // TODO: Add position
-    soundRequest(game, info.sound);
+    soundRequestEnv(game, info.sound, x, y);
   }
 
 }
