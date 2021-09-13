@@ -1,9 +1,13 @@
 
 "use strict";
 
+///////////////////////////
+// Decorations and signs //
+///////////////////////////
+
+// TODO: Deco randomness and other similar issues
+
 function mapHandleDecoration(game, deco, px, py, list) {
-  // TODO: Handle animations and similar (if needed)
-  // TODO: Depth
   const graph = GRAPHS.get(deco.graph);
   if (!graph) throw 'Unkown graph for decoration: ' + deco.graph;
   const cx = (px + 0.5) * 80.0;
@@ -20,5 +24,4 @@ function mapHandleSign(game, sign, px, py, list) {
   const im = game.add.image(cx, cy, 'special_sign');
   im.setDepth(-0.001);
   list.push(im);
-
 }

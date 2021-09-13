@@ -22,10 +22,10 @@ var edLeftSelect = null;    // left select in tool box
 var edRightSelect = null;   // right select in tool box
 var edPlayerStart = null;   // player start
 var edExit = null;          // exit
-var edTiles = [];           // tiles for each tile
-var edEnemies = [];         //  enemies for each tile
-var edPickups = [];         //  pickups for each tile
-var edDecorations = [];     //  decorations for each tile
+var edTiles = [];           // ground and deco graphs for each tile
+var edEnemies = [];         // enemies for each tile
+var edPickups = [];         // pickups for each tile
+var edSigns = [];           // sign for each tile
 var edConfirmBox = null;    // confirm objects
 var edConfirmText = null;
 
@@ -464,7 +464,7 @@ function editorCreateAllFromMap(game, map) {
   edTiles = Array.from(Array(mapBlueprint.tiles.length), () => []);
   edEnemies = Array(mapBlueprint.tiles.length);
   edPickups = Array(mapBlueprint.tiles.length);
-  edDecorations = Array(mapBlueprint.tiles.length);
+  edSigns = Array(mapBlueprint.tiles.length);
   for (var px = 0; px < map.x; px++) {
     for (var py = 0; py < map.y; py++) {
       mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x], true);
@@ -492,8 +492,8 @@ function editorDestroyAllMapObjects() {
   edEnemies = [];
   edPickups.forEach(o => { if (o) o.destroy(); });
   edPickups = [];
-  edDecorations.forEach(o => { if (o) o.destroy(); });
-  edDecorations = [];
+  edSigns.forEach(o => { if (o) o.destroy(); });
+  edSigns = [];
 }
 
 // Redo tiles for this and adjacent tiles
