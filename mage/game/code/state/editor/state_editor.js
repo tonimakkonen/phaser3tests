@@ -42,19 +42,14 @@ function stateStartEditor(game) {
     mapBlueprint = mapCreateEmpty(3*16, 2*9);
   }
 
-  // BG
-  mapCreateBackground(game, mapBlueprint, true, edBg);
-
   // Create all phaser objects related to the map
   editorCreateAllFromMap(game, mapBlueprint);
 
   // Create grid and other UI phaser3 objects
-  editorUpdateGrid(game, mapBlueprint);
   editorAddToolBox(game.add.rectangle(settingWidth / 2.0, settingHeight / 2.0, settingWidth - 160.0, settingHeight - 160.0, 0xffffff), 0.25);
   edLeftSelect = editorAddToolBox(game.add.rectangle(edLeftSelectPos.x * 80.0 + 40.0 + 80.0, edLeftSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0xff0000), 0.5);
   edRightSelect = editorAddToolBox(game.add.rectangle(edRightSelectPos.x * 80.0 + 40.0 + 80.0, edRightSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0x00ff00), 0.5);
   EDITOR_MENU.forEach(mo => editorAddMenuOption(game, mo) );
-
   edToolBoxObjects.forEach(o => o.setVisible(false) );
 }
 
@@ -95,8 +90,7 @@ function stateHandleEditor(game) {
 
   // If just loaded map
   if (edDoUpdate) {
-    editorDestroyAllMapObjects();
-    editorCreateAllFromMap(game, mapBlueprint);
+    editorRedoMap(game, mapBlueprint);
     edDoUpdate = false;
     return GAME_MODE_MAP_EDITOR;
   }
@@ -277,9 +271,9 @@ function editorApplyTool(game, map, px, py, toolType, toolOption) {
 ////////////////////
 
 // We are using html hacks here..
+// TODO: Make this a bit nicer...
 
 function editorDownloadFile() {
-  // TODO: Make this a bit nicer...
   const blob = new Blob([JSON.stringify(mapBlueprint)], { type: 'application/json;charset=utf-8' });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -306,7 +300,6 @@ function editorUploadFile(file) {
       alert('Failed to open file. Maybe wrong json format?')
       return;
     }
-
   });
   reader.readAsText(file);
 }
@@ -442,6 +435,14 @@ function editorRedoMap(game, map) {
 
 // Set up all phaser3 objects to represent the map
 function editorCreateAllFromMap(game, map) {
+
+  // Grid
+  editorUpdateGrid(game, map);
+
+  // BG
+  mapCreateBackground(game, mapBlueprint, true, edBg);
+
+  // Tiles and tile specific stuff
   edTiles = Array.from(Array(mapBlueprint.tiles.length), () => []);
   edEnemies = Array(mapBlueprint.tiles.length);
   edPickups = Array(mapBlueprint.tiles.length);
@@ -454,6 +455,8 @@ function editorCreateAllFromMap(game, map) {
       editorUpdateSign(game, map, px, py);
     }
   }
+
+  // Start and exit
   edPlayerStart = game.add.image(mapBlueprint.playerStartX*80.0 + 40, mapBlueprint.playerStartY*80.0 + 40.0, 'player');
   edPlayerStart.setDepth(5);
   edExit = game.add.image(mapBlueprint.exitX*80.0 + 40, mapBlueprint.exitY*80.0 + 40.0, 'exit_door1');
