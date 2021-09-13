@@ -91,8 +91,6 @@ function create() {
   this.physics.add.overlap(groupEnemyShots, groupPlayer, mainShotHitPlayer, null, this);
   this.physics.add.overlap(groupPickups, groupPlayer, mainCollectedPickup, null, this);
   this.physics.add.overlap(groupExits, groupPlayer, mainEnterExit, null, this);
-  this.physics.add.overlap(groupSigns, groupPlayer, mainReadSign, null, this);
-
 
 
   // TODO
@@ -136,6 +134,7 @@ function update() {
     }
   }
 
+  // Handle requested sounds
   soundHandleLogic(this);
 
 }
@@ -160,8 +159,4 @@ function mainCollectedPickup(pickup, _pl) {
 
 function mainEnterExit(exit, _pl) {
   playEnterExit(this, exit);
-}
-
-function mainReadSign(sign, _pl) {
-  signRead(this, sign);
 }
