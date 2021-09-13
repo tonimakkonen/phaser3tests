@@ -12,6 +12,10 @@ const VERSION = '2021_09_13';
 const settingWidth = 1280;
 const settingHeight = 720;
 
+const Z_ACTION  = 1.0;
+const Z_INFO_UI = 9.0
+const Z_UI      = 10.0;
+
 // TODO: Add map tile width and height
 
 // Game modes
@@ -399,8 +403,6 @@ GRAPHS.set(
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
-
-const Z_ACTION = 1.0;
 
 const LAYER_TYPE_TOP        = 1;
 const LAYER_TYPE_SYMMETRIC  = 2;

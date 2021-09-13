@@ -35,8 +35,8 @@ SPELLS.set(
     image: 'spell_dummy',
     type: MAGIC_TYPE_AIR,
     shoot: SHOT_AIR_PUNCH,
-    cost: 10,
-    reload: 400
+    cost: 7.5,
+    reload: 350
   }
 )
 
@@ -49,7 +49,7 @@ SPELLS.set(
     image: 'spell_dummy',
     type: MAGIC_TYPE_AIR,
     shoot: SHOT_ELECTRIC,
-    cost: 15,
+    cost: 10,
     reload: 500
   }
 )
@@ -57,7 +57,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_FLY,
   {
-    name: 'Fly',
+    name: 'Fly (TODO)',
     posX: 0,
     posY: 2,
     image: 'spell_dummy',
@@ -93,8 +93,8 @@ SPELLS.set(
     image: 'spell_dummy',
     type: MAGIC_TYPE_WATER,
     shoot: SHOT_ICE,
-    cost: 25,
-    reload: 1000
+    cost: 15,
+    reload: 600
   }
 )
 
@@ -137,7 +137,7 @@ SPELLS.set(
     image: 'spell_dummy',
     type: MAGIC_TYPE_FIRE,
     shoot: SHOT_FIRE_STORM,
-    cost: 25,
+    cost: 30,
     reload: 1000
   }
 )
@@ -145,7 +145,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_HELLFIRE,
   {
-    name: 'Hellfire',
+    name: 'Hellfire (TODO)',
     posX: 2,
     posY: 2,
     image: 'spell_dummy',
@@ -168,7 +168,7 @@ SPELLS.set(
     type: MAGIC_TYPE_EARTH,
     shoot: SHOT_TREE,
     cost: 5,
-    reload: 200
+    reload: 250
   }
 )
 
@@ -181,7 +181,7 @@ SPELLS.set(
     image: 'spell_dummy',
     type: MAGIC_TYPE_EARTH,
     shoot: SHOT_ROCK,
-    cost: 15,
+    cost: 10,
     reload: 500
   }
 )

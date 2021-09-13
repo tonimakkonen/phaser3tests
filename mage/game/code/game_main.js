@@ -42,7 +42,7 @@ var groupEnemyShots;
 var groupPickups;
 var groupExits;
 var groupSigns;
-var listEnemies = []; // List of all enemies
+var listEnemies = []; // TODO: We do not need this
 
 // Current map blueprint
 var mapBlueprint = null;

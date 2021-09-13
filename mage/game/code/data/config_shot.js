@@ -57,7 +57,7 @@ SHOTS.set(
   SHOT_ELECTRIC,
   {
     graph: GRAPH_ELECTRIC_SHOT,
-    damage: 25,
+    damage: 30,
     type: MAGIC_TYPE_AIR,
     velocity: 600,
     grav: 0.0,
@@ -110,7 +110,7 @@ SHOTS.set(
   SHOT_AIR_PUNCH,
   {
     graph: GRAPH_AIR_PUNCH_SHOT,
-    damage: 10,
+    damage: 12.5,
     type: MAGIC_TYPE_AIR,
     velocity: 600,
     grav: 0.0,

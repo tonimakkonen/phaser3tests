@@ -78,9 +78,7 @@ function enemyHandleLogic(game, enemy, curTime) {
   }
 
   // change health bar location
-  if (enemy.xHealthBar) {
-    enemy.xHealthBar.setPosition(enemy.x, enemy.y - enemy.height / 2.0);
-  }
+  if (enemy.xHealthBar) enemy.xHealthBar.setPosition(enemy.x, enemy.y - enemy.height / 2.0);
 
   // frozed enemies
   if (enemy.xFreeze) {
@@ -230,6 +228,8 @@ function enemyHandleJump(game, enemy, move, dx, dy) {
 }
 
 function enemyDealDamage(game, enemy, amount, shot) {
+  infoCreateText(game, shot.x, shot.y, amount.toString(10), '#FF0000', 500);
+  // TODO: Remove..
   // TODO: Handle shot types and other effects
   enemyUpdateHealth(game, enemy, -amount, shot);
 }
