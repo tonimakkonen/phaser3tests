@@ -10,7 +10,6 @@ var edCamY = 0;
 
 // Tool options currently selected
 var edState = EDITOR_STATE_EDIT;
-var edConfirmOption = null;
 var edClickSafety = 0;
 
 
@@ -26,8 +25,6 @@ var edTiles = [];           // ground and deco graphs for each tile
 var edEnemies = [];         // enemies for each tile
 var edPickups = [];         // pickups for each tile
 var edSigns = [];           // sign for each tile
-var edConfirmBox = null;    // confirm objects
-var edConfirmText = null;
 
 ////////////////////////
 // Life cycle methods //
@@ -42,7 +39,7 @@ function stateStartEditor(game) {
 
   // Create the blueprint map if not present
   if (mapBlueprint == null) {
-    mapBlueprint = mapCreateEmpty(40, 20);
+    mapBlueprint = mapCreateEmpty(3*16, 2*9);
   }
 
   // BG
@@ -115,9 +112,7 @@ function stateHandleEditor(game) {
   if (edCamY > mapBlueprint.y * 80) edCamY = mapBlueprint.y * 80;
   game.cameras.main.centerOn(edCamX, edCamY);
 
-  if (edState == EDITOR_STATE_CONFIRM) {
-    return editorHandleConfirm(game);
-  } else if (edState == EDITOR_STATE_EDIT) {
+  if (edState == EDITOR_STATE_EDIT) {
     return editorHandleEdit(game);
   } else if (edState == EDITOR_STATE_TOOL) {
     return editorHandleTab(game);
@@ -139,27 +134,6 @@ function editorClose() {
 ////////////
 // States //
 ////////////
-
-function editorHandleConfirm(game) {
-  // TODO: This needs to be better
-  if (inputLeftClick) {
-    if(game.input.mousePointer.y > 600.0 - 40.0 && game.input.mousePointer.y < 600.0 + 40.0) {
-      if (edConfirmOption.type == EDITOR_CONFIRM_NEW) {
-        editorDestroyAllMapObjects();
-        mapBlueprint = mapCreateEmpty(edConfirmOption.x*16, edConfirmOption.y*9);
-        editorCreateAllFromMap(game, mapBlueprint);
-        editorUpdateGrid(game, mapBlueprint);
-      }
-    }
-    edConfirmBox.destroy();
-    edConfirmBox = null;
-    edConfirmText.destroy();
-    edConfirmText = null;
-    edState = EDITOR_STATE_EDIT;
-    edClickSafety = game.time.now;
-  }
-  return GAME_MODE_MAP_EDITOR;
-}
 
 function editorHandleTab(game) {
 
@@ -195,12 +169,24 @@ function editorHandleTab(game) {
       if (toolOn.special == EDITOR_SPECIAL_TRY) {
         editorClose();
         return GAME_MODE_PLAYING;
-      } else if (toolOn.special == EDITOR_SPECIAL_CONFIRM) {
-        edConfirmBox = game.add.rectangle(settingWidth / 2.0, 600.0, settingWidth, 80, 0x000000).setDepth(10).setScrollFactor(0.0, 0.0);
-        edConfirmText = game.add.text(settingWidth / 2.0, 600.0, toolOn.option.info).setOrigin(0.5).setDepth(10).setScrollFactor(0.0, 0.0);
-        edToolBoxObjects.forEach(o => o.setVisible(false) );
-        edState = EDITOR_STATE_CONFIRM;
-        edConfirmOption = toolOn.option;
+      } else if (toolOn.special == EDITOR_SPECIAL_NEW) {
+        const desiredSize = prompt("Desired size in full screens (e.g. 4x4)");
+        if (desiredSize == null || desiredSize.length == 0) {
+          console.log('New map cancelled');
+        } else {
+          const parts = desiredSize.split("x");
+          if (parts.length != 2) alert('Cannot parse input');
+          else {
+            const sizeX = parseInt(parts[0], 10);
+            const sizeY = parseInt(parts[1], 10);
+            if (!(sizeX >= 2 || sizeY >= 2)) alert('Bad values');
+            else {
+              mapBlueprint = mapCreateEmpty(sizeX * 16, sizeY * 9);
+              editorRedoMap(game, mapBlueprint);
+              edClickSafety = game.time.now;
+            }
+          }
+        }
       } else if (toolOn.special == EDITOR_SPECIAL_EXPORT) {
         editorDownloadFile();
       } else if (toolOn.special == EDITOR_SPECIAL_IMPORT) {

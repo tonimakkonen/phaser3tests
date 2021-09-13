@@ -4,7 +4,6 @@
 
 const EDITOR_STATE_EDIT     = 1;
 const EDITOR_STATE_TOOL     = 2;
-const EDITOR_STATE_CONFIRM  = 3;
 
 const EDITOR_TOOL_ERASE         = 1;
 const EDITOR_TOOL_GROUND        = 2;
@@ -19,13 +18,11 @@ const EDITOR_ERASE_ALL          = 1;
 const EDITOR_ERASE_OBJ          = 2;
 
 const EDITOR_SPECIAL_TRY        = 1;
-const EDITOR_SPECIAL_CONFIRM    = 2;
+const EDITOR_SPECIAL_NEW        = 2;
 const EDITOR_SPECIAL_EXPORT     = 3;
 const EDITOR_SPECIAL_IMPORT     = 4;
 const EDITOR_SPECIAL_BG         = 5;
 
-// TODO: Get rid of this
-const EDITOR_CONFIRM_NEW = 1;
 
 // Just add all tool options manually
 var EDITOR_MENU = new Set();
@@ -34,20 +31,13 @@ var EDITOR_MENU = new Set();
 EDITOR_MENU.add({x: 0, y: 0, tool: EDITOR_TOOL_PLAYER_START, image: 'player'});
 EDITOR_MENU.add({x: 1, y: 0, tool: EDITOR_TOOL_EXIT, image: 'exit_door1'});
 EDITOR_MENU.add({x: 2, y: 0, tool: EDITOR_TOOL_SIGN, click: true, image: 'special_sign'});
-
 EDITOR_MENU.add({x: 3, y: 0, tool: EDITOR_TOOL_ERASE, option: EDITOR_ERASE_ALL,  image: 'ui_eraser_all'});
 EDITOR_MENU.add({x: 4, y: 0, tool: EDITOR_TOOL_ERASE, option: EDITOR_ERASE_OBJ,  image: 'ui_eraser_obj'});
-
-EDITOR_MENU.add({x: 0, y: 1, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 2, info: 'Create new 3x2 map?'}, text: 'N: 3x2'});
-EDITOR_MENU.add({x: 1, y: 1, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 5, y: 2, info: 'Create new 5x2 map?'}, text: 'N: 5x2'});
-EDITOR_MENU.add({x: 2, y: 1, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 7, y: 3, info: 'Create new 7x3 map?'}, text: 'N: 7x3'});
-EDITOR_MENU.add({x: 3, y: 1, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 9, y: 3, info: 'Create new 9x3 map?'}, text: 'N: 9x3'});
-EDITOR_MENU.add({x: 4, y: 1, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 5, info: 'Create new 3x5 map?'}, text: 'N: 3x5'});
-EDITOR_MENU.add({x: 5, y: 1, special: EDITOR_SPECIAL_CONFIRM, option: {type: EDITOR_CONFIRM_NEW, x: 3, y: 7, info: 'Create new 3x7 map?'}, text: 'N: 3x7'});
-
-EDITOR_MENU.add({x: 6, y: 1, special: EDITOR_SPECIAL_BG, option: BACKGROUND_EMPTY, text: 'BG 0'});
-EDITOR_MENU.add({x: 7, y: 1, special: EDITOR_SPECIAL_BG, option: BACKGROUND_MOUNTAINS, text: 'BG 1'});
-EDITOR_MENU.add({x: 8, y: 1, special: EDITOR_SPECIAL_BG, option: BACKGROUND_NIGHT, text: 'BG 2'});
+EDITOR_MENU.add({x: 5, y: 0, special: EDITOR_SPECIAL_NEW, text: 'New map'});
+// TODO: consider having this as an option
+EDITOR_MENU.add({x: 6, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_EMPTY, text: 'BG 0'});
+EDITOR_MENU.add({x: 7, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_MOUNTAINS, text: 'BG 1'});
+EDITOR_MENU.add({x: 8, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_NIGHT, text: 'BG 2'});
 
 // Second row, ground options
 EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, image: 'ground_full'});
