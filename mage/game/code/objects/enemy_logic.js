@@ -8,6 +8,7 @@ function enemyDestroyAll() {
 }
 
 function enemyDestroy(enemy) {
+  if (enemy.xHealthBar) enemy.xHealthBar.destroy();
   enemy.destroy();
 }
 
@@ -29,6 +30,13 @@ function enemyCreate(game, enemyType, x, y) {
   }
   listEnemies.push(newEnemy);
   newEnemy.setDepth(Z_ACTION);
+
+  // Add health bar
+  const healthBar = game.add.rectangle(x, y - newEnemy.height / 2.0, newEnemy.width, 6.0, 0xff0000);
+  healthBar.setDepth(9.0); // TODO
+  healthBar.setAlpha(0.5);
+  healthBar.setVisible(false);
+  newEnemy.xHealthBar = healthBar;
 
   // Add some variables
   newEnemy.xType = enemyType;
@@ -67,6 +75,11 @@ function enemyHandleLogic(game, enemy, curTime) {
   if (enemy.xHealth <= 0.0) {
     enemyKill(game, enemy);
     return false; // Calling method handles removing from list
+  }
+
+  // change health bar location
+  if (enemy.xHealthBar) {
+    enemy.xHealthBar.setPosition(enemy.x, enemy.y - enemy.height / 2.0);
   }
 
   // frozed enemies
@@ -241,7 +254,12 @@ function enemyFreeze(game, enemy, amount) {
 function enemyUpdateHealth(game, enemy, amount) {
   // Note that play state loop will handle destroying enemies
   enemy.xHealth += amount;
-  // Update health bar if any
+  if (enemy.xHealthBar) {
+    if (enemy.xHealth < enemy.xInfo.health) enemy.xHealthBar.setVisible(true);
+    else enemy.xHealthBar.setVisible(false);
+    const newWitdh = enemy.width * Math.max(0.0, enemy.xHealth) / enemy.xInfo.health;
+    enemy.xHealthBar.setSize(newWitdh, enemy.xHealthBar.height);
+  }
 }
 
 function enemyHandleShot(game, enemy, info, type, dx1, dy1) {

@@ -24,8 +24,8 @@ function playerHandleLogic(game, curTime) {
 
   if (player == null) return;
 
-  playerLocation.x = player.body.x;
-  playerLocation.y = player.body.y;
+  playerLocation.x = player.x;
+  playerLocation.y = player.y;
 
   if (player.xPoison) {
     if (game.time.now > player.xPoison) {

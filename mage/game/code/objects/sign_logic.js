@@ -33,8 +33,8 @@ function signDestroy(sign) {
 function signHandleLogic(game) {
   for (var i = 0; i < groupSigns.children.entries.length; i++) {
     const sign = groupSigns.children.entries[i];
-    const dx = playerLocation.x - sign.body.x;
-    const dy = playerLocation.y - sign.body.y;
+    const dx = playerLocation.x - sign.x;
+    const dy = playerLocation.y - sign.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
     const t = 1.0 - (dist - signSettings.minDist) / (signSettings.maxDist - signSettings.minDist);
     if (t < 0.0) {
