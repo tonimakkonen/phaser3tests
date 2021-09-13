@@ -14,7 +14,8 @@ function mapCreateEmpty(x, y) {
     playerStartX: 0,
     playerStartY: 0,
     exitX: 1,
-    exitY: 0
+    exitY: 0,
+    signs: []
   };
 }
 
@@ -180,4 +181,13 @@ function mapIsBlocked(value) {
   var layer = LAYERS.get(value);
   if (!layer) throw 'Unknown layer: ' + layer;
   return layer.block;
+}
+
+// Get the sign for a given position or null of nothing
+function mapGetSign(signs, px, py) {
+  if (!signs) return [null, -1];
+  for (var i = 0; i < signs.length; i++) {
+    if (signs[i].x == px && signs[i].y == py) return [signs[i], i];
+  }
+  return [null, -1];
 }

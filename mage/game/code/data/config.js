@@ -6,7 +6,7 @@
 ///////////////////////
 
 // Used for local storage. Update this with big changes to storage.
-const VERSION = '2021_09_10';
+const VERSION = '2021_09_12';
 
 // Typical HD (720p) resolution. Should work on most devices
 const settingWidth = 1280;
@@ -80,6 +80,7 @@ const GRAPH_ROCK_SHOT            = 309;
 const GRAPH_POISON_SHOT          = 310;
 
 const GRAPH_EXIT_DOOR1           = 401;
+const GRAPH_SIGN                 = 402;
 
 const GRAPH_ROCK1_DECORATION     = 501;
 const GRAPH_ROCK2_DECORATION     = 502;
@@ -87,6 +88,8 @@ const GRAPH_TREE1_DECORATION     = 503;
 const GRAPH_TREE2_DECORATION     = 504;
 const GRAPH_TREE3_DECORATION     = 505;
 const GRAPH_TREE4_DECORATION     = 506;
+
+
 
 var GRAPHS = new Map();
 
@@ -317,7 +320,7 @@ GRAPHS.set(
   }
 );
 
-// Exits
+// Special thingys
 
 GRAPHS.set(
   GRAPH_EXIT_DOOR1,
@@ -325,6 +328,15 @@ GRAPHS.set(
     location: 'imgs/door1.png',
     name: 'exit_door1',
     type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SIGN,
+  {
+    location: 'imgs/sign.png',
+    name: 'special_sign',
+    type: GRAPH_TYPE_SINGLE,
   }
 );
 

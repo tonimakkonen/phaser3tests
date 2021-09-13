@@ -20,6 +20,10 @@ function mapCreateSingleTile(game, map, px, py, list, inEditor) {
     mapHandleDecoration(game, deco, px, py, list);
   }
 
+  // Create signs for this tile
+  const [curSign, _signIndex] = mapGetSign(map.signs, px, py);
+  if (curSign != null) mapHandleSign(game, curSign, px, py, list);
+
 
   // TODO: The tile thingy needs to be refactored
   const tile = map.tiles[px+py*map.x];

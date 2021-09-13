@@ -2,46 +2,57 @@
 Major stuff
 -----------
 
-1. Player persistence over plays, start dealing with this..
+- Learn new spells (Absolutely needed)
+-- Create spell book pickup
+-- Add logic in game UI
 
-2. Decorations
+- Map between levels (Absolutely needed)
+-- Or different exits in same level!
 
-3. Different BGs
+- Game state persistance over plays (Absolutely needed)
+
+- New terrain types, e.g. desert (Abs. needed)
+
+- More decorations (Abs. needed)
+
+- More enemies (Abs. needed)
+
+- Proper maps to play (Abs. needed)
+
+--
+
+ -Improve terrain (needed)
+ -- top layer corners
+ -- top layer continue
+ -- some refactoring
+
+- Improved spells (needed)
+
+- More sounds (needed)
+
+--
+
+- All kind of crap and splatter (would be nice)
+
+- Do we need the enemy array? (not absolutely needed, but would be simpler like this)
+
+- Improve enemy movement (would be nice)
+
+- Improved enemy/player codebase. Remove duplicate code. (not absolutely needed)
 
 
 
----
-
-Minor refactoring:
-------------------
-
-- constant names,
-
-- what methods take the game object
+----
 
 
-Other
------
-
-
-
-
-
-- Lumimaasto
 
 - Vesihirviö
 
 - Uusi ruoka
 
-- "Koristeet" kivet, juuret, puut yms.
 
 - Uusien taikojen oppiminen
 
 - Kentän läpipääseminen
+
 - Valikko kenttien välissä
-
---
-
-- Refactor terrain
-
-- Refactor enemy movement
