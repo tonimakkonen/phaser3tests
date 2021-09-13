@@ -42,16 +42,13 @@ var groupEnemyShots;
 var groupPickups;
 var groupExits;
 var groupSigns;
-var listMapObjects = []; // All the current map objects to be deleted..
 var listEnemies = []; // List of all enemies
 
-
-// TODO: Think about player properties
-
-
 // Current map blueprint
-// Used by editor or by
 var mapBlueprint = null;
+
+// Current player progress
+var playerProgress = { knownSpells: [], level: 'intro' }
 
 // Run local storage
 storageLoad();
