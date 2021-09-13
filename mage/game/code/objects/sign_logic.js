@@ -16,7 +16,6 @@ function signCreate(game, sign, px, py) {
   text.setDepth(9.0);
   text.setVisible(false);
   newSign.xText = text;
-  newSign.xTextVisible = false;
 }
 
 function signDestroyAll(game) {
@@ -32,8 +31,8 @@ function signDestroy(sign) {
 }
 
 function signHandleLogic(game) {
-  for (var i = 0; i < groupSigns.children.size; i++) {
-    const sign = groupSigns.children.get(i);
+  for (var i = 0; i < groupSigns.children.entries.length; i++) {
+    const sign = groupSigns.children.entries[i];
     const dx = playerLocation.x - sign.body.x;
     const dy = playerLocation.y - sign.body.y;
     const dist = Math.sqrt(dx * dx + dy * dy);

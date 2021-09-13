@@ -383,7 +383,7 @@ function editorApplySign(game, map, px, py) {
       existing.text = text;
     }
   }
-  editorRedoTile(game, map, px, py);
+  editorUpdateSign(game, map, px, py);
   return true;
 }
 
@@ -398,11 +398,8 @@ function editorApplyPickup(game, map, px, py, option) {
 }
 
 function editorApplyDecoration(game, map, px, py, option) {
-  // TODO: Handle decoration options (some need to be on ground etc)
   return editorSetDecoration(game, map, px, py, option);
 }
-
-// TODO: Double tile update with decorations?
 
 function editorSetTile(game, map, px, py, value) {
   if (map.tiles[px + py*map.x] != value) {
@@ -411,8 +408,8 @@ function editorSetTile(game, map, px, py, value) {
     if (mapIsBlocked(value)) {
       editorSetEnemy(game, map, px, py, 0);
       editorSetPickup(game, map, px, py, 0);
+      // Note that we allow decorations to be anywhere
     }
-    // TODO: handle decorations also
     return true;
   }
   return false;
@@ -421,10 +418,8 @@ function editorSetTile(game, map, px, py, value) {
 function editorSetDecoration(game, map, px, py, value) {
   const index = px + py*map.x;
   if (map.decorations[index] != value) {
+    map.decorationSeed[index] = 0;
     map.decorations[index] = value;
-    if (value == 0) {
-      map.decorationSeed[index] = 0;
-    }
     editorRedoTile(game, map, px, py);
     return true;
   }
@@ -470,6 +465,7 @@ function editorCreateAllFromMap(game, map) {
       mapCreateSingleTile(game, map, px, py, edTiles[px + py*map.x], true);
       editorUpdateEnemy(game, map, px, py);
       editorUpdatePickup(game, map, px, py);
+      editorUpdateSign(game, map, px, py);
     }
   }
   edPlayerStart = game.add.image(mapBlueprint.playerStartX*80.0 + 40, mapBlueprint.playerStartY*80.0 + 40.0, 'player');
@@ -525,6 +521,21 @@ function editorUpdateEnemy(game, map, px, py) {
 
 function editorUpdatePickup(game, map, px, py) {
   editorUpdateSingle(game, map, edPickups, map.pickups, PICKUPS, px, py);
+}
+
+// TODO: This is not optimal
+function editorUpdateSign(game, map, px, py) {
+  const index = px + map.x * py;
+  if (edSigns[index]) {
+    edSigns[index].destroy();
+    edSigns[index] = null;
+  }
+  const [inMap, _index] = mapGetSign(map.signs, px, py);
+  if (inMap != null) {
+    const im = game.add.image(px * 80.0 + 40.0, py * 80.0 + 40.0, 'special_sign');
+    im.setDepth(-0.001); // TODO
+    edSigns[index] = im;
+  }
 }
 
 function editorUpdateSingle(game, map, existing, mapList, type, px, py) {
