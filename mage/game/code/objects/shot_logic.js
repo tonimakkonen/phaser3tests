@@ -127,7 +127,6 @@ function shotHitWall(game, shot, wall) {
     shot.xBounceCount += 1;
     if (shot.xInfo.bounce.count <= shot.xBounceCount) shotDestroy(game, shot);
   }
-
 }
 
 function shotDestroy(game, shot) {
