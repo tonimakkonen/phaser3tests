@@ -101,6 +101,8 @@ function resLoadTopLayer(game, value) {
   resLoadImageFromBase(game, value.name, value.locationBase, 'bottomright');
   resLoadImageFromBase(game, value.name, value.locationBase, 'bottom');
   resLoadImageFromBase(game, value.name, value.locationBase, 'top');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'cbl');
+  resLoadImageFromBase(game, value.name, value.locationBase, 'cbr');
 }
 
 function resLoadSymmetricLayer(game, value) {

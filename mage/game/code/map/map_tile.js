@@ -80,12 +80,14 @@ function mapHandleTop(game, layer, list, px, py, cont) {
   if (cont.right != TILE_END) mapAddThing(game, layer.name + '_full', cx + dx, cy - dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_right', cx + dx, cy - dy, layer.zBlock, list);
   // bottom left
-  if (cont.left != TILE_END && cont.bottom != TILE_END) mapAddThing(game, layer.name + '_full', cx - dx, cy + dy, layer.zBlock, list);
+  if (cont.left != TILE_END && cont.bottom != TILE_END && cont.bottomLeft != TILE_END) mapAddThing(game, layer.name + '_full', cx - dx, cy + dy, layer.zBlock, list);
+  else if (cont.left != TILE_END && cont.bottom) mapAddThing(game, layer.name + '_cbl', cx - dx, cy + dy, layer.zBlock, list);
   else if (cont.left != TILE_END) mapAddThing(game, layer.name + '_bottom', cx - dx, cy + dy, layer.zBlock, list);
   else if (cont.bottom != TILE_END) mapAddThing(game, layer.name + '_left', cx - dx, cy + dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_bottomleft', cx - dx, cy + dy, layer.zBlock, list);
   // bottom right
-  if (cont.right != TILE_END && cont.bottom != TILE_END) mapAddThing(game, layer.name + '_full', cx + dx, cy + dy, layer.zBlock, list);
+  if (cont.right != TILE_END && cont.bottom != TILE_END && cont.bottomRight != TILE_END) mapAddThing(game, layer.name + '_full', cx + dx, cy + dy, layer.zBlock, list);
+  else if (cont.right != TILE_END && cont.bottom != TILE_END) mapAddThing(game, layer.name + '_cbr', cx + dx, cy + dy, layer.zBlock, list);
   else if (cont.right != TILE_END) mapAddThing(game, layer.name + '_bottom', cx + dx, cy + dy, layer.zBlock, list);
   else if (cont.bottom != TILE_END) mapAddThing(game, layer.name + '_right', cx + dx, cy + dy, layer.zBlock, list);
   else mapAddThing(game, layer.name + '_bottomright', cx + dx, cy + dy, layer.zBlock, list);
