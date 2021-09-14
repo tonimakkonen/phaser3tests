@@ -8,7 +8,6 @@ const TILE_CONTINUE = 1;
 const TILE_EXTEND = 2;
 
 // Create single coordinates
-// TODO: This needs to be tweaked a lot
 function mapCreateSingleTile(game, map, px, py, list, inEditor) {
 
   if (px < 0 || py < 0 || px >= map.x && py >= map.y) throw new 'Bad px, py: ' + px + ', ' + py;
