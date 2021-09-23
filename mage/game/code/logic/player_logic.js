@@ -3,9 +3,10 @@
 
 // Player variables
 
+// TODO: Move to config
 const playerJumpAmount = 250;
 
-// This is used by a lot of effects
+// This is used by e.g. enemies and plaaying souds
 var playerLocation = { x: 0, y: 0}
 
 
@@ -14,7 +15,7 @@ var playerHealth = 100.0;
 var playerMana = 100.0;
 var playerLastRegen = null;
 
-var playerLeftSpell = SPELLS.get(SPELL_BALL_LIGHTNING);
+var playerLeftSpell = playerStatsGetInitialSpell();
 var playerRightSpell = null;
 var playerLeftSpellLast = 0;
 var playerRightSpellLast = 0;
@@ -92,7 +93,8 @@ function playerHandleLogic(game, curTime) {
   // Regeneration
   if (playerLastRegen == null) playerLastRegen = game.time.now;
   const dt = game.time.now - playerLastRegen;
-  if (player.xPoison) playerDealDamage(game, dt * 3.0 / 1000.0);
+  // TODO: Add poison damage
+  //if (player.xPoison) playerDealDamage(game, dt * 3.0 / 1000.0);
   playerUpdateMana(game, dt * 5.0 / 1000.0); // 5 per sec
   playerLastRegen = game.time.now;
 }
@@ -141,7 +143,8 @@ function playerHeal(game, amount) {
   playerUpdateHealth(game, amount);
 }
 
-function playerDealDamage(game, amount, shot) {
+function playerDealDamage(game, player, amount, shot) {
+  const damage = magicCalculateDamageAndAddText(game, shot.x, shot.y, amount, shot.xInfo.type, playerStats.airDef, playerStats.waterDef, playerStats.fireDef, playerStats.earthDef);
   playerUpdateHealth(game, -amount);
 }
 

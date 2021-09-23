@@ -228,10 +228,8 @@ function enemyHandleJump(game, enemy, move, dx, dy) {
 }
 
 function enemyDealDamage(game, enemy, amount, shot) {
-  infoCreateText(game, shot.x, shot.y, amount.toString(10), '#FF0000', 500);
-  // TODO: Remove..
-  // TODO: Handle shot types and other effects
-  enemyUpdateHealth(game, enemy, -amount, shot);
+  const damage = magicCalculateDamageAndAddText(game, shot.x, shot.y, amount, shot.xInfo.type, enemy.xInfo.airDef, enemy.xInfo.waterDef, enemy.xInfo.fireDef, enemy.xInfo.earthDef);
+  enemyUpdateHealth(game, enemy, -damage, shot);
 }
 
 function enemyPunch(game, enemy, px, py, shot) {

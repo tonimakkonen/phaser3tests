@@ -88,7 +88,7 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
 function shotHitPlayer(game, shot) {
   if (shot.xDestroyed) return; // avoid duplicate hits
   shot.xDestroyed = true;
-  if (shot.xInfo.damage) playerDealDamage(game, shot.xInfo.damage, shot);
+  if (shot.xInfo.damage) playerDealDamage(game, player, shot.xInfo.damage, shot);
   if(shot.xInfo.punch) {
     const px = shot.body.velocity.x * shot.xInfo.punch;
     const py = shot.body.velocity.y * shot.xInfo.punch;
@@ -97,7 +97,7 @@ function shotHitPlayer(game, shot) {
   if (shot.xInfo.poison) {
     playerPoison(game, shot.xInfo.poison);
   }
-  // TODO: Can player be freezed
+  // TODO: Can player be freezed?
   shotDestroy(game, shot);
 }
 

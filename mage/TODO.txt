@@ -19,6 +19,8 @@ Major stuff
 
 - Proper maps to play (Abs. needed)
 
+- Better things blockers (add fewer of those)
+
 --
 
  -Improve terrain (needed)

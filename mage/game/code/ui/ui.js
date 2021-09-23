@@ -1,13 +1,16 @@
 
 "use strict";
 
+// TODO: Refactor this totally
+
 // Options and derived options
 const uiOptions = {
   width: 300,
   height: 40,
   dx: 15,
   dy: 15,
-  m: 4
+  m: 4,
+  gridDeltaY: 60.0
 }
 
 // Width of full health bar
@@ -20,6 +23,10 @@ var uiHealthBar = null;
 var uiManaBar = null;
 var uiLeftSpell = null;
 var uiRightSpell = null;
+
+// All the objects that open up with tab
+var uiTabObjects = [];
+var uiHelpText = null;
 
 var uiSpellSelectionVisible = false;
 var uiSpellSelections = [];
@@ -45,30 +52,71 @@ function uiCreate(game) {
   uiHealthBar.setDepth(10);
   uiManaBar.setDepth(10);
 
+
+  uiHelpText = game.add.text(0, 0, '').setOrigin(0.0);
+  uiHelpText.setScrollFactor(0.0, 0.0);
+  uiHelpText.setDepth(20.0);
+
+  // TODO: Move this elsewhere
+
+
+
   // Create spell selections
-  SPELLS.forEach(spell => {
-    const cx = uiGridDelta + (spell.posX + 0.5) * uiGridSize;
-    const cy = uiGridDelta + (spell.posY + 0.5) * uiGridSize;
-    const image = game.add.image(cx, cy, spell.image);
-    image.setScrollFactor(0.0, 0.0);
-    image.setDepth(10.0);
+  SPELLS.forEach((spell, key) => {
 
-    const text = game.add.text(cx, cy + 45.0, spell.name).setOrigin(0.5);
-    text.setScrollFactor(0.0, 0.0);
-    text.setDepth(10.0);
+    //if (playerStats.learnedSpells.includes(key)) {
+      const cx = uiGridDelta + (spell.posX + 0.5) * uiGridSize;
+      const cy = uiGridDelta + (spell.posY + 0.5) * uiGridSize;
+      const image = game.add.image(cx, cy, spell.image);
+      image.setScrollFactor(0.0, 0.0);
+      image.setDepth(10.0);
 
-    uiSpellSelections.push(image);
-    uiSpellSelections.push(text);
+      const text = game.add.text(cx, cy + 45.0, spell.name).setOrigin(0.5);
+      text.setScrollFactor(0.0, 0.0);
+      text.setDepth(10.0);
+
+      uiSpellSelections.push(image);
+      uiSpellSelections.push(text);
+    //}
   });
   uiHideSpellSelection(game);
 
+  // TODO:
+  //uiCreateStatTexts(game, uiTabObjects);
 }
 
+function uiCreateStatTexts(game, list) {
+  uiCreateStatText(game, 20.0, 20.0, 'D:   0 %', 'Defence against fire magic', list);
+  uiCreateStatText(game, 20.0, 40.0, 'M:  50 %', 'Mana save using fire magic', list);
+  uiCreateStatText(game, 20.0, 60.0, 'S: 100 %', 'Speed casting fire magic', list);
+
+  uiCreateStatText(game, 160.0 + 20.0, 20.0, 'D:   0 %', 'Defence against air magic', list);
+  uiCreateStatText(game, 160.0 + 20.0, 40.0, 'M:  50 %', 'Mana save using air magic', list);
+  uiCreateStatText(game, 160.0 + 20.0, 60.0, 'S: 100 %', 'Speed casting air magic', list);
+}
+
+function uiCreateStatText(game, px, py, text, help, list) {
+  var obj = game.add.text(px, py, text);
+  obj.setScrollFactor(0.0, 0.0);
+  obj.setDepth(10.0);
+
+  list.push({
+    gameObjs: [obj],
+    x: obj.x,
+    y: obj.y,
+    width: obj.width,
+    height: obj.height,
+    help: help
+  })
+}
+
+// Hide all spell selection elements
 function uiHideSpellSelection(game) {
   uiSpellSelections.forEach(o => o.setVisible(false));
   uiSpellSelectionVisible = false;
 }
 
+// Show and update all tab elements
 function uiShowSpellSelection(game) {
   uiSpellSelections.forEach(o => o.setVisible(true));
   uiSpellSelectionVisible = true;
@@ -79,7 +127,12 @@ function uiHandleLogic(game) {
   const tabDown = inputTab.isDown;
   if (tabDown && !uiSpellSelectionVisible) uiShowSpellSelection(game);
   if (!tabDown && uiSpellSelectionVisible) uiHideSpellSelection(game);
+
   if (tabDown) {
+
+    // Set help text value
+    uiUpdateHelpText(game);
+
     const gx = Math.floor((game.input.mousePointer.x - uiGridDelta) / uiGridSize);
     const gy = Math.floor((game.input.mousePointer.y - uiGridDelta) / uiGridSize);
     const spell = spellFromGrid(gx, gy);
@@ -92,10 +145,28 @@ function uiHandleLogic(game) {
         playerRightSpell = spell;
       }
     }
+  } else {
+    uiHelpText.setVisible(false);
   }
 
   // Update spell icons
   uiUpdateSpellIcons(game);
+}
+
+function uiUpdateHelpText(game) {
+  // If we are above an object, set the help text
+  const mx = game.input.mousePointer.x;
+  const my = game.input.mousePointer.y;
+  for (var i = 0; i < uiTabObjects.length; i++) {
+    const ho = uiTabObjects[i];
+    if (mx >= ho.x && mx <= ho.x + ho.width && my >= ho.y && my <= ho.y + ho.height) {
+      uiHelpText.setVisible(true);
+      uiHelpText.setText(ho.help);
+      uiHelpText.setPosition(mx + 40.0, my);
+      return;
+    }
+  }
+  uiHelpText.setVisible(false);
 }
 
 function uiUpdateSpellIcons(game) {
@@ -113,7 +184,6 @@ function uiUpdateSpellIcon(game, posX, current, spell) {
       current.destroy();
       return null;
     } else if (spell.image != current.texture.key) {
-      console.log('replacing spell');
       current.destroy();
       return uiCreateSpellIcon(game, posX, spell.image);
     }
