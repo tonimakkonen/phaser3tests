@@ -25,19 +25,7 @@ function playerHandleLogic(game, curTime) {
   playerLocation.x = player.x;
   playerLocation.y = player.y;
 
-  // TODO: Combine tints
-  if (player.xPoison) {
-    if (game.time.now > player.xPoison) {
-      player.xPoison = undefined;
-      player.clearTint();
-    }
-  }
-  if (player.xFreeze) {
-    if (game.time.now > player.xFreeze) {
-      player.xFreeze = undefined;
-      player.clearTint();
-    }
-  }
+  magichandleObjectTint(game, player);
 
   var ld = inputA.isDown;
   var rd = inputD.isDown;
@@ -104,8 +92,8 @@ function playerHandleLogic(game, curTime) {
   // Regeneration
   if (playerLastRegen == null) playerLastRegen = game.time.now;
   const dt = game.time.now - playerLastRegen;
-  // TODO: Add poison damage
-  //if (player.xPoison) playerDealDamage(game, dt * 3.0 / 1000.0);
+  // TODO: This needs to be refactored
+  if (player.xPoison) playerUpdateHealth(game, -dt * 3.0 / 1000.0);
   playerUpdateMana(game, dt * 5.0 / 1000.0); // 5 per sec
   playerLastRegen = game.time.now;
 }
@@ -165,20 +153,6 @@ function playerPunch(game, px, py, shot) {
   const vx = player.body.velocity.x;
   const vy = player.body.velocity.y;
   player.setVelocity(vx + px / playerMass, vy + py / playerMass);
-}
-
-function playerPoison(game, pl, amount) {
-  if (!pl.xPoison) pl.xPoison = game.time.now;
-  var playerMass = 1.0;
-  pl.xPoison += amount / playerMass;
-  pl.setTint(0x20ff20);
-}
-
-function playerFreeze(game, pl, amount) {
-  if (!pl.xFreeze) pl.xFreeze = game.time.now;
-  var playerMass = 1.0;
-  pl.xFreeze += amount / playerMass;
-  pl.setTint(0x2020ff);
 }
 
 function playerUseManaIfCan(game, cost) {

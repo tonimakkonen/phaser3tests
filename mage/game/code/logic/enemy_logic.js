@@ -80,20 +80,18 @@ function enemyHandleLogic(game, enemy, curTime) {
   // change health bar location
   if (enemy.xHealthBar) enemy.xHealthBar.setPosition(enemy.x, enemy.y - enemy.height / 2.0);
 
+  magichandleObjectTint(game, enemy);
+
   // frozed enemies
+  // TODO: Poisoned enemies
   if (enemy.xFreeze) {
-    if (game.time.now > enemy.xFreeze) {
-      enemy.xFreeze = undefined;
-      enemy.clearTint();
-    } else {
-      // Do not reload shots while frozen
-      enemy.xLastShot1 = game.time.now;
-      enemy.xLastShot2 = game.time.now;
-      if (enemy.xInfo.immovable) return true;
-      // TODO: what coefficient?
-      enemy.setGravity(-enemy.body.velocity.x, 400);
-      return true;
-    }
+    // Do not reload shots while frozen
+    enemy.xLastShot1 = game.time.now;
+    enemy.xLastShot2 = game.time.now;
+    if (enemy.xInfo.immovable) return true;
+    // TODO: what coefficient?
+    enemy.setGravity(-enemy.body.velocity.x, 400);
+    return true;
   }
 
   // Towards player
@@ -239,20 +237,6 @@ function enemyPunch(game, enemy, px, py, shot) {
   const vx = enemy.body.velocity.x;
   const vy = enemy.body.velocity.y;
   enemy.setVelocity(vx + px / enemyMass, vy + py / enemyMass);
-}
-
-// TODO: Combine with player 
-
-function enemyFreeze(game, enemy, amount) {
-  if (!enemy.xFreeze) enemy.xFreeze = game.time.now;
-  var enemyMass = 1.0;
-  if(enemy.xInfo.mass) enemyMass = enemy.xInfo.mass;
-  enemy.xFreeze += amount / enemyMass;
-  enemy.setTint(0x0000ff);
-}
-
-function enemyPoison(game, enemy, amount) {
-  throw 'Not implemented';
 }
 
 function enemyUpdateHealth(game, enemy, amount) {

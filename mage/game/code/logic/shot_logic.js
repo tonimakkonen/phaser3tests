@@ -84,6 +84,7 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
 
 // TODO: Some duplicate code here in these two functions
 // TODO: Consider doing player group..
+// TODO: Remove duplicate punch logic
 
 function shotHitPlayer(game, shot, pl) {
   if (shot.xDestroyed) return; // avoid duplicate hits
@@ -94,8 +95,7 @@ function shotHitPlayer(game, shot, pl) {
     const py = shot.body.velocity.y * shot.xInfo.punch;
     playerPunch(game, px, py, shot);
   }
-  if (shot.xInfo.poison) playerPoison(game, pl, shot.xInfo.poison);
-  if (shot.xInfo.freeze) playerFreeze(game, pl, shot.xInfo.freeze)
+  shotTempFunc(game, shot, pl);
   shotDestroy(game, shot);
 }
 
@@ -108,9 +108,24 @@ function shotHitEnemy(game, shot, enemy) {
     const py = shot.body.velocity.y * shot.xInfo.punch;
     enemyPunch(game, enemy, px, py, shot);
   }
-  if (shot.xInfo.poison) enemyPoison(game, enemy, shot.xInfo.poison);
-  if (shot.xInfo.freeze) enemyFreeze(game, enemy, shot.xInfo.freeze);
+  shotTempFunc(game, shot, enemy);
   shotDestroy(game, shot);
+}
+
+// TODO:
+function shotTempFunc(game, shot, object) {
+  if (shot.xInfo.poison) shotPoison(game, object, shot.xInfo.poison);
+  if (shot.xInfo.freeze) shotFreeze(game, object, shot.xInfo.freeze);
+}
+
+function shotFreeze(game, object, amount) {
+  if (!object.xFreeze) object.xFreeze = game.time.now;
+  object.xFreeze += amount;
+}
+
+function shotPoison(game, object, amount) {
+  if (!object.xPoison) object.xPoison = game.time.now;
+  object.xPoison += amount;
 }
 
 function shotHitWall(game, shot, wall) {

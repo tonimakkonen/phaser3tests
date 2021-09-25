@@ -1,8 +1,6 @@
 
 "use strict";
 
-// TODO: refactor names to support other than damage calculations
-
 function magicCalculateDamage(damage, type, airDef, waterDef, fireDef, earthDef) {
   var final = 0.0;
   if (type == MAGIC_TYPE_AIR) {
@@ -35,4 +33,30 @@ function magicCalculateDamageAndAddText(game, px, py, amount, type,  airDef, wat
     infoCreateText(game, px, py, damage.toFixed(0).toString(10) + ' (' + delta.toFixed(0).toString(10) + ')', '#FF7070', 500);
   }
   return damage;
+}
+
+function magichandleObjectTint(game, object) {
+  // Clear tint if time has run out
+  if (object.xFreeze && game.time.now > object.xFreeze) object.xFreeze = undefined;
+  if (object.xPoison && game.time.now > object.xPoison) object.xPoison = undefined;
+  // Set desired tint based on current state
+  var desiredTint = null;
+  if (object.xFreeze && object.xPoison) {
+    desiredTint = 0x008080;
+  } else if (object.xFreeze) {
+    desiredTint = 0x2020ff;
+  } else if (object.xPoison) {
+    desiredTint = 0x20ff20;
+  }
+  if (desiredTint == null) {
+    if (object.xTint) {
+      object.clearTint();
+      object.xTint = desiredTint;
+    }
+  } else {
+    if (!object.xTint || object.xTint != desiredTint) {
+      object.setTint(desiredTint);
+      object.xTint = desiredTint;
+    }
+  }
 }
