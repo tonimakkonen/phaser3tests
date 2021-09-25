@@ -27,6 +27,7 @@ function enemyCreate(game, enemyType, x, y) {
   if (info.immovable) {
     newEnemy.setImmovable(true);
     groupPlayerBlocks.add(newEnemy);
+    newEnemy.xImmovable = true;
   }
   listEnemies.push(newEnemy);
   newEnemy.setDepth(Z_ACTION);
@@ -49,6 +50,7 @@ function enemyCreate(game, enemyType, x, y) {
   newEnemy.xLastShot2 = 0.0;
   newEnemy.xLastSpawn = 0.0;
   newEnemy.xlastAnim = null;
+  newEnemy.xMass = info.mass === undefined ? 1.0 : info.mass;
 
   newEnemy.setCollideWorldBounds(true);
 
@@ -228,15 +230,6 @@ function enemyHandleJump(game, enemy, move, dx, dy) {
 function enemyDealDamage(game, enemy, amount, shot) {
   const damage = magicCalculateDamageAndAddText(game, shot.x, shot.y, amount, shot.xInfo.type, enemy.xInfo.airDef, enemy.xInfo.waterDef, enemy.xInfo.fireDef, enemy.xInfo.earthDef);
   enemyUpdateHealth(game, enemy, -damage, shot);
-}
-
-function enemyPunch(game, enemy, px, py, shot) {
-  if (enemy.xInfo.immovable) return;
-  var enemyMass = 1.0;
-  if(enemy.xInfo.mass) enemyMass = enemy.xInfo.mass;
-  const vx = enemy.body.velocity.x;
-  const vy = enemy.body.velocity.y;
-  enemy.setVelocity(vx + px / enemyMass, vy + py / enemyMass);
 }
 
 function enemyUpdateHealth(game, enemy, amount) {

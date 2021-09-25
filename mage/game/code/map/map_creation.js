@@ -58,6 +58,7 @@ function mapInitialize(game, map, mapObjectList, inEditor) {
   player.setGravity(0, 400);
   player.setCollideWorldBounds(true);
   player.setBounce(0.0, 0.0);
+  player.xMass = 1.0;
 
   // Create map ending
   var exit = groupExits.create(map.exitX*80.0 + 40.0, map.exitY*80.0 + 40.0, 'exit_door1');

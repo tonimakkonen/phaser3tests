@@ -83,37 +83,33 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
  }
 
 // TODO: Some duplicate code here in these two functions
-// TODO: Consider doing player group..
-// TODO: Remove duplicate punch logic
 
 function shotHitPlayer(game, shot, pl) {
-  if (shot.xDestroyed) return; // avoid duplicate hits
+  if (shot.xDestroyed) return;
   shot.xDestroyed = true;
-  if (shot.xInfo.damage) playerDealDamage(game, pl, shot.xInfo.damage, shot);
-  if(shot.xInfo.punch) {
-    const px = shot.body.velocity.x * shot.xInfo.punch;
-    const py = shot.body.velocity.y * shot.xInfo.punch;
-    playerPunch(game, px, py, shot);
-  }
-  shotTempFunc(game, shot, pl);
+  shotHitHandle(game, shot, pl);
+  if (shot.xInfo.damage) playerDealDamage(game, pl, shot.xInfo.damage, shot)
   shotDestroy(game, shot);
 }
 
 function shotHitEnemy(game, shot, enemy) {
-  if (shot.xDestroyed) return; // avoid duplicate hits
+  if (enemy == null) return;
+  if (shot.xDestroyed) return;
   shot.xDestroyed = true;
+  shotHitHandle(game, shot, enemy);
   if (shot.xInfo.damage) enemyDealDamage(game, enemy, shot.xInfo.damage, shot);
-  if(shot.xInfo.punch) {
-    const px = shot.body.velocity.x * shot.xInfo.punch;
-    const py = shot.body.velocity.y * shot.xInfo.punch;
-    enemyPunch(game, enemy, px, py, shot);
-  }
-  shotTempFunc(game, shot, enemy);
   shotDestroy(game, shot);
 }
 
-// TODO:
-function shotTempFunc(game, shot, object) {
+function shotHitHandle(game, shot, object) {
+  if (shot.xInfo.punch && !object.xImmovable) {
+    const mass = object.xMass;
+    const px = shot.body.velocity.x * shot.xInfo.punch / mass;
+    const py = shot.body.velocity.y * shot.xInfo.punch / mass;
+    const vx = object.body.velocity.x;
+    const vy = object.body.velocity.y;
+    object.setVelocity(vx + px, vy + py);
+  }
   if (shot.xInfo.poison) shotPoison(game, object, shot.xInfo.poison);
   if (shot.xInfo.freeze) shotFreeze(game, object, shot.xInfo.freeze);
 }
