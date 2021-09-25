@@ -54,6 +54,7 @@ EDITOR_MENU.add({x: 2, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TR
 EDITOR_MENU.add({x: 3, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE2, image: 'decoration_tree2', scale: 0.3});
 EDITOR_MENU.add({x: 4, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE3, image: 'decoration_tree3', scale: 0.3});
 EDITOR_MENU.add({x: 5, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE4, image: 'decoration_tree4', scale: 0.5});
+EDITOR_MENU.add({x: 6, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE5, image: 'decoration_tree5', scale: 0.5});
 
 // Enemies
 EDITOR_MENU.add({x: 0, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FOREST_MONSTER, image: 'enemy_forest_monster'});
