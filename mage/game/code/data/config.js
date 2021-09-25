@@ -71,7 +71,9 @@ const GRAPH_MUSHROOM_MONSTER     = 110;
 const GRAPH_FROST_MONSTER        = 111;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
-const GRAPH_MUSHROOM_PICKUP      = 202;
+const GRAPH_MUSHROOM1_PICKUP     = 202;
+const GRAPH_MUSHROOM2_PICKUP     = 203;
+const GRAPH_BOOK_PICKUP          = 204;
 
 const GRAPH_WATER_SHOT           = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
@@ -229,10 +231,28 @@ GRAPHS.set(
 );
 
 GRAPHS.set(
-  GRAPH_MUSHROOM_PICKUP,
+  GRAPH_MUSHROOM1_PICKUP,
   {
-    location: 'imgs/pickups/mushroom.png',
-    name: 'pickup_mushroom',
+    location: 'imgs/pickups/mushroom1.png',
+    name: 'pickup_mushroom1',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_MUSHROOM2_PICKUP,
+  {
+    location: 'imgs/pickups/mushroom2.png',
+    name: 'pickup_mushroom2',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_BOOK_PICKUP,
+  {
+    location: 'imgs/pickups/book.png',
+    name: 'pickup_book',
     type: GRAPH_TYPE_SINGLE
   }
 );
@@ -513,7 +533,9 @@ LAYERS.set(
 
 
 const PICKUP_WATERMELON = 1;
-const PICKUP_MUSHROOM   = 2;
+const PICKUP_MUSHROOM1  = 2;
+const PICKUP_MUSHROOM2  = 3;
+const PICKUP_BOOK       = 4;
 
 var PICKUPS = new Map();
 
@@ -527,11 +549,29 @@ PICKUPS.set(
 );
 
 PICKUPS.set(
-  PICKUP_MUSHROOM,
+  PICKUP_MUSHROOM1,
   {
-    graph: GRAPH_MUSHROOM_PICKUP,
+    graph: GRAPH_MUSHROOM1_PICKUP,
     moveY: 25,
     mana: 100
+  }
+);
+
+PICKUPS.set(
+  PICKUP_MUSHROOM2,
+  {
+    graph: GRAPH_MUSHROOM2_PICKUP,
+    moveY: 25,
+    heal: 40,
+    mana: 40
+  }
+);
+
+PICKUPS.set(
+  PICKUP_BOOK,
+  {
+    graph: GRAPH_BOOK_PICKUP,
+    books: 1
   }
 );
 

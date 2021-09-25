@@ -71,7 +71,9 @@ EDITOR_MENU.add({x: 10, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FROST_MONST
 
 // Pickups
 EDITOR_MENU.add({x: 0, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
-EDITOR_MENU.add({x: 1, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM, image: 'pickup_mushroom'});
+EDITOR_MENU.add({x: 1, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM1, image: 'pickup_mushroom1'});
+EDITOR_MENU.add({x: 2, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM2, image: 'pickup_mushroom2'});
+EDITOR_MENU.add({x: 3, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_BOOK, image: 'pickup_book'});
 
 // Special options
 EDITOR_MENU.add({x: 0, y: 6, special: EDITOR_SPECIAL_TRY, text: 'Try'});
