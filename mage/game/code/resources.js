@@ -72,6 +72,9 @@ function resLoadResources(game) {
   game.load.audio('sound_wind', 'sound/shots/wind.wav', true);
   game.load.audio('sound_freeze', 'sound/shots/freeze.wav', true);
   game.load.audio('sound_electric', 'sound/shots/electric.wav', true);
+
+  game.load.audio('sound_eat', 'sound/misc/eat.wav', true);
+  game.load.audio('sound_book', 'sound/misc/book.wav', true);
   //game.load.audio('test_music', 'sound/music.mp3', true);
 }
 

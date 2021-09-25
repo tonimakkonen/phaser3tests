@@ -544,7 +544,8 @@ PICKUPS.set(
   {
     graph: GRAPH_WATERMELON_PICKUP,
     heal: 40,
-    mana: 40
+    mana: 40,
+    sound: 'sound_eat'
   }
 );
 
@@ -553,7 +554,8 @@ PICKUPS.set(
   {
     graph: GRAPH_MUSHROOM1_PICKUP,
     moveY: 25,
-    mana: 100
+    mana: 100,
+    sound: 'sound_eat'
   }
 );
 
@@ -563,7 +565,8 @@ PICKUPS.set(
     graph: GRAPH_MUSHROOM2_PICKUP,
     moveY: 25,
     heal: 40,
-    mana: 40
+    mana: 40,
+    sound: 'sound_eat'
   }
 );
 
@@ -571,7 +574,8 @@ PICKUPS.set(
   PICKUP_BOOK,
   {
     graph: GRAPH_BOOK_PICKUP,
-    books: 1
+    books: 1,
+    sound: 'sound_book'
   }
 );
 
