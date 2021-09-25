@@ -96,6 +96,7 @@ const GRAPH_TREE2_DECORATION     = 504;
 const GRAPH_TREE3_DECORATION     = 505;
 const GRAPH_TREE4_DECORATION     = 506;
 const GRAPH_TREE5_DECORATION     = 507;
+const GRAPH_CACTUS1_DECORATION   = 508;
 
 var GRAPHS = new Map();
 
@@ -438,6 +439,15 @@ GRAPHS.set(
   }
 )
 
+GRAPHS.set(
+  GRAPH_CACTUS1_DECORATION,
+  {
+    location: 'imgs/decorations/cactus1.png',
+    name: 'decoration_cactus1',
+    type: GRAPH_TYPE_SINGLE
+  }
+)
+
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
@@ -453,6 +463,7 @@ const LAYER_ROCK      = 3;
 const LAYER_SNOW      = 4;
 const LAYER_VOID      = 5;
 const LAYER_INVISIBLE = 6;
+const LAYER_SAND      = 7;
 
 var LAYERS = new Map();
 
@@ -527,6 +538,19 @@ LAYERS.set(
   }
 );
 
+LAYERS.set(
+  LAYER_SAND,
+  {
+    type: LAYER_TYPE_TOP,
+    name: 'sand',
+    locationBase: 'imgs/ground/sand',
+    block: true,
+    zInternal: -0.2,
+    zBlock: -0.2,
+    zTop: 2.1
+  }
+);
+
 ////////////////////////////////////
 // All the different pickup types //
 ////////////////////////////////////
@@ -584,13 +608,14 @@ PICKUPS.set(
 // All the different decoration //
 //////////////////////////////////
 
-const DECORATION_ROCK1 = 1;
-const DECORATION_ROCK2 = 2;
-const DECORATION_TREE1 = 3;
-const DECORATION_TREE2 = 4;
-const DECORATION_TREE3 = 5;
-const DECORATION_TREE4 = 6;
-const DECORATION_TREE5 = 7;
+const DECORATION_ROCK1   = 1;
+const DECORATION_ROCK2   = 2;
+const DECORATION_TREE1   = 3;
+const DECORATION_TREE2   = 4;
+const DECORATION_TREE3   = 5;
+const DECORATION_TREE4   = 6;
+const DECORATION_TREE5   = 7;
+const DECORATION_CACTUS1 = 8;
 
 var DECORATIONS = new Map();
 
@@ -650,6 +675,14 @@ DECORATIONS.set(
     graph: GRAPH_TREE5_DECORATION,
     z: -0.025,
     moveY: -40
+  }
+)
+DECORATIONS.set(
+  DECORATION_CACTUS1,
+  {
+    graph: GRAPH_CACTUS1_DECORATION,
+    z: -0.025,
+    moveY: 10
   }
 )
 

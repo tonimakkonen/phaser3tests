@@ -104,10 +104,10 @@ function shotHitEnemy(game, shot, enemy) {
 function shotHitHandle(game, shot, object) {
   if (shot.xInfo.punch && !object.xImmovable) {
     const mass = object.xMass;
-    const px = shot.body.velocity.x * shot.xInfo.punch / mass;
-    const py = shot.body.velocity.y * shot.xInfo.punch / mass;
     const vx = object.body.velocity.x;
     const vy = object.body.velocity.y;
+    const px = (shot.body.velocity.x - vx) * shot.xInfo.punch / mass;
+    const py = (shot.body.velocity.y - vy) * shot.xInfo.punch / mass;
     object.setVelocity(vx + px, vy + py);
   }
   if (shot.xInfo.poison) shotPoison(game, object, shot.xInfo.poison);

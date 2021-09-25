@@ -192,7 +192,7 @@ function uiUpdateSpellIcon(game, posX, current, spell) {
 }
 
 function uiCreateSpellIcon(game, posX, texture) {
-    const requiredScale = uiOptions.height / 120.0; // Hard coded height of spell artwork
+    const requiredScale = uiOptions.height / 80.0; // Hard coded height of spell artwork
     const bgCenterY = settingHeight - uiOptions.dy - uiOptions.height * 0.5;
     var image = game.add.image(posX, bgCenterY, texture);
     image.setScale(requiredScale);

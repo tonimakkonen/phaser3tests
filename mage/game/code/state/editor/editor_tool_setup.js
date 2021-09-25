@@ -46,6 +46,7 @@ EDITOR_MENU.add({x: 2, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_ROCK, image
 EDITOR_MENU.add({x: 3, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_SNOW, image: 'snow_full'});
 EDITOR_MENU.add({x: 4, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_VOID, image: 'void_layer'});
 EDITOR_MENU.add({x: 5, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_INVISIBLE, text: 'IB'});
+EDITOR_MENU.add({x: 6, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_SAND, image: 'sand_full'});
 
 // Decorations
 EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_ROCK1, image: 'decoration_rock1'});
@@ -55,6 +56,7 @@ EDITOR_MENU.add({x: 3, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TR
 EDITOR_MENU.add({x: 4, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE3, image: 'decoration_tree3', scale: 0.3});
 EDITOR_MENU.add({x: 5, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE4, image: 'decoration_tree4', scale: 0.5});
 EDITOR_MENU.add({x: 6, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE5, image: 'decoration_tree5', scale: 0.5});
+EDITOR_MENU.add({x: 7, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_CACTUS1, image: 'decoration_cactus1'});
 
 // Enemies
 EDITOR_MENU.add({x: 0, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FOREST_MONSTER, image: 'enemy_forest_monster'});
