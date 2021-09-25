@@ -3,9 +3,6 @@
 
 // Player variables
 
-// TODO: Move to config
-const playerJumpAmount = 250;
-
 // This is used by e.g. enemies and plaaying souds
 var playerLocation = { x: 0, y: 0}
 
@@ -28,9 +25,16 @@ function playerHandleLogic(game, curTime) {
   playerLocation.x = player.x;
   playerLocation.y = player.y;
 
+  // TODO: Combine tints
   if (player.xPoison) {
     if (game.time.now > player.xPoison) {
       player.xPoison = undefined;
+      player.clearTint();
+    }
+  }
+  if (player.xFreeze) {
+    if (game.time.now > player.xFreeze) {
+      player.xFreeze = undefined;
       player.clearTint();
     }
   }
@@ -46,11 +50,18 @@ function playerHandleLogic(game, curTime) {
   const vx = player.body.velocity.x;
   const vy = player.body.velocity.y;
 
+  var moveAcc = 800;
+  var playerJumpAmount = 250;
+  if (player.xFreeze) {
+    moveAcc = moveAcc / 2.0;
+    playerJumpAmount = playerJumpAmount / 2.0;
+  }
+
   if (moveLeft && vx > -250) {
-    player.setGravityX(-800 - 2.0*vx);
+    player.setGravityX(-moveAcc - 2.0*vx);
     //player.setVelocityX(-300);
   } else if (moveRight && vx < 250) {
-    player.setGravityX(800 - 2.0*vx);
+    player.setGravityX(moveAcc - 2.0*vx);
     //player.setVelocityX(300);
   } else {
     player.setGravityX(-4.0 * vx);
@@ -156,12 +167,18 @@ function playerPunch(game, px, py, shot) {
   player.setVelocity(vx + px / playerMass, vy + py / playerMass);
 }
 
-function playerPoison(game, amount) {
-  if (player == null) return;
-  if (!player.xFreeze) player.xPoison = game.time.now;
+function playerPoison(game, pl, amount) {
+  if (!pl.xPoison) pl.xPoison = game.time.now;
   var playerMass = 1.0;
-  player.xPoison += amount / playerMass;
-  player.setTint(0x20ff20);
+  pl.xPoison += amount / playerMass;
+  pl.setTint(0x20ff20);
+}
+
+function playerFreeze(game, pl, amount) {
+  if (!pl.xFreeze) pl.xFreeze = game.time.now;
+  var playerMass = 1.0;
+  pl.xFreeze += amount / playerMass;
+  pl.setTint(0x2020ff);
 }
 
 function playerUseManaIfCan(game, cost) {

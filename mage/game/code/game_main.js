@@ -142,8 +142,8 @@ function mainShotHitEnemy(shot, enemy) {
   shotHitEnemy(this, shot, enemy);
 }
 
-function mainShotHitPlayer(shot, _pl) {
-  shotHitPlayer(this, shot);
+function mainShotHitPlayer(shot, player) {
+  shotHitPlayer(this, shot, player);
 }
 
 function mainShotHitWall(wall, shot) {
@@ -154,6 +154,7 @@ function mainCollectedPickup(pickup, _pl) {
   pickupCollect(this, pickup);
 }
 
+// TODO: Use signs as exits
 function mainEnterExit(exit, _pl) {
   playEnterExit(this, exit);
 }

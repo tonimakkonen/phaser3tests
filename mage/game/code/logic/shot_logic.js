@@ -85,19 +85,17 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
 // TODO: Some duplicate code here in these two functions
 // TODO: Consider doing player group..
 
-function shotHitPlayer(game, shot) {
+function shotHitPlayer(game, shot, pl) {
   if (shot.xDestroyed) return; // avoid duplicate hits
   shot.xDestroyed = true;
-  if (shot.xInfo.damage) playerDealDamage(game, player, shot.xInfo.damage, shot);
+  if (shot.xInfo.damage) playerDealDamage(game, pl, shot.xInfo.damage, shot);
   if(shot.xInfo.punch) {
     const px = shot.body.velocity.x * shot.xInfo.punch;
     const py = shot.body.velocity.y * shot.xInfo.punch;
     playerPunch(game, px, py, shot);
   }
-  if (shot.xInfo.poison) {
-    playerPoison(game, shot.xInfo.poison);
-  }
-  // TODO: Can player be freezed?
+  if (shot.xInfo.poison) playerPoison(game, pl, shot.xInfo.poison);
+  if (shot.xInfo.freeze) playerFreeze(game, pl, shot.xInfo.freeze)
   shotDestroy(game, shot);
 }
 
@@ -110,10 +108,8 @@ function shotHitEnemy(game, shot, enemy) {
     const py = shot.body.velocity.y * shot.xInfo.punch;
     enemyPunch(game, enemy, px, py, shot);
   }
-  if (shot.xInfo.freeze) {
-    enemyFreeze(game, enemy, shot.xInfo.freeze);
-  }
-  // TODO: Poison enemies
+  if (shot.xInfo.poison) enemyPoison(game, enemy, shot.xInfo.poison);
+  if (shot.xInfo.freeze) enemyFreeze(game, enemy, shot.xInfo.freeze);
   shotDestroy(game, shot);
 }
 

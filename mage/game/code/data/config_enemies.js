@@ -16,6 +16,7 @@ const ENEMY_MAGMA_MONSTER          = 7;
 const ENEMY_SAND_MONSTER           = 8;
 const ENEMY_BAT_MONSTER            = 9;
 const ENEMY_MUSHROOM_MONSTER       = 10;
+const ENEMY_FROST_MONSTER          = 11;
 
 
 var ENEMIES = new Map();
@@ -153,5 +154,18 @@ ENEMIES.set(
     mass: 2.5,
     fireDef: -50,
     earthDef: 50
+  }
+);
+
+ENEMIES.set(
+  ENEMY_FROST_MONSTER,
+  {
+    graph: GRAPH_FROST_MONSTER,
+    moveFloat: { maxSpeed: 50, alpha: 0.5, minDistance: 80, maxDistance: 320, constantSway: 100, towards: true},
+    health: 40,
+    shoot1: { type: SHOT_ICE, time: 2500, randomAngle: 10.0 },
+    mass: 1.0,
+    waterDef: 100,
+    fireDef: -50
   }
 );

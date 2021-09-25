@@ -241,12 +241,18 @@ function enemyPunch(game, enemy, px, py, shot) {
   enemy.setVelocity(vx + px / enemyMass, vy + py / enemyMass);
 }
 
+// TODO: Combine with player 
+
 function enemyFreeze(game, enemy, amount) {
   if (!enemy.xFreeze) enemy.xFreeze = game.time.now;
   var enemyMass = 1.0;
   if(enemy.xInfo.mass) enemyMass = enemy.xInfo.mass;
   enemy.xFreeze += amount / enemyMass;
   enemy.setTint(0x0000ff);
+}
+
+function enemyPoison(game, enemy, amount) {
+  throw 'Not implemented';
 }
 
 function enemyUpdateHealth(game, enemy, amount) {

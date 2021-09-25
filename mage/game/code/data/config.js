@@ -68,6 +68,7 @@ const GRAPH_MAGMA_MONSTER        = 107;
 const GRAPH_SAND_MONSTER         = 108;
 const GRAPH_BAT_MONSTER          = 109;
 const GRAPH_MUSHROOM_MONSTER     = 110;
+const GRAPH_FROST_MONSTER        = 111;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM_PICKUP      = 202;
@@ -203,6 +204,15 @@ GRAPHS.set(
   {
     location: 'imgs/monsters/mushroom_monster.png',
     name: 'enemy_mushroom_monster',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_FROST_MONSTER,
+  {
+    location: 'imgs/monsters/frost_monster.png',
+    name: 'enemy_frost_monster',
     type: GRAPH_TYPE_SINGLE
   }
 );
