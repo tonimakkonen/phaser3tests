@@ -17,6 +17,7 @@ const ENEMY_SAND_MONSTER           = 8;
 const ENEMY_BAT_MONSTER            = 9;
 const ENEMY_MUSHROOM_MONSTER       = 10;
 const ENEMY_FROST_MONSTER          = 11;
+const ENEMY_BUG_MONSTER            = 12;
 
 
 var ENEMIES = new Map();
@@ -26,7 +27,7 @@ ENEMIES.set(
   {
     graph: GRAPH_FOREST_MONSTER,
     moveWalk: { maxSpeed: 60, alpha: 1},
-    moveJump: { delay: 3000, velocity: 300 }, // TODO: Add randomness
+    moveJump: { delay: 5000, velocity: 250 }, // TODO: Add randomness
     shoot1: { type: SHOT_TREE, time: 2000, randomAngle: 10.0, topBias: 0.5 },
     health: 60,
     mass: 1.0,
@@ -167,5 +168,19 @@ ENEMIES.set(
     mass: 1.0,
     waterDef: 100,
     fireDef: -50
+  }
+);
+
+ENEMIES.set(
+  ENEMY_BUG_MONSTER,
+  {
+    graph: GRAPH_BUG_MONSTER,
+    moveWalk: { maxSpeed: 80, alpha: 1},
+    moveJump: { delay: 3000, velocity: 350 },
+    shoot1: { type: SHOT_POISON, time: 3000, randomAngle: 10.0, topBias: 0.25 },
+    health: 30,
+    mass: 0.5,
+    fireDef: -50,
+    earthDef: 50
   }
 );

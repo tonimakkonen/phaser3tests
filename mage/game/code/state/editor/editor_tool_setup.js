@@ -38,6 +38,7 @@ EDITOR_MENU.add({x: 5, y: 0, special: EDITOR_SPECIAL_NEW, text: 'New map'});
 EDITOR_MENU.add({x: 6, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_EMPTY, text: 'BG 0'});
 EDITOR_MENU.add({x: 7, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_MOUNTAINS, text: 'BG 1'});
 EDITOR_MENU.add({x: 8, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_NIGHT, text: 'BG 2'});
+EDITOR_MENU.add({x: 9, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_FOREST, text: 'BG 3'});
 
 // Second row, ground options
 EDITOR_MENU.add({x: 0, y: 2, tool: EDITOR_TOOL_GROUND, option: LAYER_GROUND, image: 'ground_full'});
@@ -70,6 +71,7 @@ EDITOR_MENU.add({x: 7, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SAND_MONSTER
 EDITOR_MENU.add({x: 8, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BAT_MONSTER, image: 'enemy_bat_monster'});
 EDITOR_MENU.add({x: 9, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MUSHROOM_MONSTER, image: 'enemy_mushroom_monster'});
 EDITOR_MENU.add({x: 10, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FROST_MONSTER, image: 'enemy_frost_monster'});
+EDITOR_MENU.add({x: 11, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BUG_MONSTER, image: 'enemy_bug_monster'});
 
 // Pickups
 EDITOR_MENU.add({x: 0, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});

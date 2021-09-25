@@ -45,13 +45,6 @@ function resLoadResources(game) {
       }
     }
   )
-  // TODO: Define these
-  //game.load.image('bg_mountains', 'imgs/bg_mountains.jpg');
-  //game.load.image('bg0', 'imgs/bg0.png');
-  //game.load.image('bg1', 'imgs/bg1.png');
-  //game.load.image('bg2', 'imgs/bg2.png');
-  //game.load.image('bg3', 'imgs/bg3.png');
-  //game.load.image('bg_forest', 'imgs/bg_forest.png');
 
   // Load UI images not defined in config
   game.load.image('ui_eraser_all', 'imgs/ui/eraser_all.png');

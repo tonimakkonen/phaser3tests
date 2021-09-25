@@ -69,6 +69,7 @@ const GRAPH_SAND_MONSTER         = 108;
 const GRAPH_BAT_MONSTER          = 109;
 const GRAPH_MUSHROOM_MONSTER     = 110;
 const GRAPH_FROST_MONSTER        = 111;
+const GRAPH_BUG_MONSTER          = 112;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
@@ -217,6 +218,17 @@ GRAPHS.set(
     location: 'imgs/monsters/frost_monster.png',
     name: 'enemy_frost_monster',
     type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_BUG_MONSTER,
+  {
+    location: 'imgs/monsters/bug_monster.png',
+    name: 'enemy_bug_monster',
+    type: GRAPH_TYPE_LEFT_RIGHT,
+    sizeX: 50,
+    sizeY: 25
   }
 );
 
@@ -647,8 +659,7 @@ DECORATIONS.set(
   DECORATION_TREE2,
   {
     graph: GRAPH_TREE2_DECORATION,
-    z: -0.05,
-    moveY: -80
+    z: -0.05
   }
 )
 
@@ -656,8 +667,7 @@ DECORATIONS.set(
   DECORATION_TREE3,
   {
     graph: GRAPH_TREE3_DECORATION,
-    z: -0.05,
-    moveY: -80
+    z: -0.05
   }
 )
 
@@ -673,8 +683,7 @@ DECORATIONS.set(
   DECORATION_TREE5,
   {
     graph: GRAPH_TREE5_DECORATION,
-    z: -0.025,
-    moveY: -40
+    z: -0.025
   }
 )
 DECORATIONS.set(
@@ -695,6 +704,7 @@ DECORATIONS.set(
 const BACKGROUND_EMPTY     = 1;
 const BACKGROUND_MOUNTAINS = 2;
 const BACKGROUND_NIGHT     = 3;
+const BACKGROUND_FOREST    = 4;
 
 var BACKGROUNDS = new Map();
 
@@ -718,5 +728,13 @@ BACKGROUNDS.set(
   {
     name: 'bg_night',
     location: 'imgs/bg_sky.jpg' // TODO: rename
+  }
+)
+
+BACKGROUNDS.set(
+  BACKGROUND_FOREST,
+  {
+    name: 'bg_forest',
+    location: 'imgs/bg_forest.jpg' // TODO: rename
   }
 )

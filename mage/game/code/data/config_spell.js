@@ -145,14 +145,14 @@ SPELLS.set(
 SPELLS.set(
   SPELL_HELLFIRE,
   {
-    name: 'Hellfire (TODO)',
+    name: 'Meteor shower',
     posX: 2,
     posY: 2,
     image: 'spell_dummy',
     type: MAGIC_TYPE_FIRE,
-    shoot: SHOT_FIRE,
-    cost: 2.5,
-    reload: 25
+    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_FIRE_STORM, reload: 200, time: 5000},
+    cost: 100,
+    reload: 1500
   }
 )
 
