@@ -10,14 +10,18 @@ const uiOptions = {
   dx: 15,
   dy: 15,
   m: 4,
-  gridDeltaY: 60.0
+  gridDeltaY: 60.0,
+  spellCenterX: 300.0,
+  spellCenterY: 300.0,
+  spellDelta: 120.0,
+  spellScale: 1.0
 }
 
 // Width of full health bar
 const uiHealthBarWidth = uiOptions.width - 2.0 * uiOptions.m;
 const uiHealthBarHeight = (uiOptions.height - 3.0 * uiOptions.m) * 0.5;
 
-
+// Normal UI always visible
 var uiBarBg = null;
 var uiHealthBar = null;
 var uiManaBar = null;
@@ -25,14 +29,9 @@ var uiLeftSpell = null;
 var uiRightSpell = null;
 
 // All the objects that open up with tab
+var uiSpellSelectionVisible = false;
 var uiTabObjects = [];
 var uiHelpText = null;
-
-var uiSpellSelectionVisible = false;
-var uiSpellSelections = [];
-
-const uiGridSize = 160.0;
-const uiGridDelta = 0.0;
 
 function uiCreate(game) {
   const bgCenterX = uiOptions.dx + uiOptions.width * 0.5;
@@ -52,37 +51,10 @@ function uiCreate(game) {
   uiHealthBar.setDepth(10);
   uiManaBar.setDepth(10);
 
-
+  // This TAB object is always present but hidden
   uiHelpText = game.add.text(0, 0, '').setOrigin(0.0);
   uiHelpText.setScrollFactor(0.0, 0.0);
   uiHelpText.setDepth(20.0);
-
-  // TODO: Move this elsewhere
-
-
-
-  // Create spell selections
-  SPELLS.forEach((spell, key) => {
-
-    //if (playerStats.learnedSpells.includes(key)) {
-      const cx = uiGridDelta + (spell.posX + 0.5) * uiGridSize;
-      const cy = uiGridDelta + (spell.posY + 0.5) * uiGridSize;
-      const image = game.add.image(cx, cy, spell.image);
-      image.setScrollFactor(0.0, 0.0);
-      image.setDepth(10.0);
-
-      const text = game.add.text(cx, cy + 45.0, spell.name).setOrigin(0.5);
-      text.setScrollFactor(0.0, 0.0);
-      text.setDepth(10.0);
-
-      uiSpellSelections.push(image);
-      uiSpellSelections.push(text);
-    //}
-  });
-  uiHideSpellSelection(game);
-
-  // TODO:
-  //uiCreateStatTexts(game, uiTabObjects);
 }
 
 function uiCreateStatTexts(game, list) {
@@ -112,61 +84,83 @@ function uiCreateStatText(game, px, py, text, help, list) {
 
 // Hide all spell selection elements
 function uiHideSpellSelection(game) {
-  uiSpellSelections.forEach(o => o.setVisible(false));
+  uiTabObjects.forEach(uiTabObject => {
+    uiTabObject.gameObjs.forEach(phaserObj => { phaserObj.destroy(); });
+  });
+  uiTabObjects = [];
   uiSpellSelectionVisible = false;
 }
 
 // Show and update all tab elements
 function uiShowSpellSelection(game) {
-  uiSpellSelections.forEach(o => o.setVisible(true));
+
+  // Create spells
+  // TODO: Move to own function
+  SPELLS.forEach((spell, key) => {
+    const delta = uiOptions.spellDelta;
+    const cx = uiOptions.spellCenterX + spell.posX * delta;
+    const cy = uiOptions.spellCenterY + spell.posY * delta;
+    const image = game.add.image(cx, cy, spell.image);
+    image.setScrollFactor(0.0, 0.0);
+    image.setDepth(10.0);
+    image.setScale(uiOptions.spellScale);
+
+    uiTabObjects.push({
+      gameObjs: [image],
+      x: cx - delta / 2,
+      y: cy - delta / 2,
+      width: delta,
+      height: delta,
+      help: spell.name, // TODO: set better help
+      selectSpell: spell
+    })
+  });
+
+  // Create info texts
+
   uiSpellSelectionVisible = true;
 }
 
 // Handle spell selection logic and other UI logic
 function uiHandleLogic(game) {
+
+  // Handle TAB logic (spell selection & skills)
   const tabDown = inputTab.isDown;
   if (tabDown && !uiSpellSelectionVisible) uiShowSpellSelection(game);
   if (!tabDown && uiSpellSelectionVisible) uiHideSpellSelection(game);
-
   if (tabDown) {
 
-    // Set help text value
-    uiUpdateHelpText(game);
+    var onTabObject = false;
+    const mx = game.input.mousePointer.x;
+    const my = game.input.mousePointer.y;
+    for (var i = 0; i < uiTabObjects.length; i++) {
+      const ho = uiTabObjects[i];
+      if (mx >= ho.x && mx <= ho.x + ho.width && my >= ho.y && my <= ho.y + ho.height) {
+        uiHelpText.setVisible(true);
+        uiHelpText.setText(ho.help);
+        uiHelpText.setPosition(mx + 40.0, my);
+        onTabObject = true;
 
-    const gx = Math.floor((game.input.mousePointer.x - uiGridDelta) / uiGridSize);
-    const gy = Math.floor((game.input.mousePointer.y - uiGridDelta) / uiGridSize);
-    const spell = spellFromGrid(gx, gy);
-    if (spell != null) {
-      // TODO: Make this better
-      if (game.input.activePointer.leftButtonDown()) {
-        playerLeftSpell = spell;
-      }
-      if (game.input.activePointer.rightButtonDown()) {
-        playerRightSpell = spell;
+        // Select spell
+        if (inputLeftClick && ho.selectSpell) {
+          playerLeftSpell = ho.selectSpell;
+        }
+        if (inputRightClick && ho.selectSpell) {
+          playerRightSpell = ho.selectSpell;
+        }
+
       }
     }
+    if (!onTabObject) uiHelpText.setVisible(false);
+
   } else {
     uiHelpText.setVisible(false);
   }
 
+  // TODO: Update player health and mana here! (not callback from player stuff)
+
   // Update spell icons
   uiUpdateSpellIcons(game);
-}
-
-function uiUpdateHelpText(game) {
-  // If we are above an object, set the help text
-  const mx = game.input.mousePointer.x;
-  const my = game.input.mousePointer.y;
-  for (var i = 0; i < uiTabObjects.length; i++) {
-    const ho = uiTabObjects[i];
-    if (mx >= ho.x && mx <= ho.x + ho.width && my >= ho.y && my <= ho.y + ho.height) {
-      uiHelpText.setVisible(true);
-      uiHelpText.setText(ho.help);
-      uiHelpText.setPosition(mx + 40.0, my);
-      return;
-    }
-  }
-  uiHelpText.setVisible(false);
 }
 
 function uiUpdateSpellIcons(game) {
@@ -228,6 +222,5 @@ function uiDestroy(game) {
   uiLeftSpell = null;
   if (uiRightSpell != null) uiRightSpell.destroy();
   uiRightSpell = null;
-  uiSpellSelections.forEach(o => o.destroy());
-  uiSpellSelections = [];
+  uiHideSpellSelection();
 }

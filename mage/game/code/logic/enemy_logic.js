@@ -85,7 +85,7 @@ function enemyHandleLogic(game, enemy, curTime) {
   magichandleObjectTint(game, enemy);
 
   // frozed enemies
-  // TODO: Poisoned enemies
+  // TODO: Poisoned enemies damage
   if (enemy.xFreeze) {
     // Do not reload shots while frozen
     enemy.xLastShot1 = game.time.now;

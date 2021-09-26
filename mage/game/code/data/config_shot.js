@@ -70,7 +70,7 @@ SHOTS.set(
   SHOT_FIRE,
   {
     graph: GRAPH_FIRE_SHOT,
-    damage: 20,
+    damage: 15,
     type: MAGIC_TYPE_FIRE,
     velocity: 600,
     grav: 0.5,
@@ -82,7 +82,7 @@ SHOTS.set(
   SHOT_TREE,
   {
     graph: GRAPH_TREE_SHOT,
-    damage: 25,
+    damage: 20,
     type: MAGIC_TYPE_EARTH,
     velocity: 350,
     grav: 0.9,
@@ -110,7 +110,7 @@ SHOTS.set(
   SHOT_AIR_PUNCH,
   {
     graph: GRAPH_AIR_PUNCH_SHOT,
-    damage: 12.5,
+    damage: 12,
     type: MAGIC_TYPE_AIR,
     velocity: 600,
     grav: 0.0,
