@@ -17,7 +17,7 @@ const SPELL_SUMMON_STICK   = 7;
 const SPELL_ROCK           = 8;
 
 const SPELL_RAIN           = 9;
-const SPELL_ROCKET         = 10;
+const SPELL_METEOR         = 10;
 const SPELL_VOLCANO        = 11;
 const SPELL_POISON         = 12;
 
@@ -163,19 +163,16 @@ SPELLS.set(
 )
 
 SPELLS.set(
-  SPELL_ROCKET,
+  SPELL_METEOR,
   {
-    name: 'Rocket (TODO)',
+    name: 'Meteors',
     posX: 1.5,
     posY: -1.5,
     image: 'spell_dummy',
-    jump: 50,
     type: MAGIC_TYPE_FIRE,
-    shoot: SHOT_FIRE,
-    direction: 180,
-    randomAngle: 10,
-    cost: 5,
-    reload: 10
+    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_METEOR, reload: 400, time: 5000},
+    cost: 90,
+    reload: 1500
   }
 )
 

@@ -11,6 +11,7 @@ const SHOT_ICE         = 7;
 const SHOT_SMALL_WATER = 8;
 const SHOT_ROCK        = 9;
 const SHOT_POISON      = 10;
+const SHOT_METEOR      = 11;
 
 
 var SHOTS = new Map();
@@ -144,5 +145,18 @@ SHOTS.set(
     bounce: { count: 3, amount: 0.5 },
     grav: 0.5,
     sound: 'sound_poison'
+  }
+)
+
+SHOTS.set(
+  SHOT_METEOR,
+  {
+    graph: GRAPH_METEOR_SHOT,
+    damage: 100,
+    type: MAGIC_TYPE_FIRE,
+    velocity: 400,
+    grav: 1.0,
+    spawn: { type: SHOT_FIRE, amount: 20, velocity: 0.5},
+    punch: 1.0
   }
 )

@@ -86,6 +86,7 @@ const GRAPH_ICE_SHOT             = 307;
 const GRAPH_SMALL_WATER_SHOT     = 308;
 const GRAPH_ROCK_SHOT            = 309;
 const GRAPH_POISON_SHOT          = 310;
+const GRAPH_METEOR_SHOT          = 311;
 
 const GRAPH_EXIT_DOOR1           = 401;
 const GRAPH_SIGN                 = 402;
@@ -362,6 +363,15 @@ GRAPHS.set(
   {
     location: 'imgs/shots/poison.png',
     name: 'shot_poison',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_METEOR_SHOT,
+  {
+    location: 'imgs/shots/meteor.png',
+    name: 'shot_meteor',
     type: GRAPH_TYPE_SINGLE
   }
 );

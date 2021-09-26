@@ -117,7 +117,16 @@ function playerHandleSpell(game, spell, last, dx, dy) {
   if (curTime < last + reloadTime) return last;
   const manaCost = spell.cost;
   if (playerUseManaIfCan(game, manaCost)) {
-    if (spell.shoot) shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
+    if (spell.shoot) {
+      if (spell.direction) {
+        const a = spell.direction * Math.PI / 180.0;
+        const ndx = Math.cos(a);
+        const ndy = Math.sin(a);
+        shotShoot(game, true, spell.shoot, player.x, player.y, ndx, ndy, true);
+      } else {
+          shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
+      }
+    }
     if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
     if (spell.jump) playerAddJump(game, spell.jump);
     if (spell.heal) playerHeal(game, spell.heal);
@@ -127,14 +136,11 @@ function playerHandleSpell(game, spell, last, dx, dy) {
 }
 
 // Handle fly spell effect
-// Note: if we're one the ground, add extra jump
 function playerAddJump(game, amount) {
   if (player == null) return;
   const cvx = player.body.velocity.x;
   const cvy = player.body.velocity.y;
   var delta = -amount;
-  if (player.body.blocked.down) delta -= playerJumpAmount;
-  console.log(delta);
   player.setVelocity(cvx, cvy + delta);
 }
 
