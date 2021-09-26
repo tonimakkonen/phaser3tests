@@ -10,11 +10,13 @@ const uiOptions = {
   dx: 15,
   dy: 15,
   m: 4,
-  gridDeltaY: 60.0,
+  gridDeltaY: 50.0,
   spellCenterX: 300.0,
   spellCenterY: 300.0,
-  spellDelta: 120.0,
-  spellScale: 1.0
+  spellDelta: 90.0,
+  spellScale: 0.75,
+  skillX: 700,
+  skillY: 100
 }
 
 // Width of full health bar
@@ -95,26 +97,60 @@ function uiHideSpellSelection(game) {
 function uiShowSpellSelection(game) {
 
   // Create spells
-  // TODO: Move to own function
   SPELLS.forEach((spell, key) => {
     const delta = uiOptions.spellDelta;
     const cx = uiOptions.spellCenterX + spell.posX * delta;
     const cy = uiOptions.spellCenterY + spell.posY * delta;
-    const image = game.add.image(cx, cy, spell.image);
+    var image;
+    var selectSpell = undefined;
+    var help = undefined;
+    if (playerStats.spells.includes(key)) {
+      image = game.add.image(cx, cy, spell.image);
+      help = spell.name;
+      selectSpell = spell;
+    } else {
+      image = game.add.image(cx, cy, 'spell_base');
+      image.setAlpha(0.25);
+    }
     image.setScrollFactor(0.0, 0.0);
     image.setDepth(10.0);
     image.setScale(uiOptions.spellScale);
-
     uiTabObjects.push({
       gameObjs: [image],
       x: cx - delta / 2,
       y: cy - delta / 2,
       width: delta,
       height: delta,
-      help: spell.name, // TODO: set better help
-      selectSpell: spell
+      help: help, // TODO: set better help
+      selectSpell: selectSpell
     })
   });
+
+  // Create skills that can be learned
+  const text = game.add.text(uiOptions.skillX, uiOptions.skillY, 'Learnable skills');
+  text.setScrollFactor(0.0, 0.0);
+  text.setDepth(10.0);
+  uiTabObjects.push({gameObjs: [text]});
+
+  const learnableSkills = skillGetLearnable(playerProgress.skills);
+  for (var i = 0; i < learnableSkills.length; i++) {
+    const skill = SKILLS.get(learnableSkills[i]);
+    const px = uiOptions.skillX;
+    const py = uiOptions.skillY + (i + 2) * 40.0; // TODO:
+    const text = game.add.text(px, py, skill.name);
+    text.setScrollFactor(0.0, 0.0);
+    text.setDepth(10.0);
+    uiTabObjects.push({
+      gameObjs: [text],
+      x: text.x,
+      y: text.y,
+      width: text.width,
+      height: text.height,
+      help: skill.help,
+      learnSkill: learnableSkills[i]
+    })
+
+  }
 
   // Create info texts
 
@@ -130,12 +166,13 @@ function uiHandleLogic(game) {
   if (!tabDown && uiSpellSelectionVisible) uiHideSpellSelection(game);
   if (tabDown) {
 
+    var changes = false;
     var onTabObject = false;
     const mx = game.input.mousePointer.x;
     const my = game.input.mousePointer.y;
     for (var i = 0; i < uiTabObjects.length; i++) {
       const ho = uiTabObjects[i];
-      if (mx >= ho.x && mx <= ho.x + ho.width && my >= ho.y && my <= ho.y + ho.height) {
+      if (ho.x && mx >= ho.x && mx <= ho.x + ho.width && my >= ho.y && my <= ho.y + ho.height) {
         uiHelpText.setVisible(true);
         uiHelpText.setText(ho.help);
         uiHelpText.setPosition(mx + 40.0, my);
@@ -144,14 +181,27 @@ function uiHandleLogic(game) {
         // Select spell
         if (inputLeftClick && ho.selectSpell) {
           playerLeftSpell = ho.selectSpell;
+          changes = true;
         }
         if (inputRightClick && ho.selectSpell) {
           playerRightSpell = ho.selectSpell;
+          changes = true;
+        }
+
+        if (inputLeftClick && ho.learnSkill) {
+          playerProgress.skills.push(ho.learnSkill);
+          playerStatsUpdate();
+          changes = true;
         }
 
       }
     }
     if (!onTabObject) uiHelpText.setVisible(false);
+
+    if (changes) {
+      uiHideSpellSelection(game);
+      uiShowSpellSelection(game);
+    }
 
   } else {
     uiHelpText.setVisible(false);
@@ -222,5 +272,6 @@ function uiDestroy(game) {
   uiLeftSpell = null;
   if (uiRightSpell != null) uiRightSpell.destroy();
   uiRightSpell = null;
+  if (uiHelpText != null) uiHelpText.destroy();
   uiHideSpellSelection();
 }

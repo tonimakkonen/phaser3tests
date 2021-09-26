@@ -75,6 +75,7 @@ const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
 const GRAPH_MUSHROOM2_PICKUP     = 203;
 const GRAPH_BOOK_PICKUP          = 204;
+const GRAPH_APPLE_PICKUP         = 205;
 
 const GRAPH_WATER_SHOT           = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
@@ -267,6 +268,15 @@ GRAPHS.set(
   {
     location: 'imgs/pickups/book.png',
     name: 'pickup_book',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_APPLE_PICKUP,
+  {
+    location: 'imgs/pickups/apple.png',
+    name: 'pickup_apple',
     type: GRAPH_TYPE_SINGLE
   }
 );
@@ -582,6 +592,7 @@ const PICKUP_WATERMELON = 1;
 const PICKUP_MUSHROOM1  = 2;
 const PICKUP_MUSHROOM2  = 3;
 const PICKUP_BOOK       = 4;
+const PICKUP_APPLE      = 5;
 
 var PICKUPS = new Map();
 
@@ -622,6 +633,16 @@ PICKUPS.set(
     graph: GRAPH_BOOK_PICKUP,
     books: 1,
     sound: 'sound_book'
+  }
+);
+
+PICKUPS.set(
+  PICKUP_APPLE,
+  {
+    graph: GRAPH_APPLE_PICKUP,
+    heal: 60,
+    mana: 20,
+    sound: 'sound_eat'
   }
 );
 

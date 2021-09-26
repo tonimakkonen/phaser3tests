@@ -20,11 +20,12 @@ function playerStatsZero() {
   }
 }
 
-function playerUpdateStats() {
+function playerStatsUpdate() {
   playerStats = playerStatsZero();
-  for (var i = 0; playerProgress.skills.length; i++) {
+  for (var i = 0; i < playerProgress.skills.length; i++) {
     const cs = playerProgress.skills[i];
-    if (cs.spell) playerStats.spells.push(cs.spell);
+    const skill = SKILLS.get(cs);
+    if (skill.spell) playerStats.spells.push(skill.spell);
   }
 }
 

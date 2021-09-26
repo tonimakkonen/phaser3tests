@@ -47,9 +47,6 @@ var listEnemies = []; // TODO: We do not need this
 // Current map blueprint
 var mapBlueprint = null;
 
-// Current player progress
-var playerProgress = { knownSpells: [], level: 'intro' }
-
 // Run local storage
 storageLoad();
 

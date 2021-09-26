@@ -196,7 +196,7 @@ SPELLS.set(
     name: 'Poison',
     posX: -1.5,
     posY: 1.5,
-    image: 'spell_dummy',
+    image: 'spell_poison',
     type: MAGIC_TYPE_EARTH,
     shoot: SHOT_POISON,
     cost: 5,
