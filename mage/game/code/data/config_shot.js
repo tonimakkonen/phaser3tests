@@ -103,7 +103,8 @@ SHOTS.set(
     grav: 0.5,
     spawn: { type: SHOT_FIRE, amount: 10, velocity: 0.5},
     punch: 0.2,
-    sound: 'sound_fire2'
+    sound: 'sound_fire2',
+    deathSound: 'sound_explosion1'
   }
 )
 
@@ -157,6 +158,7 @@ SHOTS.set(
     velocity: 400,
     grav: 1.0,
     spawn: { type: SHOT_FIRE, amount: 20, velocity: 0.5},
-    punch: 1.0
+    punch: 1.0,
+    deathSound: 'sound_explosion1'
   }
 )

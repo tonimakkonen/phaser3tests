@@ -158,7 +158,8 @@ SPELLS.set(
     type: MAGIC_TYPE_WATER,
     effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 15, time: 5000},
     cost: 90,
-    reload: 1500
+    reload: 1500,
+    sound: 'sound_spell_rain'
   }
 )
 
@@ -172,7 +173,8 @@ SPELLS.set(
     type: MAGIC_TYPE_FIRE,
     effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_METEOR, reload: 400, time: 5000},
     cost: 90,
-    reload: 1500
+    reload: 1500,
+    sound: 'sound_spell_meteor'
   }
 )
 

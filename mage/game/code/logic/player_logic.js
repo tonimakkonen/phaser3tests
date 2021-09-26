@@ -118,18 +118,12 @@ function playerHandleSpell(game, spell, last, dx, dy) {
   const manaCost = spell.cost;
   if (playerUseManaIfCan(game, manaCost)) {
     if (spell.shoot) {
-      if (spell.direction) {
-        const a = spell.direction * Math.PI / 180.0;
-        const ndx = Math.cos(a);
-        const ndy = Math.sin(a);
-        shotShoot(game, true, spell.shoot, player.x, player.y, ndx, ndy, true);
-      } else {
-          shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
-      }
+        shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
     }
     if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
     if (spell.jump) playerAddJump(game, spell.jump);
     if (spell.heal) playerHeal(game, spell.heal);
+    if (spell.sound) soundRequestEnv(game, spell.sound, player.x, player.y);
     return curTime;
   }
   return last;

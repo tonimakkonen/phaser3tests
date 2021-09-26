@@ -80,6 +80,11 @@ function resLoadResources(game) {
 
   game.load.audio('sound_eat', 'sound/misc/eat.wav', true);
   game.load.audio('sound_book', 'sound/misc/book.wav', true);
+
+  game.load.audio('sound_explosion1', 'sound/misc/explosion1.wav', true);
+
+  game.load.audio('sound_spell_rain', 'sound/misc/spell_rain.wav', true);
+  game.load.audio('sound_spell_meteor', 'sound/misc/spell_meteor.wav', true);
   //game.load.audio('test_music', 'sound/music.mp3', true);
 }
 

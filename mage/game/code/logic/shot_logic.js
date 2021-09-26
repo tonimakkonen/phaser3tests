@@ -137,6 +137,7 @@ function shotHitWall(game, shot, wall) {
 }
 
 function shotDestroy(game, shot) {
+  if (shot.xInfo.deathSound) soundRequestEnv(game, shot.xInfo.deathSound, shot.x, shot.y);
   if (shot.xInfo.spawn) {
     const spawn = shot.xInfo.spawn;
     for (var i = 0; i < spawn.amount; i++) {
