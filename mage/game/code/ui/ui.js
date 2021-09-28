@@ -11,12 +11,14 @@ const uiOptions = {
   dy: 15,
   m: 4,
   gridDeltaY: 50.0,
-  spellCenterX: 300.0,
-  spellCenterY: 300.0,
+  spellCenterX: 240.0,
+  spellCenterY: 240.0,
   spellDelta: 90.0,
   spellScale: 0.75,
-  skillX: 700,
-  skillY: 100
+  statX: 500,
+  statY: 80,
+  skillX: 900,
+  skillY: 40
 }
 
 // Width of full health bar
@@ -126,6 +128,18 @@ function uiShowSpellSelection(game) {
     })
   });
 
+  // Create defense and other modifiers
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY, 'Health regen: ' + playerStats.healthRegen, playerStats.healthRegenText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 40, 'Mana regen: ' + playerStats.manaRegen, playerStats.manaRegenText, uiTabObjects);
+
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 120, 'Air def: ' + playerStats.airDef, playerStats.airDefText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 160, 'Water def: ' + playerStats.waterDef, playerStats.waterDefText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 180, 'Fire def: ' + playerStats.fireDef, playerStats.fireDefText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 240, 'Earth def: ' + playerStats.earthDef, playerStats.earthDefText, uiTabObjects);
+
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 300, 'Speed ' + playerStats.speed, playerStats.speedText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 340, 'Jump ' + playerStats.jump, playerStats.jumpText, uiTabObjects);
+
   // Create skills that can be learned
   const text = game.add.text(uiOptions.skillX, uiOptions.skillY, 'Learnable skills');
   text.setScrollFactor(0.0, 0.0);
@@ -155,6 +169,20 @@ function uiShowSpellSelection(game) {
   // Create info texts
 
   uiSpellSelectionVisible = true;
+}
+
+function uiAddStatText(game, px, py, text, help, list) {
+  const textObj = game.add.text(px, py, text);
+  textObj.setScrollFactor(0.0, 0.0);
+  textObj.setDepth(10.0);
+  list.push({
+    gameObjs: [textObj],
+    x: textObj.x,
+    y: textObj.y,
+    width: textObj.width,
+    height: textObj.height,
+    help: help
+  })
 }
 
 // Handle spell selection logic and other UI logic
