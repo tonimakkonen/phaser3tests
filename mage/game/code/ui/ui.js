@@ -123,7 +123,7 @@ function uiShowSpellSelection(game) {
       y: cy - delta / 2,
       width: delta,
       height: delta,
-      help: help, // TODO: set better help
+      help: help,
       selectSpell: selectSpell
     })
   });
@@ -173,6 +173,7 @@ function uiShowSpellSelection(game) {
   uiSpellSelectionVisible = true;
 }
 
+// TODO: Add color
 function uiAddStatText(game, px, py, text, help, list) {
   const textObj = game.add.text(px, py, text);
   textObj.setScrollFactor(0.0, 0.0);

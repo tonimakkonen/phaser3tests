@@ -78,6 +78,11 @@ function playerStatsSetForRandomLevel() {
   playerProgress.spellBooks = 10;
 }
 
+function playerStatsSetForTesting() {
+  playerProgress.skills = [];
+  playerProgress.spellBooks = 999;
+}
+
 // Reset player stats when e.g. dying
 function playerStatsReset() {
 

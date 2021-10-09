@@ -70,6 +70,7 @@ const GRAPH_BAT_MONSTER          = 109;
 const GRAPH_MUSHROOM_MONSTER     = 110;
 const GRAPH_FROST_MONSTER        = 111;
 const GRAPH_BUG_MONSTER          = 112;
+const GRAPH_WALL                 = 113;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
@@ -231,6 +232,15 @@ GRAPHS.set(
     type: GRAPH_TYPE_LEFT_RIGHT,
     sizeX: 50,
     sizeY: 25
+  }
+);
+
+GRAPHS.set(
+  GRAPH_WALL,
+  {
+    location: 'imgs/monsters/wall.png',
+    name: 'enemy_wall',
+    type: GRAPH_TYPE_SINGLE
   }
 );
 
