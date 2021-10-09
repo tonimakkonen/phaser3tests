@@ -1,11 +1,20 @@
 
 "use strict";
 
-// Current player progress
-// TODO: Add level
+// TODO:
+
+var playerProgressSave = {
+  skills: [],
+  spellBooks: 0,
+  level: 0,
+  started: false
+}
+
 var playerProgress = {
   skills: [],
-  spellBooks: 0
+  spellBooks: 0,
+  level: 0,
+  started: false
 }
 
 var playerStats = playerStatsZero();
@@ -73,25 +82,48 @@ function playerStatsUpdate() {
   }
 }
 
+// Set up for random level
 function playerStatsSetForRandomLevel() {
+  console.log('Setting player progress for random level');
   playerProgress.skills = [];
   playerProgress.spellBooks = 10;
+  playerStatsUpdate();
 }
 
+// Set up for trying a level from the ditor
 function playerStatsSetForTesting() {
+  console.log('Setting player progress for testing');
   playerProgress.skills = [];
   playerProgress.spellBooks = 999;
+  playerStatsUpdate();
 }
 
-// Reset player stats when e.g. dying
+// When e.g. restaring a level
 function playerStatsReset() {
-
+  console.log('Setting current player progress');
+  playerProgress = JSON.parse(JSON.stringify(playerProgressSave));
+  playerStatsUpdate();
 }
 
-// Set random player stats (used for testing basically)
-function playerStatsSetRandom() {
+// Full save
+function playerStatsFullReset() {
+  console.log('Full reset for player progress');
+  playerProgressSave = {
+    skills: [],
+    spellBooks: 0,
+    level: 0
+  }
+  playerStatsUpdate();
 }
 
+// When completing a level
+function playerStatsSave() {
+  console.log('Saving player progress to local storage');
+  playerProgressSave = JSON.parse(JSON.stringify(playerProgress));
+  storageSavePlayerProgress();
+}
+
+// Get some initial spell when starting the game
 function playerStatsGetInitialSpell() {
   // TODO
   return null;

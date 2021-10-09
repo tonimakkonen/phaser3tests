@@ -14,6 +14,7 @@ function stateStartPlay(game) {
   // TODO: Move to player logic
   playerHealth = 100.0;
   playerMana = 100.0;
+  playerStatsReset();
 
   playInitMap(game);
   uiCreate(game);
@@ -94,10 +95,11 @@ function stateHandlePlay(game) {
     if (inputLeftClick) {
       if (game.input.mousePointer.x < settingWidth * 0.5) {
         // retry level
+        if (gameModePlayingCampaign) playerStatsReset();
         playDestroyPhaserObjects(game);
         stateStartPlay(game);
       } else {
-        // Back to other thing
+        // Back to whereever we were before this
         playDestroyPhaserObjects(game);
         return gameModeLast;
       }
