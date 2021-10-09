@@ -17,7 +17,8 @@ LEVELS.set(
   }
 );
 
-// We set up level loading here..
+// We load our levels here
+// TODO: Make a check when levels are actually loaded
 
 const getJSON = async url => {
   const response = await fetch(url);

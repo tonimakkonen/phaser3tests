@@ -2,7 +2,8 @@
 "use strict";
 
 const PLAY_STATE_PLAYING  = 1;
-const PLAY_STATE_FINISHED = 2; // Dead or finished level
+const PLAY_STATE_DEAD     = 2;
+const PLAY_STATE_FINISHED = 3;
 
 var playState = null;
 
@@ -14,7 +15,7 @@ function stateStartPlay(game) {
   // TODO: Move to player logic
   playerHealth = 100.0;
   playerMana = 100.0;
-  playerStatsReset();
+  if (gameModePlayingCampaign) playerStatsReset();
 
   playInitMap(game);
   uiCreate(game);
@@ -55,6 +56,7 @@ function playEnterExit(game, exit) {
   player = null;
   // Move to finished state
   playState = PLAY_STATE_FINISHED;
+  // Set up menu for next level
   playMenuSetupComplete(game);
 }
 
@@ -85,17 +87,21 @@ function stateHandlePlay(game) {
   if (playState == PLAY_STATE_PLAYING) {
 
     if (playerHealth <= 0.0 ) {
-        playState = PLAY_STATE_FINISHED;
+        playState = PLAY_STATE_DEAD;
         playMenuSetupDead(game);
     }
-  } else if (playState == PLAY_STATE_FINISHED) {
+  } else if (playState == PLAY_STATE_FINISHED || playState == PLAY_STATE_DEAD) {
 
-    // && game.input.mousePointer.y > 600 + 40.0 &&  game.input.mousePointer.y < 600.0 - 40.0
-
-    if (inputLeftClick) {
+    if (inputLeftClick && game.input.mousePointer.y > 600 - 40.0 &&  game.input.mousePointer.y < 600.0 + 40.0) {
       if (game.input.mousePointer.x < settingWidth * 0.5) {
-        // retry level
-        if (gameModePlayingCampaign) playerStatsReset();
+        if (playState == PLAY_STATE_FINISHED && gameModePlayingCampaign) {
+          playerProgress.level += 1;
+          playerStatsSave();
+          mapBlueprint = LEVELS.get(playerProgressSave.level).mapBlueprint;
+        } else {
+          if (gameModePlayingCampaign) playerStatsReset();
+        }
+        // Destroy everythign and restart
         playDestroyPhaserObjects(game);
         stateStartPlay(game);
       } else {
@@ -105,6 +111,8 @@ function stateHandlePlay(game) {
       }
     }
 
+  } else {
+    throw 'Unkown play state';
   }
 
   return GAME_MODE_PLAYING;
