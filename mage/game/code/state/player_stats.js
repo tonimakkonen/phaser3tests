@@ -1,6 +1,8 @@
 
 "use strict";
 
+// Current player progress
+// TODO: Add level
 var playerProgress = {
   skills: [],
   spellBooks: 0
@@ -69,6 +71,11 @@ function playerStatsUpdate() {
       playerStats.jumpText += '\n+' + skill.jump +' - ' + skill.name;
     }
   }
+}
+
+function playerStatsSetForRandomLevel() {
+  playerProgress.skills = [];
+  playerProgress.spellBooks = 10;
 }
 
 // Reset player stats when e.g. dying

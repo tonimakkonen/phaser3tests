@@ -60,26 +60,32 @@ function mmPushButton(game, option) {
   // TODO: Refactor a bit
   if (option == 0) {
     mapBlueprint = mapCreateDummy(3, 1); // size, difficulty
+    playerStatsSetForRandomLevel();
     mmDestroy(game);
     return GAME_MODE_PLAYING;
   } else if(option == 1) {
     mapBlueprint = mapCreateDummy(5, 2); // size, difficulty
+    playerStatsSetForRandomLevel();
     mmDestroy(game);
     return GAME_MODE_PLAYING;
   } else if (option == 2) {
     mapBlueprint = mapCreateDummy(10, 1.5); // size, difficulty
+    playerStatsSetForRandomLevel();
     mmDestroy(game);
     return GAME_MODE_PLAYING;
   } else if (option == 3) {
     mapBlueprint = { ...testMapDescent };
+    playerStatsSetForRandomLevel();
     mmDestroy(game);
     return GAME_MODE_PLAYING;
   } else if (option == 4) {
     mapBlueprint = { ...testMapWinterMaze };
+    playerStatsSetForRandomLevel();
     mmDestroy(game);
     return GAME_MODE_PLAYING;
   } else if (option == 5) {
     mapBlueprint = { ...testMapForest };
+    playerStatsSetForRandomLevel();
     mmDestroy(game);
     return GAME_MODE_PLAYING;
   } else if (option == 6) {
