@@ -134,11 +134,11 @@ function uiShowSpellSelection(game) {
 
   uiAddStatText(game, uiOptions.statX, uiOptions.statY + 120, 'Air def: ' + playerStats.airDef, playerStats.airDefText, uiTabObjects);
   uiAddStatText(game, uiOptions.statX, uiOptions.statY + 160, 'Water def: ' + playerStats.waterDef, playerStats.waterDefText, uiTabObjects);
-  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 180, 'Fire def: ' + playerStats.fireDef, playerStats.fireDefText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 200, 'Fire def: ' + playerStats.fireDef, playerStats.fireDefText, uiTabObjects);
   uiAddStatText(game, uiOptions.statX, uiOptions.statY + 240, 'Earth def: ' + playerStats.earthDef, playerStats.earthDefText, uiTabObjects);
 
-  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 300, 'Speed ' + playerStats.speed, playerStats.speedText, uiTabObjects);
-  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 340, 'Jump ' + playerStats.jump, playerStats.jumpText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 320, 'Speed ' + playerStats.speed, playerStats.speedText, uiTabObjects);
+  uiAddStatText(game, uiOptions.statX, uiOptions.statY + 360, 'Jump ' + playerStats.jump, playerStats.jumpText, uiTabObjects);
 
   // Create skills that can be learned
   const text = game.add.text(uiOptions.skillX, uiOptions.skillY, 'Learnable skills');
