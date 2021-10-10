@@ -6,7 +6,7 @@
 ///////////////////////
 
 // Used for local storage. Update this with big changes to storage.
-const VERSION = '2021_09_13';
+const VERSION = '2021_10_09';
 
 // Typical HD (720p) resolution. Should work on most devices
 const settingWidth = 1280;
@@ -724,7 +724,8 @@ DECORATIONS.set(
   DECORATION_TREE5,
   {
     graph: GRAPH_TREE5_DECORATION,
-    z: -0.025
+    z: -0.025,
+    moveY: -40
   }
 )
 DECORATIONS.set(
