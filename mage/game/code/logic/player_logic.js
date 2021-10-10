@@ -97,6 +97,13 @@ function playerHandleLogic(game, curTime) {
   if (playerStats.manaRegen != 0) playerUpdateMana(game, playerStats.manaRegen * dt / 1000.0);
   if (playerStats.healthRegen != 0) playerUpdateHealth(game, playerStats.healthRegen * dt / 1000.0);
   playerLastRegen = game.time.now;
+
+  // Falling to death
+  if (player != null) {
+    if (player.y >= mapBlueprint.y * 80.0 - 40.0) {
+      playerUpdateHealth(game, -1000);
+    }
+  }
 }
 
 // Choose a spell if is different than the last one

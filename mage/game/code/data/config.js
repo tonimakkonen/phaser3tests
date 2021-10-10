@@ -506,6 +506,7 @@ const LAYER_SNOW      = 4;
 const LAYER_VOID      = 5;
 const LAYER_INVISIBLE = 6;
 const LAYER_SAND      = 7;
+const LAYER_SNOWCAVE  = 8;
 
 var LAYERS = new Map();
 
@@ -590,6 +591,18 @@ LAYERS.set(
     zInternal: -0.2,
     zBlock: -0.2,
     zTop: 2.1
+  }
+);
+
+LAYERS.set(
+  LAYER_SNOWCAVE,
+  {
+    type: LAYER_TYPE_SYMMETRIC,
+    name: 'snowcave',
+    locationBase: 'imgs/ground/snowcave',
+    block: false,
+    zInternal: -0.5,
+    zBlock: -0.5
   }
 );
 

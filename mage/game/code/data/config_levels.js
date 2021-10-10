@@ -6,6 +6,7 @@ var LEVELS = new Map();
 LEVELS.set(
   0,
   {
+    name: 'Intro',
     location: 'maps/level0.json'
   }
 );
@@ -35,6 +36,27 @@ LEVELS.set(
   4,
   {
     location: 'maps/level4.json'
+  }
+);
+
+LEVELS.set(
+  5,
+  {
+    location: 'maps/level5.json'
+  }
+);
+
+LEVELS.set(
+  6,
+  {
+    location: 'maps/level6.json'
+  }
+);
+
+LEVELS.set(
+  7,
+  {
+    location: 'maps/level7.json'
   }
 );
 

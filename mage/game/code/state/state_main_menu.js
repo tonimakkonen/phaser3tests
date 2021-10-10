@@ -10,7 +10,7 @@ function stateStartMainMenu(game) {
   mmBg = game.add.image(settingWidth/2, settingHeight/2, 'bg_night');
 
   if (!playerProgressSave.started) mmAddNewText(game, 'Start new game');
-  else mmAddNewText(game, 'Continue game');
+  else mmAddNewText(game, 'Continue game (level ' + playerProgressSave.level + ')');
   mmAddNewText(game, 'Editor');
   if (playerProgressSave.started) mmAddNewText(game, 'Reset progress')
 }
