@@ -8,8 +8,6 @@ function mapHandleDecoration(game, deco, px, py, list) {
   if (!graph) throw 'Unkown graph for decoration: ' + deco.graph;
   const cx = (px + 0.5) * 80.0;
   var cy = (py + 0.5) * 80.0;
-  console.log(deco);
-  console.log(deco.moveY);
   if (deco.moveY) cy += deco.moveY;
 
   const im = game.add.image(cx, cy, graph.name);
