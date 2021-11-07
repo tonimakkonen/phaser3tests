@@ -169,7 +169,7 @@ SPELLS.set(
     name: 'Meteors',
     posX: 1.5,
     posY: -1.5,
-    image: 'spell_dummy',
+    image: 'spell_meteor',
     type: MAGIC_TYPE_FIRE,
     effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_METEOR, reload: 400, time: 5000},
     cost: 90,

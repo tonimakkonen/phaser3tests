@@ -60,6 +60,21 @@ LEVELS.set(
   }
 );
 
+LEVELS.set(
+  8,
+  {
+    location: 'maps/level8.json'
+  }
+);
+
+LEVELS.set(
+  9,
+  {
+    location: 'maps/level9.json'
+  }
+);
+
+
 // We load our levels here
 // TODO: Make a check when levels are actually loaded
 
