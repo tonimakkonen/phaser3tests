@@ -64,6 +64,7 @@ function resLoadResources(game) {
   game.load.image('spell_summon_stick', 'imgs/spells/spell_summon_stick.png');
 
   game.load.image('spell_rain', 'imgs/spells/spell_rain.png');
+  game.load.image('spell_meteor', 'imgs/spells/spell_meteor.png');
   game.load.image('spell_poison', 'imgs/spells/spell_poison.png');
 
   // Sound
