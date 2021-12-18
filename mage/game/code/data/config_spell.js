@@ -181,13 +181,13 @@ SPELLS.set(
 SPELLS.set(
   SPELL_VOLCANO,
   {
-    name: 'Volcano (TODO)',
+    name: 'Volcano',
     posX: 1.5,
     posY: 1.5,
-    image: 'spell_dummy',
-    type: MAGIC_TYPE_WATER,
-    effect: {type: EFFECT_TYPE_SKY, range: 800, shoot: SHOT_WATER, reload: 15, time: 5000},
-    cost: 90,
+    image: 'spell_volcano',
+    shoot: SHOT_METEOR,
+    type: MAGIC_TYPE_EARTH,
+    cost: 50,
     reload: 1500
   }
 )
