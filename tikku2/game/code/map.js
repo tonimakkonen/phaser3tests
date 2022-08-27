@@ -2,7 +2,8 @@
 "use strict"
 
 function mapCreate(game) {
-  for (var i = 0; i < 1600/40; i++) {
+  // TODO: 
+  for (var i = 0; i < 1200/40; i++) {
       groupBlocks.create(i*40 + 20, 800-20, 'tile')
   }
 

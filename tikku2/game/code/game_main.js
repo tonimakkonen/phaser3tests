@@ -4,8 +4,8 @@
 // Phaser3 game config
 var config = {
   type: Phaser.AUTO,
-  width: 1600,
-  height: 800,
+  width: CONFIG_WIDTH,
+  height: CONFIG_HEIGHT,
   parent: 'gamediv',
   physics: {
     default: 'arcade',
@@ -22,8 +22,8 @@ var config = {
     mode: Phaser.Scale.NONE,
     autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
     parent: 'gamediv',
-    width: 1600,
-    height: 800
+    width: CONFIG_WIDTH,
+    height: CONFIG_HEIGHT
   },
 };
 

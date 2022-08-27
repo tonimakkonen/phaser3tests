@@ -1,6 +1,9 @@
 
 "use strict";
 
+const CONFIG_WIDTH = 1200;
+const CONFIG_HEIGHT = 800;
+
 const GAME_STATE_MAIN_MENU = 1
 const GAME_STATE_BLUE_BUY = 2
 const GAME_STATE_RED_BUY = 3
