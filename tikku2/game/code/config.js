@@ -30,6 +30,7 @@ const UNIT_BUG_BASE = 2
 const UNIT_ALIEN_BASE = 3
 const UNIT_SOLDIER = 4
 const UNIT_BUG = 5
+const UNIT_ALIEN = 6
 
 ///////////
 // RACES //
@@ -87,17 +88,17 @@ var configUnits = new Map();
 configUnits.set(
   UNIT_HUMAN_BASE,
   {
-    graph: 'base', // TODO
+    graph: 'human_base',
     base: true,
     building: true,
     width: 80,
     health: 30,
     spawn: {
       unit: UNIT_SOLDIER,
-      time: 300
+      time: 5000
     }
   }
-);
+)
 
 configUnits.set(
   UNIT_BUG_BASE,
@@ -109,10 +110,10 @@ configUnits.set(
     health: 30,
     spawn: {
       unit: UNIT_BUG,
-      time: 100
+      time: 3000
     }
   }
-);
+)
 
 configUnits.set(
   UNIT_ALIEN_BASE,
@@ -123,11 +124,11 @@ configUnits.set(
     width: 80,
     health: 30,
     spawn: {
-      unit: UNIT_BUG,
-      time: 3000
+      unit: UNIT_ALIEN,
+      time: 9000
     }
   }
-);
+)
 
 configUnits.set(
   UNIT_SOLDIER,
@@ -149,7 +150,7 @@ configUnits.set(
         time: 900
     }
   }
-);
+)
 
 configUnits.set(
   UNIT_BUG,
@@ -169,6 +170,22 @@ configUnits.set(
         amax: 45,
         speed: 100,
         time: 500
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_ALIEN,
+  {
+    graph: 'alien',
+    health: 9,
+    velocity: 30,
+    shoot: {
+        type: SHOT_LASER,
+        amin: 5,
+        amax: 45,
+        speed: 350,
+        time: 700
     }
   }
 );
