@@ -30,6 +30,7 @@ function unitCreate(type, xpos, ypos, player, game)
     newUnit.x_health = props.health;
     newUnit.x_lastShot = game.time.now;
     newUnit.x_lastJump = game.time.now;
+    newUnit.x_lastSpawn = game.time.now;
     newUnit.x_props = props;
     if (props.building) {
         newUnit.setImmovable(true);
@@ -48,13 +49,18 @@ function unitAi(unit, game) {
   var props = unit.x_props;
 
   // handle movement and jumps only every 5 th tick so that it's less random
-  unit.setVelocityX(toEnemy*props.velocity);
+  if (props.velocity) unit.setVelocityX(toEnemy*props.velocity);
 
-  unitHandleJump(unit, game);
-  unitHandleShot(unit, game);
+  unitHandleJump(unit, game)
+  unitHandleShot(unit, game)
+  unitHandleSpawn(unit, game)
+
+  // kill units off map
+  if (unit.x < 0 || unit.x > CONFIG_WIDTH) unit.destroy()
 }
 
 function unitHandleJump(unit, game) {
+  if (unit.x_alreadyDead) return
   var p = unit.x_props
   if (p.jump) {
     if (p.jump.feetOnGround && unit.body.touching.down || !p.jump.feetOnGround) {
@@ -69,8 +75,9 @@ function unitHandleJump(unit, game) {
 }
 
 function unitHandleShot(unit, game) {
-  var toEnemy = unit.x_player == PLAYER_BLUE ? 1 : -1;
-  var props = unit.x_props;
+  if (unit.x_alreadyDead) return
+  var toEnemy = unit.x_player == PLAYER_BLUE ? 1 : -1
+  var props = unit.x_props
   if (props.shoot) {
     var shoot = props.shoot;
     if (game.time.now > unit.x_lastShot + shoot.time) {
@@ -79,9 +86,22 @@ function unitHandleShot(unit, game) {
       var a = Math.PI * (shoot.amin + Math.random()*(shoot.amax - shoot.amin))/180.0
       var vx = toEnemy * Math.cos(a) * vel
       var vy = -Math.sin(a) * vel
-      shotCreate(shoot.type, unit.x, unit.y, vx + unit.body.velocity.x, vy + unit.body.velocity.y, unit.x_player, game)
+      shotCreate(shoot.type, unit.x, unit.y, vx, vy, unit.x_player, game)
     }
   }
+}
+
+function unitHandleSpawn(unit, game) {
+  if (unit.x_alreadyDead) return
+  var props = unit.x_props
+  var spawn = props.spawn
+  if (spawn) {
+    if (game.time.now > unit.x_lastSpawn + spawn.time) {
+      unit.x_lastSpawn = game.time.now
+      unitCreate(spawn.unit, unit.x, unit.y, unit.x_player, game)
+    }
+  }
+
 }
 
 function unitHit(unit, shot, game) {

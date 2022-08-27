@@ -27,22 +27,32 @@ var config = {
   },
 };
 
+// Global variables
+
 var gameSingleton = new Phaser.Game(config);
 
-var gameState = undefined;
+var mouseClick = false
+var mouseDownLast = false
+var mouseX = undefined
+var mouseY = undefined
 
-var blueGold = undefined;
-var redGold = undefined;
-var blueTeam = undefined;
-var redTeam = undefined;
-var blueAi = undefined;
-var redAi = undefined;
+var gameStateLast = undefined
+var gameState = undefined
 
-var groupBlocks;
-var groupBlueUnits;
-var groupRedUnits;
-var groupBlueShots;
-var groupRedShots;
+var blueGold = undefined
+var redGold = undefined
+var blueRace = undefined
+var blueGoldText = undefined
+var redGoldText = undefined
+var redRace = undefined
+var blueAi = undefined
+var redAi = undefined
+
+var groupBlocks
+var groupBlueUnits
+var groupRedUnits
+var groupBlueShots
+var groupRedShots
 
 ////////////////////////
 // Phaser 3 functions //
@@ -76,21 +86,40 @@ function create() {
 
 }
 
+function goldUpdateText(game) {
+  if (!blueGoldText) {
+      blueGoldText = game.add.text(80, CONFIG_HEIGHT - 20, blueGold, { color: '#fff' }).setOrigin(0.5, 0.5)
+  } else {
+    blueGoldText.setText(blueGold)
+  }
+  if (!redGoldText) {
+    redGoldText = game.add.text(CONFIG_WIDTH - 80, CONFIG_HEIGHT - 20, blueGold, { color: '#fff' }).setOrigin(0.5, 0.5)
+  } else {
+    redGoldText.setText(redGold)
+  }
+}
+
 function update() {
 
+  // handle mouse logic (wtf does phaser3 does not have this..)
+  mouseClick = false;
+  if (this.input.mousePointer.isDown && ! mouseDownLast) mouseClick = true
+  mouseDownLast = this.input.mousePointer.isDown
+  mouseX = this.input.mousePointer.x
+  mouseY = this.input.mousePointer.y
+
+  // Handle game state changes
   if (!gameState) {
     gameState = GAME_STATE_MAIN_MENU
-    modeMainMenuStart(this)
+    stateMainMenuStart(this)
   } else if (gameState == GAME_STATE_MAIN_MENU) {
-    modeMainMenuUpdate(this)
+    stateMainMenuUpdate(this)
+  } else if (gameState == GAME_STATE_COMBAT) {
+    stateCombatUpdate(this)
   } else {
     throw "Unkown game state: " + gameState
   }
 
-
-  // Run unit AI
-  groupBlueUnits.children.each(function(unit) { unitAi(unit, this) }, this)
-  groupRedUnits.children.each(function(unit) { unitAi(unit, this) }, this)
 
 }
 

@@ -19,7 +19,6 @@ function shotCreate(type, xpos, ypos, xvel, yvel, player, game) {
       throw "bad shot type: " + type
   }
 
-  console.log(props.graph)
   newShot = group.create(xpos, ypos, props.graph)
   newShot.x_props = props
   newShot.setVelocity(xvel, yvel)
@@ -31,4 +30,9 @@ function shotDestroy(shot, game) {
   if (shot.x_alreadyDead) return
   shot.x_alreadyDead = true;
   shot.destroy()
+}
+
+function shotAi(shot, game) {
+  if (shot.x_alreadyDead) return
+  if (shot.x < 0 || shot.x > CONFIG_WIDTH) shot.destroy()
 }
