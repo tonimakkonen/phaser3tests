@@ -91,10 +91,10 @@ configUnits.set(
     base: true,
     building: true,
     width: 80,
-    health: 300,
+    health: 30,
     spawn: {
       unit: UNIT_SOLDIER,
-      time: 6000
+      time: 300
     }
   }
 );
@@ -106,10 +106,10 @@ configUnits.set(
     base: true,
     building: true,
     width: 80,
-    health: 300,
+    health: 30,
     spawn: {
       unit: UNIT_BUG,
-      time: 4000
+      time: 100
     }
   }
 );
@@ -121,7 +121,7 @@ configUnits.set(
     base: true,
     building: true,
     width: 80,
-    health: 300,
+    health: 30,
     spawn: {
       unit: UNIT_BUG,
       time: 3000

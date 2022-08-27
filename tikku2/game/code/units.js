@@ -34,9 +34,9 @@ function unitCreate(type, xpos, ypos, player, game)
     newUnit.x_props = props;
     if (props.building) {
         newUnit.setImmovable(true);
-        newUnit.x_health_bar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00);
-        newUnit.x_health_bar.alpha = 0.25;
-        newUnit.x_health_bar.setDepth(1);
+        newUnit.x_healthBar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00);
+        newUnit.x_healthBar.alpha = 0.25;
+        newUnit.x_healthBar.setDepth(1);
     } else {
           newUnit.setGravity(0, 300);
           newUnit.setBounce(0.2);
@@ -105,14 +105,30 @@ function unitHandleSpawn(unit, game) {
 }
 
 function unitHit(unit, shot, game) {
+  if (unit.x_alreadyDead) return
+
   unit.x_health -= shot.x_props.damage
-  if (unit.x_health <= 0) {
-    unitDestroy(unit, game)
+
+  if (unit.x_healthBar) {
+    var fraction = unit.x_health / unit.x_props.health;
+    var newWidth = unit.x_props.width * 0.75 * fraction;
+    if (fraction >= 0.5) {
+        unit.x_healthBar.setFillStyle('0x00ff00');
+    } else if (fraction < 0.5 && fraction >= 0.25) {
+        unit.x_healthBar.setFillStyle('0xffff00');
+    } else {
+        unit.x_healthBar.setFillStyle('0xff0000');
+    }
+    unit.x_healthBar.setSize(newWidth, 2);
   }
+
+  if (unit.x_health <= 0) unitDestroy(unit, game)
 }
 
 function unitDestroy(unit, game) {
   if (unit.x_alreadyDead) return
   unit.x_alreadyDead = true
+  if (unit.x_healthBar) unit.x_healthBar.destroy()
+  unit.x_healthBar = undefined
   unit.destroy()
 }

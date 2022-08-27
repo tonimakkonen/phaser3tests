@@ -46,7 +46,7 @@ function buttonAddListButton(x, y, width, height, text, func, selected, list, ga
     list: list,
     func: (button) => {
       buttonClearListButtonSelection(button.list)
-      button.rect.fillColor = buttonSelectecColor
+      button.rect.setFillStyle(buttonSelectecColor)
       func()
     }
   }
@@ -56,7 +56,7 @@ function buttonAddListButton(x, y, width, height, text, func, selected, list, ga
 
 function buttonClearListButtonSelection(list) {
   for (const button of list) {
-    button.rect.setFillStyle(0x44bbcc)
+    button.rect.setFillStyle(buttonColor)
   }
 }
 
