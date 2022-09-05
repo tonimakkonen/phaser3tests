@@ -17,5 +17,5 @@ const AI_PLAYER = 1
 const AI_NORMAL = 2
 const AI_DIFFICULT = 3
 
-const CONFIG_COMBAT_LEN = 10
-const CONFIG_MAX_SPAWN = 5
+const CONFIG_COMBAT_LEN = 40
+const CONFIG_MAX_SPAWN = 30

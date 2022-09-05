@@ -16,6 +16,8 @@ var mmRedSelectAi = []
 
 function stateMainMenuStart(game) {
 
+  goldUpdateText(game)
+
   mmBlueSelectRace = []
   mmBlueSelectAi = []
   mmRedSelectRace = []

@@ -34,6 +34,9 @@ function stateCombatUpdate(game) {
 }
 
 function stateCombatStart(game) {
+
+  goldUpdateText(game)
+
   combatStart = game.time.now
   combatText = game.add.text(CONFIG_WIDTH*0.5, CONFIG_HEIGHT - CONFIG_BLOCK*0.5, "-", {'color': '#FFFFFF'})
   combatText.setOrigin(0.5, 0.5)

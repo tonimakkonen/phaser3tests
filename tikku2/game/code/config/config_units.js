@@ -39,7 +39,7 @@ configUnits.set(
     health: 30,
     spawn: {
       unit: UNIT_BUG,
-      time: 2500
+      time: 500
     }
   }
 )

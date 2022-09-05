@@ -3,19 +3,24 @@
 
 const buttonSelectecColor = 0x8888ff
 const buttonColor = 0x44bbcc
+const buttonDisabledColor = 0x555555
 
 function buttonLogic(buttonList) {
   for (const button of buttonList) {
     if (mouseClick && mouseX >= button.x0 && mouseX <= button.x1 && mouseY >= button.y0 && mouseY <= button.y1) {
-      button.func(button) // just execute the base logic in button
+      button.func(button)
+      return // only allow one button execution
     }
   }
 }
 
 function buttonAddClickButton(x, y, width, height, text, image, func, game) {
   var rect = game.add.rectangle(x, y, width, height, buttonColor);
-  var text = game.add.text(x, y, text, {'color': '#000000'})
-  text.setOrigin(0.5, 0.5)
+  if (text) {
+    var text = game.add.text(x, y, text, {'color': '#000000'})
+    text.setOrigin(0.5, 0.5)
+  }
+
   if (image) {
     image = game.add.sprite(x, y, image)
   }
@@ -34,13 +39,32 @@ function buttonAddClickButton(x, y, width, height, text, image, func, game) {
   return nb
 }
 
-function buttonImLeft(image) {
+function buttonAddGridButton(x, y, width, height, func, game) {
+  var rect = game.add.rectangle(x, y, width, height);
+  rect.setFillStyle()
+  rect.setStrokeStyle(2,buttonColor)
+  var nb = {
+    x: x,
+    y: y,
+    x0: x - width/2,
+    x1: x + width/2,
+    y0: y - height/2,
+    y1: y + height/2,
+    rect: rect,
+    text: undefined,
+    image: undefined,
+    grid: true,
+    func: func
+  }
+  return nb
 }
 
 function buttonAddListButton(x, y, width, height, text, image, func, selected, list, game) {
   var rect = game.add.rectangle(x, y, width, height, selected ? buttonSelectecColor : buttonColor);
-  var text = game.add.text(x, y, text, {'color': '#000000'})
-  text.setOrigin(0.5, 0.5)
+  if(text) {
+    var text = game.add.text(x, y, text, {'color': '#000000'})
+    text.setOrigin(0.5, 0.5)
+  }
   if (image) {
     image = game.add.sprite(x - width * 0.5 + height*0.5 + 5, y, image)
   }
@@ -58,7 +82,7 @@ function buttonAddListButton(x, y, width, height, text, image, func, selected, l
     func: (button) => {
       buttonClearListButtonSelection(button.list)
       button.rect.setFillStyle(buttonSelectecColor)
-      func()
+      func(button)
     }
   }
   list.push(nb)
@@ -79,5 +103,16 @@ function buttonDestroy(button) {
 }
 
 function buttonDestroyList(list) {
-  for (const button of list) buttonDestroy(button)
+  for (const button of list) {
+    buttonDestroy(button)
+  }
+}
+
+function buttonSetColor(button, color) {
+  if (button.grid) button.rect.setStrokeStyle(2, color)
+  else button.rect.setFillStyle(color)
+}
+
+function buttonSetColorList(list, color) {
+  for (const button of list) buttonSetColor(button, color)
 }

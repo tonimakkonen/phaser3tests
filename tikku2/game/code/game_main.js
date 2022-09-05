@@ -60,7 +60,6 @@ var groupRedShots
 
 function preload() {
   resLoadResources(this);
-
 }
 
 function create() {
@@ -87,15 +86,22 @@ function create() {
 }
 
 function goldUpdateText(game) {
-  if (!blueGoldText) {
-      blueGoldText = game.add.text(80, CONFIG_HEIGHT - 20, blueGold, { color: '#fff' }).setOrigin(0.5, 0.5)
+  const ty = CONFIG_HEIGHT - CONFIG_BLOCK / 2.0
+  const tx = CONFIG_WIDTH*0.08
+  const bgt = "Resources : " + blueGold
+  const rgt = "Resources : " + redGold
+  if (!blueGoldText) blueGoldText = game.add.text(tx, ty, bgt, { color: '#ffffff' })
+  else blueGoldText.setText(bgt)
+  if (!redGoldText) redGoldText = game.add.text(CONFIG_WIDTH - tx, ty, rgt, { color: '#ffffff' })
+  else redGoldText.setText(rgt)
+  blueGoldText.setOrigin(0.5, 0.5)
+  redGoldText.setOrigin(0.5, 0.5)
+  if (gameState == GAME_STATE_BUY || gameState == GAME_STATE_COMBAT) {
+    redGoldText.setVisible(true)
+    blueGoldText.setVisible(true)
   } else {
-    blueGoldText.setText(blueGold)
-  }
-  if (!redGoldText) {
-    redGoldText = game.add.text(CONFIG_WIDTH - 80, CONFIG_HEIGHT - 20, blueGold, { color: '#fff' }).setOrigin(0.5, 0.5)
-  } else {
-    redGoldText.setText(redGold)
+    redGoldText.setVisible(false)
+    blueGoldText.setVisible(false)
   }
 }
 
