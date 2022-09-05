@@ -1,12 +1,15 @@
 
 "use strict";
 
+
 const UNIT_HUMAN_BASE = 1
 const UNIT_BUG_BASE = 2
 const UNIT_ALIEN_BASE = 3
 const UNIT_SOLDIER = 4
 const UNIT_BUG = 5
 const UNIT_ALIEN = 6
+
+const UNIT_DUMMY = 100;
 
 ///////////
 // UNITS //
@@ -15,9 +18,20 @@ const UNIT_ALIEN = 6
 var configUnits = new Map();
 
 configUnits.set(
+  UNIT_DUMMY,
+  {
+    graph: 'wall',
+    building: true,
+    width: 40,
+    health: 50,
+  }
+)
+
+configUnits.set(
   UNIT_HUMAN_BASE,
   {
     graph: 'human_base',
+    name: 'Human base',
     base: true,
     building: true,
     width: 80,
@@ -33,6 +47,7 @@ configUnits.set(
   UNIT_BUG_BASE,
   {
     graph: 'bug_base',
+    name: 'Bug base',
     base: true,
     building: true,
     width: 80,
@@ -48,6 +63,7 @@ configUnits.set(
   UNIT_ALIEN_BASE,
   {
     graph: 'alien_base',
+    name: 'Alien base',
     base: true,
     building: true,
     width: 80,

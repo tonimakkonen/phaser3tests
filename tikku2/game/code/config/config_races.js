@@ -10,18 +10,27 @@ var configRaces = new Map();
 configRaces.set(
   RACE_HUMAN,
   {
-    base: UNIT_HUMAN_BASE
+    base: UNIT_HUMAN_BASE,
+    build: [
+      UNIT_DUMMY
+    ]
   }
 )
 configRaces.set(
   RACE_BUG,
   {
-    base: UNIT_BUG_BASE
+    base: UNIT_BUG_BASE,
+    build: [
+      UNIT_DUMMY
+    ]
   }
 )
 configRaces.set(
   RACE_ALIEN,
   {
-    base: UNIT_ALIEN_BASE
+    base: UNIT_ALIEN_BASE,
+    build: [
+      UNIT_DUMMY
+    ]
   }
 )

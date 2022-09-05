@@ -112,8 +112,8 @@ function mmSetupGame(game) {
   const baseY = CONFIG_HEIGHT - CONFIG_BLOCK * 3
   const baseBlueX = CONFIG_BLOCK
   const baseRedX = CONFIG_WIDTH - baseBlueX
-  unitCreate(br.base, baseBlueX, baseY, PLAYER_BLUE, undefined, game)
-  unitCreate(rr.base, baseRedX, baseY, PLAYER_RED, undefined, game)
+  blueBase = unitCreate(br.base, baseBlueX, baseY, PLAYER_BLUE, undefined, game)
+  redBase = unitCreate(rr.base, baseRedX, baseY, PLAYER_RED, undefined, game)
 
   // Set up resources
   // TODO: For easy debugging now

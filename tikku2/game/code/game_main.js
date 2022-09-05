@@ -47,6 +47,8 @@ var redGoldText = undefined
 var redRace = undefined
 var blueAi = undefined
 var redAi = undefined
+var blueBase = undefined
+var redBase = undefined
 
 var groupBlocks
 var groupBlueUnits
