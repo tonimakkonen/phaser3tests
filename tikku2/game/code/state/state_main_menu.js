@@ -117,7 +117,7 @@ function mmSetupGame(game) {
 
   // Set up resources
   // TODO: For easy debugging now
-  blueGold = 9000
-  redGold = 9000
+  blueGold = 900
+  redGold = 900
   goldUpdateText(game)
 }

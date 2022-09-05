@@ -4,6 +4,7 @@
 var buyPlayer = undefined
 var buyFirstButtons = []
 var buySelectionButtons = []
+var buySelectionDisabledButtons = []
 var buySelectionUi = []
 var buyInSelection = false
 
@@ -85,7 +86,8 @@ function buyPressBaseButton(button, base, game) {
 function buyPressGrid(grid, button, game) {
   buttonSetColorList(buyFirstButtons, buttonDisabledColor)
   buttonSetColor(button, buttonSelectecColor)
-  buyCreateSelectionButtons(grid, game)
+  if (grid.building) buyCreateBuildingButtons(grid.building, game)
+  else buyCreateBuyButtons(grid, game)
   buyInSelection = true
 }
 
@@ -95,33 +97,96 @@ function buyCreateBuildingButtons(building, game) {
   const p = building.x_props
   const allowSell = !p.base
   // name + health, sell, empty cancel
-  const rows = 3 + allowSell ? 1 : 0
   const cx = CONFIG_WIDTH / 2
   const r0 = 50
   const dy = 40
-  const header = p.name + " [" + Math.floor(building.x_health) + " / " + p.health + "]"
+  const header = p.name + ' [ ' + Math.floor(building.x_health) + ' / ' + p.health + ' ]'
+
   buySelectionUi.push(game.add.text(cx, r0, header, { color: '#ffffff' }).setOrigin(0.5, 0.5))
-  buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy, 200, 30, 'Cancel', undefined, (button) => buyPressCancel(), game))
+  var row = 1
+  if (allowSell) {
+    buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*row, 200, 30, 'Sell', undefined, () => buyPressSell(building), game))
+    row += 1
+  }
+  buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(row + 1), 200, 30, 'Cancel', undefined, () => buyPressCancel(), game))
 }
 
-function buyCreateEmptyButtons(grid, game) {
+function buyCreateBuyButtons(grid, game) {
+  var race
+  if (grid.player == PLAYER_BLUE) {
+    race = blueRace
+  } else if (grid.player == PLAYER_RED) {
+    race = redRace
+  }
+  else throw "Unkown player in grid: " + grid.player
 
+  const rp = configRaces.get(race)
+  if(!rp) throw "Could not find race: " + rp
+
+  const cx = CONFIG_WIDTH / 2
+  const r0 = 50
+  const dy = 40
+
+  const buyList = rp.build
+  for (var i = 0; i < buyList.length; i++) {
+    const unitType = buyList[i]
+    buyHandleCreatingBuySelection(cx, r0 + dy*i, grid, unitType, game)
+  }
+  buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(1 + buyList.length), 200, 30, 'Cancel', undefined, (button) => buyPressCancel(), game))
 }
 
-function buyCreateSelectionButtons(grid, game) {
-  buySelectionButtons.push(
-    buttonAddClickButton(400, 400, 200, 30, 'Cancel', undefined, (button) => buyPressCancel(), game)
-  )
+function buyHandleCreatingBuySelection(x, y, grid, unitType, game) {
+
+  const bp = configUnits.get(unitType)
+  if (!bp) throw "Could not find unit props for: " + unitType
+
+  var gold
+  var graphBase
+  if (grid.player == PLAYER_BLUE) {
+    gold = blueGold
+    graphBase = 'blue_'
+  } else {
+    gold = redGold
+    graphBase = 'red_'
+  }
+
+  if (gold >= bp.cost) {
+    buySelectionButtons.push(
+      buttonAddBuyButton(x, y, 700, 30, bp.cost, bp.help, graphBase + bp.graph, () => buyPressBuy(grid, unitType, game), game)
+    )
+  } else {
+    const b = buttonAddBuyButton(x, y, 700, 30, bp.cost, bp.help, graphBase + bp.graph, () => {}, game)
+    buttonSetColor(b, CONFIG_BUTTON_DISABLED_COLOR)
+    buySelectionDisabledButtons.push(b)
+  }
 }
 
-function buyDestroySelectionButtons() {
-  buttonDestroyList(buySelectionButtons)
-  for (const po of buySelectionUi) po.destroy()
-  buySelectionUi = []
+function buyPressSell(building, game) {
+  unitRelease(building)
+  buyPressCancel()
+}
+
+function buyPressBuy(grid, unitType, game) {
+  const bp = configUnits.get(unitType)
+  if (!bp) throw "Could not find unit props for: " + unitType
+  const player = grid.player
+  const x = (grid.x + 0.5) * CONFIG_BLOCK
+  const y = CONFIG_HEIGHT - (grid.y + 2.5)*CONFIG_BLOCK
+  const newBuilding = unitCreate(unitType, x, y, player, grid, game)
+  grid.building = newBuilding
+  if (player == PLAYER_BLUE) blueGold -= bp.cost
+  else redGold -= bp.cost
+  goldUpdateText(game)
+  buyPressCancel()
 }
 
 function buyPressCancel() {
-  buyDestroySelectionButtons()
-  buyInSelection = false
+  buttonDestroyList(buySelectionButtons)
+  buySelectionButtons = []
+  buttonDestroyList(buySelectionDisabledButtons)
+  buySelectionDisabledButtons = []
+  for (const po of buySelectionUi) po.destroy()
+  buySelectionUi = []
   buttonSetColorList(buyFirstButtons, buttonColor)
+  buyInSelection = false
 }

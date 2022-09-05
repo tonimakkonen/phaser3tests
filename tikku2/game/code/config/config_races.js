@@ -12,7 +12,7 @@ configRaces.set(
   {
     base: UNIT_HUMAN_BASE,
     build: [
-      UNIT_DUMMY
+      UNIT_OUTPOST
     ]
   }
 )
@@ -21,7 +21,7 @@ configRaces.set(
   {
     base: UNIT_BUG_BASE,
     build: [
-      UNIT_DUMMY
+      UNIT_HATCHERY
     ]
   }
 )
@@ -30,7 +30,6 @@ configRaces.set(
   {
     base: UNIT_ALIEN_BASE,
     build: [
-      UNIT_DUMMY
     ]
   }
 )

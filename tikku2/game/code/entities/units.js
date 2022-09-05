@@ -34,13 +34,13 @@ function unitCreate(type, xpos, ypos, player, grid, game)
     if (props.building) {
         newUnit.setImmovable(true);
         newUnit.x_healthBar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00)
-        newUnit.x_healthBar.alpha = 0.25
+        //newUnit.x_healthBar.alpha = 0.25
         newUnit.x_healthBar.setDepth(1)
     } else {
           newUnit.setGravity(0, 300)
           newUnit.setBounce(0.2)
     }
-    newUnit.grid = grid
+    newUnit.x_grid = grid
     return newUnit
 }
 
@@ -144,7 +144,10 @@ function unitRelease(unit) {
   if (unit.x_healthBar) unit.x_healthBar.destroy()
   unit.x_healthBar = undefined
 
-  if (unit.x_grid) unit.x_grid.building = undefined
+  if (unit.x_grid) {
+    console.log(unit.x_grid)
+    unit.x_grid.building = undefined
+  }
 
   unit.destroy()
 }
