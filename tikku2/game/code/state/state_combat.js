@@ -50,6 +50,11 @@ function stateCombatEnd(game) {
   groupRedUnits.children.each((unit) => combatEndTurnForUnit(unit), game)
   groupBlueShots.children.each((shot) => shotRelease(shot), game)
   groupRedShots.children.each((shot) => shotRelease(shot), game)
+
+  blueGold += 200
+  if (blueAi == AI_DIFFICULT) blueGold += 100
+  redGold += 200
+  if (redAi == AI_DIFFICULT) redGold += 100
 }
 
 function combatEndTurnForUnit(unit) {

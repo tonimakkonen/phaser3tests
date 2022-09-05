@@ -105,7 +105,7 @@ function buyCreateBuildingButtons(building, game) {
   buySelectionUi.push(game.add.text(cx, r0, header, { color: '#ffffff' }).setOrigin(0.5, 0.5))
   var row = 1
   if (allowSell) {
-    buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*row, 200, 30, 'Sell', undefined, () => buyPressSell(building), game))
+    buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*row, 200, 30, 'Sell for ' + p.cost/2, undefined, () => buyPressSell(building), game))
     row += 1
   }
   buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(row + 1), 200, 30, 'Cancel', undefined, () => buyPressCancel(), game))
@@ -162,6 +162,10 @@ function buyHandleCreatingBuySelection(x, y, grid, unitType, game) {
 }
 
 function buyPressSell(building, game) {
+  const p = building.x_props
+  if (building.x_player == PLAYER_BLUE) blueGold += p.cost / 2
+  else redGold += p.cost / 2
+  goldUpdateText()
   unitRelease(building)
   buyPressCancel()
 }

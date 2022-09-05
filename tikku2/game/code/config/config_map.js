@@ -8,6 +8,27 @@ var configMap = []
 configMapBase.push({ x: 2, y: 0})
 configMapBase.push({ x: 3, y: 0})
 configMapBase.push({ x: 4, y: 0})
+configMapBase.push({ x: 5, y: 0})
+configMapBase.push({ x: 6, y: 0})
+configMapBase.push({ x: 7, y: 0})
+configMapBase.push({ x: 8, y: 0})
+configMapBase.push({ x: 8, y: 0})
+configMapBase.push({ x: 9, y: 0})
+configMapBase.push({ x: 10, y: 0})
+
+configMapBase.push({ x: 9, y: 2})
+configMapBase.push({ x: 10, y: 2})
+
+configMapBase.push({ x: 0, y: 4})
+configMapBase.push({ x: 1, y: 4})
+configMapBase.push({ x: 2, y: 4})
+configMapBase.push({ x: 3, y: 4})
+configMapBase.push({ x: 4, y: 4})
+
+configMapBase.push({ x: 0, y: 7})
+configMapBase.push({ x: 1, y: 7})
+configMapBase.push({ x: 2, y: 7})
+configMapBase.push({ x: 3, y: 7})
 
 // Make actual mapCreate
 for (const mt of configMapBase) {
