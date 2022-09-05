@@ -46,8 +46,8 @@ function stateCombatEnd(game) {
   combatStart = undefined
   if (combatText) combatText.destroy()
 
-  groupBlueUnits.children.each((unit) => combatEndTurnForUnit(unit), game)
-  groupRedUnits.children.each((unit) => combatEndTurnForUnit(unit), game)
+  groupBlueUnits.children.each((unit) => combatEndTurnForUnit(unit, game), game)
+  groupRedUnits.children.each((unit) => combatEndTurnForUnit(unit, game), game)
   groupBlueShots.children.each((shot) => shotRelease(shot), game)
   groupRedShots.children.each((shot) => shotRelease(shot), game)
 
@@ -57,10 +57,13 @@ function stateCombatEnd(game) {
   if (redAi == AI_DIFFICULT) redGold += 100
 }
 
-function combatEndTurnForUnit(unit) {
-  if (unit.x_props.building) {
+function combatEndTurnForUnit(unit, game) {
+  const p = unit.x_props
+  if (p.building) {
     unit.x_lastSpawn = undefined
     unit.x_lastShot = undefined
+    unit.x_spawnCount = 0
+    if (p.heal) unitUpdateHealth(unit, p.heal, game)
   } else {
     unitRelease(unit)
   }

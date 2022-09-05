@@ -104,6 +104,10 @@ function buyCreateBuildingButtons(building, game) {
 
   buySelectionUi.push(game.add.text(cx, r0, header, { color: '#ffffff' }).setOrigin(0.5, 0.5))
   var row = 1
+  if (p.heal) {
+    buySelectionUi.push(game.add.text(cx, r0 + dy*row, 'Ability: heal ' + p.heal + ' per turn', { color: '#ffffff' }).setOrigin(0.5, 0.5))
+    row += 1
+  }
   if (allowSell) {
     buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*row, 200, 30, 'Sell for ' + p.cost/2, undefined, () => buyPressSell(building), game))
     row += 1

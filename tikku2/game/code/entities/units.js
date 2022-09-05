@@ -1,47 +1,51 @@
 
 "use strict";
 
-function unitCreate(type, xpos, ypos, player, grid, game)
-{
+function unitCreate(type, xpos, ypos, player, grid, game) {
 
-    var group
-    var graphName
-    var newUnit
+  // Do not spaw outside border
+  if (xpos < 0 || xpos > CONFIG_WIDTH ||  ypos > CONFIG_HEIGHT - 2*CONFIG_BLOCK - 5) return
 
-    if (player == PLAYER_BLUE) {
-        group = groupBlueUnits
-        graphName = 'blue_'
-    } else if (player == PLAYER_RED) {
-        group = groupRedUnits
-        graphName = 'red_'
-    } else {
-        throw "Unkown player: " + player
-    }
-    var props = configUnits.get(type);
-    if (props == null) {
-        console.error('Unknown unit type: ' + type)
-        return
-    }
-    graphName += props.graph
-    newUnit = group.create(xpos, ypos, graphName)
-    newUnit.x_player = player
-    newUnit.x_type = type
-    newUnit.x_health = props.health
-    newUnit.x_lastShot = undefined
-    newUnit.x_lastJump = undefined
-    newUnit.x_lastSpawn = undefined
-    newUnit.x_props = props
-    if (props.building) {
-        newUnit.setImmovable(true);
-        newUnit.x_healthBar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00)
-        //newUnit.x_healthBar.alpha = 0.25
-        newUnit.x_healthBar.setDepth(1)
-    } else {
-          newUnit.setGravity(0, 300)
-          newUnit.setBounce(0.2)
-    }
-    newUnit.x_grid = grid
-    return newUnit
+  var group
+  var graphName
+  var newUnit
+
+  if (player == PLAYER_BLUE) {
+    group = groupBlueUnits
+    graphName = 'blue_'
+  } else if (player == PLAYER_RED) {
+    group = groupRedUnits
+    graphName = 'red_'
+  } else {
+    throw "Unkown player: " + player
+  }
+  var props = configUnits.get(type);
+  if (props == null) {
+    console.error('Unknown unit type: ' + type)
+    return
+  }
+  graphName += props.graph
+  newUnit = group.create(xpos, ypos, graphName)
+  newUnit.x_player = player
+  newUnit.x_type = type
+  newUnit.x_health = props.health
+  newUnit.x_lastShot = undefined
+  newUnit.x_lastJump = undefined
+  newUnit.x_lastSpawn = undefined
+  newUnit.x_spawnCount = 0
+  newUnit.x_props = props
+  if (props.building) {
+    newUnit.setImmovable(true)
+    newUnit.x_healthBar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00)
+    newUnit.x_healthBar.setDepth(1)
+  } else if (props.immovable) {
+    newUnit.setImmovable(true)
+  } else {
+        newUnit.setGravity(0, 300)
+        newUnit.setBounce(0.2)
+  }
+  newUnit.x_grid = grid
+  return newUnit
 }
 
 function unitAi(unit, game) {
@@ -63,6 +67,7 @@ function unitHandleJump(unit, game) {
   if (unit.x_alreadyDead) return
   var p = unit.x_props
   if (p.jump) {
+    if (p.jump.below && unit.y < p.jump.below) return
     if (p.jump.feetOnGround && unit.body.touching.down || !p.jump.feetOnGround) {
       if (unit.x_lastJump === undefined || game.time.now > unit.x_lastJump + p.jump.time) {
         unit.x_lastJump = game.time.now
@@ -100,9 +105,20 @@ function unitHandleSpawn(unit, game) {
 
   var spawn = props.spawn
   if (spawn) {
+
+    // Do not spawn if span count exceeded
+    if (spawn.maxTimes && unit.x_spawnCount >= spawn.maxTimes) return
+
     if (unit.x_lastSpawn === undefined || game.time.now > unit.x_lastSpawn + spawn.time) {
       unit.x_lastSpawn = game.time.now
-      unitCreate(spawn.unit, unit.x, unit.y, unit.x_player, undefined, game)
+      unit.x_spawnCount += 1
+      const count = spawn.count ? spawn.count : 1
+      const radius = spawn.radius ? spawn.radius : 0.0
+      for (var i = 0; i < count; i++) {
+        const dx = radius * Math.cos(i*Math.PI*2 / count)
+        const dy = radius * Math.sin(i*Math.PI*2 / count)
+        unitCreate(spawn.unit, unit.x + dx, unit.y + dy, unit.x_player, undefined, game)
+      }
     }
   }
 
@@ -110,9 +126,16 @@ function unitHandleSpawn(unit, game) {
 
 function unitHit(unit, shot, game) {
   if (unit.x_alreadyDead) return
+  unitUpdateHealth(unit, -shot.x_props.damage, game)
+}
 
-  unit.x_health -= shot.x_props.damage
-
+function unitUpdateHealth(unit, amount, game) {
+  unit.x_health += amount
+  if (unit.x_health > unit.x_props.health) unit.x_health = unit.x_props.health
+  if (unit.x_health <= 0) {
+    unitDestroy(unit, game)
+    return
+  }
   if (unit.x_healthBar) {
     var fraction = unit.x_health / unit.x_props.health;
     var newWidth = unit.x_props.width * 0.75 * fraction;
@@ -125,16 +148,30 @@ function unitHit(unit, shot, game) {
     }
     unit.x_healthBar.setSize(newWidth, 2);
   }
-
-  if (unit.x_health <= 0) unitDestroy(unit, game)
 }
 
 function unitDestroy(unit, game) {
-
   if (unit.x_alreadyDead) return
   unit.x_alreadyDead = true
 
-  if (unit.x_props.base) gameLoseFlag = unit.x_player
+  const p = unit.x_props
+
+  // win/lose flag
+  if (p.base) gameLoseFlag = unit.x_player
+
+  // death effects
+  if (p.death) {
+
+    // spawn
+    if (p.death.spawn) {
+      for (var i = 0; i < p.death.spawn.count; i++) {
+        const rx = Math.random()*10.0 - 5.0
+        const ry = Math.random()*10.0 - 5.0
+        unitCreate(p.death.spawn.type, unit.x + rx, unit.y + ry, unit.x_player, undefined, game)
+      }
+    }
+
+  }
 
   unitRelease(unit)
 }
