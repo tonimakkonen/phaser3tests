@@ -36,8 +36,8 @@ var mouseDownLast = false
 var mouseX = undefined
 var mouseY = undefined
 
-var gameStateLast = undefined
 var gameState = undefined
+var gameLoseFlag = undefined
 
 var blueGold = undefined
 var redGold = undefined
@@ -117,6 +117,8 @@ function update() {
     stateBuyUpdate(this)
   } else if (gameState == GAME_STATE_COMBAT) {
     stateCombatUpdate(this)
+  } else if (gameState == GAME_STATE_WIN) {
+    stateWinUpdate(this)
   } else {
     throw "Unkown game state: " + gameState
   }

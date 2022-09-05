@@ -29,6 +29,10 @@ function shotCreate(type, xpos, ypos, xvel, yvel, player, game) {
 function shotDestroy(shot, game) {
   if (shot.x_alreadyDead) return
   shot.x_alreadyDead = true;
+  shotRelease(shot)
+}
+
+function shotRelease(shot) {
   shot.destroy()
 }
 

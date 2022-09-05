@@ -1,47 +1,47 @@
 
 "use strict";
 
-function unitCreate(type, xpos, ypos, player, game)
+function unitCreate(type, xpos, ypos, player, grid, game)
 {
 
-    var group;
-    var graphName;
-    var newUnit;
+    var group
+    var graphName
+    var newUnit
 
     if (player == PLAYER_BLUE) {
-        group = groupBlueUnits;
-        graphName = 'blue_';
+        group = groupBlueUnits
+        graphName = 'blue_'
     } else if (player == PLAYER_RED) {
-        group = groupRedUnits;
-        graphName = 'red_';
+        group = groupRedUnits
+        graphName = 'red_'
     } else {
-        console.error('bad player: ' + player);
-        return;
+        throw "Unkown player: " + player
     }
     var props = configUnits.get(type);
     if (props == null) {
-        console.error('Unknown unit type: ' + type);
-        return;
+        console.error('Unknown unit type: ' + type)
+        return
     }
-    graphName += props.graph;
-    newUnit = group.create(xpos, ypos, graphName);
-    newUnit.x_player = player;
-    newUnit.x_type = type;
-    newUnit.x_health = props.health;
-    newUnit.x_lastShot = game.time.now;
-    newUnit.x_lastJump = game.time.now;
-    newUnit.x_lastSpawn = game.time.now;
-    newUnit.x_props = props;
+    graphName += props.graph
+    newUnit = group.create(xpos, ypos, graphName)
+    newUnit.x_player = player
+    newUnit.x_type = type
+    newUnit.x_health = props.health
+    newUnit.x_lastShot = undefined
+    newUnit.x_lastJump = undefined
+    newUnit.x_lastSpawn = undefined
+    newUnit.x_props = props
     if (props.building) {
         newUnit.setImmovable(true);
-        newUnit.x_healthBar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00);
-        newUnit.x_healthBar.alpha = 0.25;
-        newUnit.x_healthBar.setDepth(1);
+        newUnit.x_healthBar = game.add.rectangle(xpos, ypos-props.width/2, props.width*0.75, 2, 0x00ff00)
+        newUnit.x_healthBar.alpha = 0.25
+        newUnit.x_healthBar.setDepth(1)
     } else {
-          newUnit.setGravity(0, 300);
-          newUnit.setBounce(0.2);
+          newUnit.setGravity(0, 300)
+          newUnit.setBounce(0.2)
     }
-    return newUnit;
+    newUnit.grid = grid
+    return newUnit
 }
 
 function unitAi(unit, game) {
@@ -64,7 +64,7 @@ function unitHandleJump(unit, game) {
   var p = unit.x_props
   if (p.jump) {
     if (p.jump.feetOnGround && unit.body.touching.down || !p.jump.feetOnGround) {
-      if (game.time.now > unit.x_lastJump + p.jump.time) {
+      if (unit.x_lastJump === undefined || game.time.now > unit.x_lastJump + p.jump.time) {
         unit.x_lastJump = game.time.now
         if (Math.random() < p.jump.prob) {
           unit.setVelocityY(unit.body.velocity.y - p.jump.speed)
@@ -80,7 +80,7 @@ function unitHandleShot(unit, game) {
   var props = unit.x_props
   if (props.shoot) {
     var shoot = props.shoot;
-    if (game.time.now > unit.x_lastShot + shoot.time) {
+    if (unit.x_lastShot === undefined || game.time.now > unit.x_lastShot + shoot.time) {
       unit.x_lastShot = game.time.now;
       var vel = shoot.speed
       var a = Math.PI * (shoot.amin + Math.random()*(shoot.amax - shoot.amin))/180.0
@@ -94,11 +94,15 @@ function unitHandleShot(unit, game) {
 function unitHandleSpawn(unit, game) {
   if (unit.x_alreadyDead) return
   var props = unit.x_props
+
+  // Do not spawn from buildings at the end of the turn
+  if (props.building && (game.time.now - combatStart) / 1000.0 > CONFIG_MAX_SPAWN) return
+
   var spawn = props.spawn
   if (spawn) {
-    if (game.time.now > unit.x_lastSpawn + spawn.time) {
+    if (unit.x_lastSpawn === undefined || game.time.now > unit.x_lastSpawn + spawn.time) {
       unit.x_lastSpawn = game.time.now
-      unitCreate(spawn.unit, unit.x, unit.y, unit.x_player, game)
+      unitCreate(spawn.unit, unit.x, unit.y, unit.x_player, undefined, game)
     }
   }
 
@@ -126,9 +130,21 @@ function unitHit(unit, shot, game) {
 }
 
 function unitDestroy(unit, game) {
+
   if (unit.x_alreadyDead) return
   unit.x_alreadyDead = true
+
+  if (unit.x_props.base) gameLoseFlag = unit.x_player
+
+  unitRelease(unit)
+}
+
+function unitRelease(unit) {
+
   if (unit.x_healthBar) unit.x_healthBar.destroy()
   unit.x_healthBar = undefined
+
+  if (unit.x_grid) unit.x_grid.building = undefined
+
   unit.destroy()
 }

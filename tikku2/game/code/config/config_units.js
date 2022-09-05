@@ -64,7 +64,7 @@ configUnits.set(
   {
     graph: 'soldier',
     health: 5,
-    velocity: 40,
+    velocity: 60,
     jump: {
       feetOnGround: true,
       time: 500,
@@ -86,7 +86,7 @@ configUnits.set(
   {
     graph: 'bug',
     health: 5,
-    velocity: 50,
+    velocity: 70,
     jump: {
       feetOnGround: false,
       time: 200,
@@ -108,7 +108,7 @@ configUnits.set(
   {
     graph: 'alien',
     health: 9,
-    velocity: 30,
+    velocity: 50,
     shoot: {
         type: SHOT_LASER,
         amin: 5,
