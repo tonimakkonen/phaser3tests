@@ -111,9 +111,10 @@ function update() {
   // Handle game state changes
   if (!gameState) {
     gameState = GAME_STATE_MAIN_MENU
-    stateMainMenuStart(this)
   } else if (gameState == GAME_STATE_MAIN_MENU) {
     stateMainMenuUpdate(this)
+  } else if (gameState == GAME_STATE_BUY) {
+    stateBuyUpdate(this)
   } else if (gameState == GAME_STATE_COMBAT) {
     stateCombatUpdate(this)
   } else {

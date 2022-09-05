@@ -1,6 +1,24 @@
 
-"use strict"
+"use strict";
 
+var configMapBase = []
+var configMap = []
+
+// Add some basic
+configMapBase.push({ x: 2, y: 0})
+configMapBase.push({ x: 3, y: 0})
+configMapBase.push({ x: 4, y: 0})
+
+// Make actual mapCreate
+for (const mt of configMapBase) {
+  const x = mt.x
+  const y = mt.y
+  configMap.push( { x: x, y: y, player: PLAYER_BLUE } )
+  configMap.push( { x: 34 - x, y: y, player: PLAYER_RED } )
+}
+
+
+// Create the walkable map
 function mapCreate(game) {
   for (var i = 0; i < CONFIG_WIDTH/CONFIG_BLOCK; i++) {
       groupBlocks.create(i*CONFIG_BLOCK + CONFIG_BLOCK/2, CONFIG_HEIGHT - CONFIG_BLOCK*1.5, 'tile')

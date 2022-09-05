@@ -12,10 +12,13 @@ function buttonLogic(buttonList) {
   }
 }
 
-function buttonAddClickButton(x, y, width, height, text, func, game) {
+function buttonAddClickButton(x, y, width, height, text, image, func, game) {
   var rect = game.add.rectangle(x, y, width, height, buttonColor);
   var text = game.add.text(x, y, text, {'color': '#000000'})
   text.setOrigin(0.5, 0.5)
+  if (image) {
+    image = game.add.sprite(x, y, image)
+  }
   var nb = {
     x: x,
     y: y,
@@ -25,15 +28,22 @@ function buttonAddClickButton(x, y, width, height, text, func, game) {
     y1: y + height/2,
     rect: rect,
     text: text,
+    image: image,
     func: func
   }
   return nb
 }
 
-function buttonAddListButton(x, y, width, height, text, func, selected, list, game) {
+function buttonImLeft(image) {
+}
+
+function buttonAddListButton(x, y, width, height, text, image, func, selected, list, game) {
   var rect = game.add.rectangle(x, y, width, height, selected ? buttonSelectecColor : buttonColor);
   var text = game.add.text(x, y, text, {'color': '#000000'})
   text.setOrigin(0.5, 0.5)
+  if (image) {
+    image = game.add.sprite(x - width * 0.5 + height*0.5 + 5, y, image)
+  }
   var nb = {
     x: x,
     y: y,
@@ -43,6 +53,7 @@ function buttonAddListButton(x, y, width, height, text, func, selected, list, ga
     y1: y + height/2,
     rect: rect,
     text: text,
+    image: image,
     list: list,
     func: (button) => {
       buttonClearListButtonSelection(button.list)
@@ -64,6 +75,7 @@ function buttonClearListButtonSelection(list) {
 function buttonDestroy(button) {
   if (button.rect) button.rect.destroy()
   if (button.text) button.text.destroy()
+  if (button.image) button.image.destroy()
 }
 
 function buttonDestroyList(list) {
