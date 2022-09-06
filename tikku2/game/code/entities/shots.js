@@ -21,6 +21,7 @@ function shotCreate(type, xpos, ypos, xvel, yvel, player, game) {
 
   newShot = group.create(xpos, ypos, props.graph)
   newShot.x_props = props
+  newShot.x_player = player
   newShot.setVelocity(xvel, yvel)
   newShot.setGravity(0, 300)
   return newShot
@@ -28,7 +29,20 @@ function shotCreate(type, xpos, ypos, xvel, yvel, player, game) {
 
 function shotDestroy(shot, game) {
   if (shot.x_alreadyDead) return
-  shot.x_alreadyDead = true;
+  shot.x_alreadyDead = true
+
+  const p = shot.x_props
+  if (p.death) {
+    const d = p.death
+    if (d.spawn) {
+      for (var i = 0; i < d.spawn.count; i++) {
+        const vx = d.spawn.speed * Math.cos(Math.random()*Math.PI*2)
+        const vy = d.spawn.speed * Math.sin(Math.random()*Math.PI*2)
+        shotCreate(d.spawn.type, shot.x, shot.y, vx, vy, shot.x_player, game)
+      }
+    }
+  }
+
   shotRelease(shot)
 }
 

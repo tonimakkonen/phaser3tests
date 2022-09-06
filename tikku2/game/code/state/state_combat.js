@@ -31,6 +31,8 @@ function stateCombatUpdate(game) {
   // Shot logic
   groupBlueShots.children.each(function(shot) { shotAi(shot, game) }, game)
   groupRedShots.children.each(function(shot) { shotAi(shot, game) }, game)
+  // Splatter logic
+  groupSplatter.children.each((s) => splatterLogic(s, game), game)
 }
 
 function stateCombatStart(game) {
@@ -50,10 +52,11 @@ function stateCombatEnd(game) {
   groupRedUnits.children.each((unit) => combatEndTurnForUnit(unit, game), game)
   groupBlueShots.children.each((shot) => shotRelease(shot), game)
   groupRedShots.children.each((shot) => shotRelease(shot), game)
+  groupSplatter.children.each((splatter) => splatterRelease(splatter), game)
 
-  blueGold += 200
+  blueGold += 300
   if (blueAi == AI_DIFFICULT) blueGold += 100
-  redGold += 200
+  redGold += 300
   if (redAi == AI_DIFFICULT) redGold += 100
 }
 

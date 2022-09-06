@@ -12,7 +12,7 @@ configRaces.set(
   {
     base: UNIT_HUMAN_BASE,
     build: [
-      UNIT_OUTPOST, UNIT_FORT
+      UNIT_OUTPOST, UNIT_FORT, UNIT_FACTORY
     ]
   }
 )
@@ -21,7 +21,7 @@ configRaces.set(
   {
     base: UNIT_BUG_BASE,
     build: [
-      UNIT_HATCHERY, UNIT_BUG_WALL
+      UNIT_HATCHERY, UNIT_BUG_WALL, UNIT_FIRE_SPITTER, UNIT_BURROW, UNIT_FIRE_BURROW, 
     ]
   }
 )
@@ -30,7 +30,7 @@ configRaces.set(
   {
     base: UNIT_ALIEN_BASE,
     build: [
-      UNIT_MONUMENT, UNIT_FF_GENERATOR
+      UNIT_MONUMENT, UNIT_FF_GENERATOR, UNIT_SPIDER_ASSEMBLY
     ]
   }
 )

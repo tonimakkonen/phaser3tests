@@ -55,6 +55,7 @@ var groupBlueUnits
 var groupRedUnits
 var groupBlueShots
 var groupRedShots
+var groupSplatter
 
 ////////////////////////
 // Phaser 3 functions //
@@ -72,15 +73,18 @@ function create() {
   groupRedUnits = this.physics.add.group()
   groupBlueShots = this.physics.add.group()
   groupRedShots = this.physics.add.group()
+  groupSplatter = this.physics.add.group()
 
   this.physics.add.collider(groupBlueUnits, groupBlocks)
   this.physics.add.collider(groupRedUnits,  groupBlocks)
   this.physics.add.collider(groupBlueUnits, groupRedUnits)
+  this.physics.add.collider(groupSplatter, groupBlocks)
 
   this.physics.add.overlap(groupBlueShots, groupRedUnits, callbackUnitHit, null, this)
   this.physics.add.overlap(groupRedShots, groupBlueUnits, callbackUnitHit, null, this)
   this.physics.add.overlap(groupBlueShots, groupBlocks, callbackShotHitGround, null, this)
   this.physics.add.overlap(groupRedShots, groupBlocks, callbackShotHitGround, null, this)
+
 
   // create tiles
   mapCreate(this)

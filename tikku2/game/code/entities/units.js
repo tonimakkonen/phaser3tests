@@ -41,9 +41,10 @@ function unitCreate(type, xpos, ypos, player, grid, game) {
   } else if (props.immovable) {
     newUnit.setImmovable(true)
   } else {
-        newUnit.setGravity(0, 300)
-        newUnit.setBounce(0.2)
+    newUnit.setGravity(0, 300)
+    newUnit.setBounce(0.2)
   }
+  if (props.mass) newUnit.setMass(props.mass)
   newUnit.x_grid = grid
   return newUnit
 }
@@ -164,12 +165,19 @@ function unitDestroy(unit, game) {
 
     // spawn
     if (p.death.spawn) {
+      const height = p.height ? p.height : CONFIG_BLOCK
+      const deltay = (CONFIG_BLOCK - height) / 2
+      const y = unit.y - deltay
+      console.log(deltay)
       for (var i = 0; i < p.death.spawn.count; i++) {
-        const rx = Math.random()*10.0 - 5.0
-        const ry = Math.random()*10.0 - 5.0
-        unitCreate(p.death.spawn.type, unit.x + rx, unit.y + ry, unit.x_player, undefined, game)
+        const x = unit.x + Math.random()*10.0
+        console.log('Death spawn, x: ' + x + ', y: ' + y + ', type: ' + p.death.spawn.type)
+        unitCreate(p.death.spawn.type, x, y, unit.x_player, undefined, game)
       }
     }
+
+    // splatter
+    if (p.death.splatter) splatterHandleDef(p.death.splatter, unit.x, unit.y, game)
 
   }
 
