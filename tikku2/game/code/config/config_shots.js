@@ -3,6 +3,7 @@ const SHOT_LASER = 1
 const SHOT_SLIME = 2
 const SHOT_FIRE = 3
 const SHOT_FIRE_BALL = 4
+const SHOT_ROCKET = 5
 
 var configShots = new Map();
 
@@ -42,5 +43,18 @@ configShots.set(
         speed: 300
       }
     }
+  }
+)
+
+configShots.set(
+  SHOT_ROCKET,
+  {
+    graph: 'shot_rocket',
+    leftRight: true,
+    death: {
+      splatter: {
+      }
+    },
+    damage: 20
   }
 )

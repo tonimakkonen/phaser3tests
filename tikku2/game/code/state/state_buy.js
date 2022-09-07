@@ -1,6 +1,7 @@
 
 "use strict";
 
+var buyTurn = undefined
 var buyPlayer = undefined
 var buyFirstButtons = []
 var buySelectionButtons = []
@@ -8,16 +9,54 @@ var buySelectionDisabledButtons = []
 var buySelectionUi = []
 var buyInSelection = false
 
+// Update
 function stateBuyUpdate(game) {
-  if (!buyPlayer) stateBuyStart(game)
+
+  // Set up if not done
+  if (!buyTurn) stateBuyStart(game)
+
+  // If we have buttons, run their logic
   if (buyInSelection) buttonLogic(buySelectionButtons)
   else buttonLogic(buyFirstButtons)
+
+  // Run AI if needed
+  if (buyPlayer) {
+    if (playerGetAi(buyPlayer) != AI_PLAYER) {
+      if (aiBuyUpdate(buyPlayer, game)) stateBuyTurnDone(game)
+    }
+  }
+
 }
 
+// Init
 function stateBuyStart(game) {
   goldUpdateText(game)
-  buyPlayer = PLAYER_BLUE
-  buyCreateFirstButtons(buyPlayer, game)
+  buyTurn = 1
+  stateBuySetUpBuyTurn(game)
+}
+
+// Get current player who should buy
+function stateBuyGetPlayer() {
+  if (buyTurn == 1) return round % 2 == 1 ? PLAYER_BLUE : PLAYER_RED
+  else if (buyTurn == 2) return round % 2 == 1 ? PLAYER_RED : PLAYER_BLUE
+  throw "bad buyTurn: " + buyTurn
+}
+
+function stateBuySetUpBuyTurn(game) {
+  buyPlayer = stateBuyGetPlayer()
+  // Only set up buy buttons for human player
+  if (playerGetAi(buyPlayer) == AI_PLAYER) buyCreateFirstButtons(buyPlayer, game)
+}
+
+function stateBuyTurnDone(game) {
+  if (buyTurn == 2) {
+    gameState = GAME_STATE_COMBAT
+    buyTurn = undefined
+    buyPlayer = undefined
+    return
+  }
+  buyTurn += 1
+  stateBuySetUpBuyTurn(game)
 }
 
 
@@ -49,7 +88,7 @@ function buyCreateFirstButtons(player, game) {
   }
 
   // grid buttons
-  for (const grid of configMap) {
+  for (const grid of map) {
     if (grid.player != player) continue
     const x = (grid.x + 0.5) * CONFIG_BLOCK
     const y = CONFIG_HEIGHT - (grid.y + 2.5)*CONFIG_BLOCK
@@ -65,15 +104,11 @@ function buyDestroyButtons() {
 
 // first level button presses
 
+
+
 function buyPressTurnDone(game) {
   buyDestroyButtons(buyFirstButtons)
-  if (buyPlayer == PLAYER_BLUE) {
-    buyPlayer = PLAYER_RED
-    buyCreateFirstButtons(buyPlayer, game)
-  } else {
-    gameState = GAME_STATE_COMBAT
-    buyPlayer = undefined
-  }
+  stateBuyTurnDone(game)
 }
 
 function buyPressBaseButton(button, base, game) {
@@ -91,7 +126,25 @@ function buyPressGrid(grid, button, game) {
   buyInSelection = true
 }
 
-// second level buttons
+//////////////////////////
+// second level buttons //
+//////////////////////////
+
+function buyCreateBuyButtons(grid, game) {
+  const rp = configRaces.get(playerGetRace(grid.player))
+  if(!rp) throw "Could not find race props: " + grid.player
+
+  const cx = CONFIG_WIDTH / 2
+  const r0 = 50
+  const dy = 40
+
+  const buyList = rp.build
+  for (var i = 0; i < buyList.length; i++) {
+    const unitType = buyList[i]
+    buyHandleCreatingBuySelection(cx, r0 + dy*i, grid, unitType, game)
+  }
+  buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(1 + buyList.length), 200, 30, 'Cancel', undefined, (button) => buyPressCancel(), game))
+}
 
 function buyCreateBuildingButtons(building, game) {
   const p = building.x_props
@@ -113,30 +166,6 @@ function buyCreateBuildingButtons(building, game) {
     row += 1
   }
   buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(row + 1), 200, 30, 'Cancel', undefined, () => buyPressCancel(), game))
-}
-
-function buyCreateBuyButtons(grid, game) {
-  var race
-  if (grid.player == PLAYER_BLUE) {
-    race = blueRace
-  } else if (grid.player == PLAYER_RED) {
-    race = redRace
-  }
-  else throw "Unkown player in grid: " + grid.player
-
-  const rp = configRaces.get(race)
-  if(!rp) throw "Could not find race: " + rp
-
-  const cx = CONFIG_WIDTH / 2
-  const r0 = 50
-  const dy = 40
-
-  const buyList = rp.build
-  for (var i = 0; i < buyList.length; i++) {
-    const unitType = buyList[i]
-    buyHandleCreatingBuySelection(cx, r0 + dy*i, grid, unitType, game)
-  }
-  buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(1 + buyList.length), 200, 30, 'Cancel', undefined, (button) => buyPressCancel(), game))
 }
 
 function buyHandleCreatingBuySelection(x, y, grid, unitType, game) {

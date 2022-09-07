@@ -6,20 +6,15 @@ function shotCreate(type, xpos, ypos, xvel, yvel, player, game) {
   var group
   var newShot
 
-  if (player == PLAYER_BLUE) {
-      group = groupBlueShots
-  } else if (player == PLAYER_RED) {
-      group = groupRedShots
-  } else {
-      throw "bad player: " + player
-  }
+  if (player == PLAYER_BLUE) group = groupBlueShots
+  else if (player == PLAYER_RED) group = groupRedShots
+  else throw "bad player: " + player
 
   var props = configShots.get(type);
-  if (props == null) {
-      throw "bad shot type: " + type
-  }
+  if (props == null) throw "bad shot type: " + type
 
   newShot = group.create(xpos, ypos, props.graph)
+  if (props.leftRight && xvel < 0) newShot.setFlipX(true)
   newShot.x_props = props
   newShot.x_player = player
   newShot.setVelocity(xvel, yvel)
@@ -48,6 +43,15 @@ function shotDestroy(shot, game) {
 
 function shotRelease(shot) {
   shot.destroy()
+}
+
+function shotHandleDef(def, x, y, player, game) {
+  for (var i = 0; i < def.count; i++) {
+    const ra = Math.random()*Math.PI*2
+    const vx = def.speed * Math.cos(ra)
+    const vy = def.speed * Math.sin(ra)
+    shotCreate(def.type, x, y, vx, vy, player, game)
+  }
 }
 
 function shotAi(shot, game) {

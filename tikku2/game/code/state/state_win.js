@@ -37,6 +37,7 @@ function stateWinEnd(game) {
   combatStart = undefined
   gameState = GAME_STATE_MAIN_MENU
   gameLoseFlag = undefined
+  round = 1
 
   groupBlueUnits.children.each((unit) => unitRelease(unit), game)
   groupRedUnits.children.each((unit) => unitRelease(unit), game)

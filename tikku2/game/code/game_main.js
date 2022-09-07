@@ -49,6 +49,8 @@ var blueAi = undefined
 var redAi = undefined
 var blueBase = undefined
 var redBase = undefined
+var map = []
+var round = 1
 
 var groupBlocks
 var groupBlueUnits
@@ -147,4 +149,28 @@ function callbackUnitHit(shot, unit) {
 
 function callbackShotHitGround(shot, block) {
   shotDestroy(shot, this)
+}
+
+function playerGetRace(player) {
+  if (player == PLAYER_BLUE) return blueRace
+  else if (player == PLAYER_RED) return redRace
+  throw "Bad player: " + player
+}
+
+function playerGetGold(player) {
+  if (player == PLAYER_BLUE) return blueGold
+  else if (player == PLAYER_RED) return redGold
+  throw "Bad player: " + player
+}
+
+function playerAddGold(player, amount) {
+  if (player == PLAYER_BLUE) blueGold += amount
+  else if (player == PLAYER_RED) redGold += amount
+  else "Bad player: " + player
+}
+
+function playerGetAi(player) {
+  if (player == PLAYER_BLUE) return blueAi
+  else if (player == PLAYER_RED) return redAi
+  throw "Bad player: " + player
 }

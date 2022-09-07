@@ -40,8 +40,8 @@ function stateCombatStart(game) {
   goldUpdateText(game)
 
   combatStart = game.time.now
-  combatText = game.add.text(CONFIG_WIDTH*0.5, CONFIG_HEIGHT - CONFIG_BLOCK*0.5, "-", {'color': '#FFFFFF'})
-  combatText.setOrigin(0.5, 0.5)
+  combatText = game.add.text(CONFIG_WIDTH*0.5 - 120, CONFIG_HEIGHT - CONFIG_BLOCK*0.5, "", {'color': '#FFFFFF'})
+  combatText.setOrigin(0.0, 0.5)
 }
 
 function stateCombatEnd(game) {
@@ -58,6 +58,8 @@ function stateCombatEnd(game) {
   if (blueAi == AI_DIFFICULT) blueGold += 100
   redGold += 300
   if (redAi == AI_DIFFICULT) redGold += 100
+
+  round += 1
 }
 
 function combatEndTurnForUnit(unit, game) {
@@ -75,9 +77,9 @@ function combatEndTurnForUnit(unit, game) {
 function combatUpdateText(game) {
   const secsElapsed = (game.time.now - combatStart) / 1000.0
   const noSpawn = secsElapsed >= CONFIG_MAX_SPAWN
-  var secsRemaining = Math.floor(CONFIG_COMBAT_LEN - secsElapsed)
+  var secsRemaining = (CONFIG_COMBAT_LEN - secsElapsed).toFixed(1)
   if (secsRemaining < 0) secsRemaining = 0
-  if (noSpawn) combatText.setText("Combat end phase : " + secsRemaining)
-  else combatText.setText("Combat active phase : " + secsRemaining)
-  combatText.setOrigin(0.5, 0.5)
+  if (noSpawn) combatText.setText('Combat round ' + round + ' : ' + secsRemaining + ' (end of round)')
+  else combatText.setText('Combat round ' + round + ' : ' + secsRemaining)
+  combatText.setOrigin(0.0, 0.5)
 }

@@ -41,7 +41,8 @@ function unitCreate(type, xpos, ypos, player, grid, game) {
   } else if (props.immovable) {
     newUnit.setImmovable(true)
   } else {
-    newUnit.setGravity(0, 300)
+    const gravityMult = props.gravity != undefined ? props.gravity : 1.0
+    newUnit.setGravity(0.0, gravityMult * 300.0)
     newUnit.setBounce(0.2)
   }
   if (props.mass) newUnit.setMass(props.mass)
@@ -53,12 +54,17 @@ function unitAi(unit, game) {
   var toEnemy = unit.x_player == PLAYER_BLUE ? 1 : -1;
   var props = unit.x_props;
 
-  // handle movement and jumps only every 5 th tick so that it's less random
+  // TODO: Make separate
   if (props.velocity) unit.setVelocityX(toEnemy*props.velocity);
 
+  if (props.fly) unitHandleFly(unit, props.fly, game)
+
+  // TODO: MAKE NICER
   unitHandleJump(unit, game)
   unitHandleShot(unit, game)
   unitHandleSpawn(unit, game)
+
+  if (props.suicide) unitHandleSuicide(props.suicide, unit, toEnemy, game)
 
   // kill units off map
   if (unit.x < 0 || unit.x > CONFIG_WIDTH) unit.destroy()
@@ -77,6 +83,14 @@ function unitHandleJump(unit, game) {
         }
       }
     }
+  }
+}
+
+function unitHandleFly(unit, fly, game) {
+  if (unit.x_lastFly == undefined || game.time.now > unit.x_lastFly + fly.time) {
+    unit.x_lastFly = game.time.now
+    const vy = Math.random() * (fly.max - fly.min) + fly.min
+    unit.setVelocityY(vy)
   }
 }
 
@@ -168,20 +182,30 @@ function unitDestroy(unit, game) {
       const height = p.height ? p.height : CONFIG_BLOCK
       const deltay = (CONFIG_BLOCK - height) / 2
       const y = unit.y - deltay
-      console.log(deltay)
       for (var i = 0; i < p.death.spawn.count; i++) {
         const x = unit.x + Math.random()*10.0
-        console.log('Death spawn, x: ' + x + ', y: ' + y + ', type: ' + p.death.spawn.type)
         unitCreate(p.death.spawn.type, x, y, unit.x_player, undefined, game)
       }
     }
 
-    // splatter
     if (p.death.splatter) splatterHandleDef(p.death.splatter, unit.x, unit.y, game)
-
+    if (p.death.shoot) shotHandleDef(p.death.shoot, unit.x, unit.y, unit.x_player, game)
   }
 
   unitRelease(unit)
+}
+
+function unitHandleSuicide(def, unit, toEnemy, game) {
+  const xte = toEnemy > 0 ? unit.x : CONFIG_WIDTH - unit.x
+  if (xte < def.after) return
+  if (xte > def.before) {
+    unitDestroy(unit, game)
+    return
+  }
+  if (unit.x_lastSuicide == undefined || game.time.now > unit.x_lastSuicide + def.time) {
+    unit.x_lastSuicide = game.time.now
+    if (Math.random() < def.prob) unitDestroy(unit, game)
+  }
 }
 
 function unitRelease(unit) {
@@ -190,7 +214,6 @@ function unitRelease(unit) {
   unit.x_healthBar = undefined
 
   if (unit.x_grid) {
-    console.log(unit.x_grid)
     unit.x_grid.building = undefined
   }
 
