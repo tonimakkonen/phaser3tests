@@ -22,11 +22,21 @@ function splatterRelease(splatter) {
 }
 
 function splatterHandleDef(def, x, y, game) {
-  for (var i = 0; i < def.count; i++) {
-    const vx = def.speed * Math.cos(Math.random()*Math.PI*2)
-    const vy = def.speed * Math.sin(Math.random()*Math.PI*2)
-    splatterCreate(def.graph, x, y, vx, vy, def.time, game)
+
+  if (def.count) {
+    for (var i = 0; i < def.count; i++) {
+      const vx = def.speed * Math.cos(Math.random()*Math.PI*2)
+      const vy = def.speed * Math.sin(Math.random()*Math.PI*2)
+      splatterCreate(def.graph, x, y, vx, vy, def.time, game)
+    }
   }
+
+  if (def.explosion) {
+    const s = splatterCreate(def.graph, x, y, 0.0, 0.0, def.time, game)
+    s.setGravity(0.0, 0.0)
+    s.setImmovable(true)
+  }
+
 }
 
 function splatterLogic(splatter, game) {

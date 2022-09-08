@@ -157,7 +157,7 @@ configUnits.set(
     cost: 450,
     spawn: {
       unit: UNIT_ROCKET_LAUNCHER,
-      time: 11000
+      time: 15000
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 6, speed: 200, time: 1500 }
@@ -177,7 +177,7 @@ configUnits.set(
         amin: 20,
         amax: 40,
         speed: 550,
-        time: 2000
+        time: 2700
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 3, speed: 100, time: 400 }

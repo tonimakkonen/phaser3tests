@@ -52,9 +52,17 @@ configShots.set(
     graph: 'shot_rocket',
     leftRight: true,
     death: {
+      spawn: {
+        type: SHOT_FIRE,
+        count: 4,
+        speed: 100
+      },
       splatter: {
+        graph: 'splatter_explosion',
+        explosion: true,
+        time: 200
       }
     },
-    damage: 20
+    damage: 10
   }
 )

@@ -3,6 +3,7 @@
 
 var combatStart = undefined
 var combatText = undefined
+var combatResourceSpawn = undefined
 
 function stateCombatUpdate(game) {
 
@@ -10,6 +11,19 @@ function stateCombatUpdate(game) {
 
   // Update text
   combatUpdateText(game)
+
+  // Spawn resources
+  if (combatResourceSpawn.length >= 1) {
+    const time = combatResourceSpawn[0]
+    if (game.time.now > time) {
+      console.log('spawn resource at ' + game.time.now)
+      combatResourceSpawn.shift()
+      const x = CONFIG_WIDTH * (0.25 + Math.random()*0.5)
+      const nr = groupResources.create(x, 0, 'resource')
+      nr.setGravity(0, 300)
+      nr.setBounce(0.5)
+    }
+  }
 
   // If a lose flag isupdated
   if (gameLoseFlag) {
@@ -42,6 +56,13 @@ function stateCombatStart(game) {
   combatStart = game.time.now
   combatText = game.add.text(CONFIG_WIDTH*0.5 - 120, CONFIG_HEIGHT - CONFIG_BLOCK*0.5, "", {'color': '#FFFFFF'})
   combatText.setOrigin(0.0, 0.5)
+
+  // Update resource spawn
+  const delta = 1000.0 * CONFIG_MAX_SPAWN / (round + 1.0)
+  combatResourceSpawn = []
+
+  for (var i = 0; i < round; i++) combatResourceSpawn.push(game.time.now + (i+1)*delta)
+    console.log(combatResourceSpawn)
 }
 
 function stateCombatEnd(game) {

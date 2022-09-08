@@ -36,6 +36,8 @@ function shotDestroy(shot, game) {
         shotCreate(d.spawn.type, shot.x, shot.y, vx, vy, shot.x_player, game)
       }
     }
+
+    if (d.splatter) splatterHandleDef(d.splatter, shot.x, shot.y, game)
   }
 
   shotRelease(shot)

@@ -9,11 +9,9 @@ function aiBuyUpdate(buyPlayer, game) {
   // run 4 actions each turn and buy random shit
   for (var i = 0; i < 4; i++) {
     const grid = aiBuySelectRandomGrid(buyPlayer)
-    console.log(grid)
     if (grid == null) return true
     const list = aiBuyGetList(grid)
     const building = list[Math.floor(Math.random() * list.length)]
-    console.log(building)
 
     const bp = configUnits.get(building)
     if (!bp) throw "could not find building props: " + building

@@ -58,6 +58,7 @@ var groupRedUnits
 var groupBlueShots
 var groupRedShots
 var groupSplatter
+var groupResources
 
 ////////////////////////
 // Phaser 3 functions //
@@ -76,16 +77,20 @@ function create() {
   groupBlueShots = this.physics.add.group()
   groupRedShots = this.physics.add.group()
   groupSplatter = this.physics.add.group()
+  groupResources = this.physics.add.group()
 
   this.physics.add.collider(groupBlueUnits, groupBlocks)
   this.physics.add.collider(groupRedUnits,  groupBlocks)
   this.physics.add.collider(groupBlueUnits, groupRedUnits)
   this.physics.add.collider(groupSplatter, groupBlocks)
+  this.physics.add.collider(groupResources, groupBlocks)
 
   this.physics.add.overlap(groupBlueShots, groupRedUnits, callbackUnitHit, null, this)
   this.physics.add.overlap(groupRedShots, groupBlueUnits, callbackUnitHit, null, this)
   this.physics.add.overlap(groupBlueShots, groupBlocks, callbackShotHitGround, null, this)
   this.physics.add.overlap(groupRedShots, groupBlocks, callbackShotHitGround, null, this)
+  this.physics.add.overlap(groupBlueUnits, groupResources, callbackCollectResource, null, this)
+  this.physics.add.overlap(groupRedUnits, groupResources, callbackCollectResource, null, this)
 
 
   // create tiles
@@ -140,6 +145,8 @@ function update() {
 
 }
 
+// CALLBACKS //
+
 function callbackUnitHit(shot, unit) {
   if (shot.x_alreadyDead) return
   if (unit.x_alreadyDead) return
@@ -150,6 +157,16 @@ function callbackUnitHit(shot, unit) {
 function callbackShotHitGround(shot, block) {
   shotDestroy(shot, this)
 }
+
+function callbackCollectResource(unit, resource) {
+  if (resource.x_alreadyDead) return
+  resource.x_alreadyDead = true
+  resource.destroy()
+  playerAddGold(unit.x_player, 50)
+  goldUpdateText(this)
+}
+
+// UTILS //
 
 function playerGetRace(player) {
   if (player == PLAYER_BLUE) return blueRace
@@ -166,7 +183,7 @@ function playerGetGold(player) {
 function playerAddGold(player, amount) {
   if (player == PLAYER_BLUE) blueGold += amount
   else if (player == PLAYER_RED) redGold += amount
-  else "Bad player: " + player
+  else throw "Bad player: " + player
 }
 
 function playerGetAi(player) {
