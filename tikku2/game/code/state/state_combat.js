@@ -16,7 +16,6 @@ function stateCombatUpdate(game) {
   if (combatResourceSpawn.length >= 1) {
     const time = combatResourceSpawn[0]
     if (game.time.now > time) {
-      console.log('spawn resource at ' + game.time.now)
       combatResourceSpawn.shift()
       const x = CONFIG_WIDTH * (0.25 + Math.random()*0.5)
       const nr = groupResources.create(x, 0, 'resource')
@@ -62,7 +61,6 @@ function stateCombatStart(game) {
   combatResourceSpawn = []
 
   for (var i = 0; i < round; i++) combatResourceSpawn.push(game.time.now + (i+1)*delta)
-    console.log(combatResourceSpawn)
 }
 
 function stateCombatEnd(game) {

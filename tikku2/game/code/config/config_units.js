@@ -86,7 +86,7 @@ configUnits.set(
     health: 100,
     building: true,
     width: 40,
-    cost: 120,
+    cost: 150,
     shoot: {
         type: SHOT_LASER,
         amin: 5,
@@ -175,9 +175,9 @@ configUnits.set(
     shoot: {
         type: SHOT_ROCKET,
         amin: 20,
-        amax: 40,
-        speed: 550,
-        time: 2700
+        amax: 45,
+        speed: 560,
+        time: 2500
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 3, speed: 100, time: 400 }
@@ -200,6 +200,8 @@ const UNIT_FIRE_LARVA = 207
 const UNIT_FIRE_SPITTER = 208
 const UNIT_FLYER_NEST = 209
 const UNIT_FLYER = 210
+const UNIT_DRAGONBUG_NEST = 211
+const UNIT_DRAGONBUG = 212
 
 configUnits.set(
   UNIT_BUG_BASE,
@@ -236,7 +238,7 @@ configUnits.set(
         amin: 30,
         amax: 45,
         speed: 150,
-        time: 1100
+        time: 700
     },
     death: {
       splatter: { graph: 'splatter_green', count: 4, speed: 100, time: 200 }
@@ -372,6 +374,7 @@ configUnits.set(
     name: 'Fire Spitter',
     help: 'Mutate Fire Spitter: AA and artillery role',
     health: 60,
+    heal: 20,
     building: true,
     width: 40,
     cost: 240,
@@ -399,10 +402,7 @@ configUnits.set(
     width: 40,
     cost: 320,
     heal: 10,
-    spawn: {
-      unit: UNIT_FLYER,
-      time: 4000
-    },
+    spawn: { unit: UNIT_FLYER, time: 4000 },
     death: {
       spawn: { type: UNIT_FLYER, count: 1 },
       splatter: { graph: 'splatter_green', count: 6, speed: 200, time: 1500 }
@@ -421,6 +421,47 @@ configUnits.set(
     suicide: { after: CONFIG_WIDTH / 2, before: CONFIG_WIDTH - CONFIG_BLOCK/2, prob: 0.06, time: 200 },
     death: {
       shoot: { type: SHOT_SLIME, count: 10, speed: 150 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_DRAGONBUG_NEST,
+  {
+    graph: 'dragonbug_nest',
+    name: 'Dragonbug Nest',
+    help: 'Mutate Dragonbug Nest: spawns dragonbugs',
+    health: 50,
+    building: true,
+    width: 40,
+    cost: 580,
+    heal: 10,
+    spawn: {
+      unit: UNIT_DRAGONBUG,
+      time: 20000
+    },
+    death: {
+      splatter: { graph: 'splatter_green', count: 6, speed: 100, time: 1500 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_DRAGONBUG,
+  {
+    graph: 'dragonbug',
+    health: 30,
+    hover: { x: CONFIG_WIDTH*0.5, y: CONFIG_BLOCK*8, dx: CONFIG_WIDTH*0.25, dy: CONFIG_BLOCK*8, time: 1000, speed: 100 },
+    gravity: 0,
+    shoot: {
+        type: SHOT_FIRE_BALL,
+        amin: -30,
+        amax: 45,
+        speed: 400,
+        time: 2000
+    },
+    death: {
+      splatter: { graph: 'splatter_green', count: 8, speed: 200, time: 1500 }
     }
   }
 )
@@ -540,13 +581,13 @@ configUnits.set(
   {
     graph: 'fire_spider',
     health: 5,
-    velocity: 40,
+    velocity: 80,
     shoot: {
         type: SHOT_FIRE,
         amin: 0,
         amax: 45,
         speed: 230,
-        time: 1000
+        time: 900
     },
     jump: {
       feetOnGround: true,

@@ -54,16 +54,12 @@ function unitAi(unit, game) {
   var toEnemy = unit.x_player == PLAYER_BLUE ? 1 : -1;
   var props = unit.x_props;
 
-  // TODO: Make separate
   if (props.velocity) unit.setVelocityX(toEnemy*props.velocity);
-
   if (props.fly) unitHandleFly(unit, props.fly, game)
-
-  // TODO: MAKE NICER
+  if (props.hover) unitHandleHover(unit, props.hover, toEnemy, game)
   unitHandleJump(unit, game)
   unitHandleShot(unit, game)
   unitHandleSpawn(unit, game)
-
   if (props.suicide) unitHandleSuicide(props.suicide, unit, toEnemy, game)
 
   // kill units off map
@@ -91,6 +87,20 @@ function unitHandleFly(unit, fly, game) {
     unit.x_lastFly = game.time.now
     const vy = Math.random() * (fly.max - fly.min) + fly.min
     unit.setVelocityY(vy)
+  }
+}
+
+function unitHandleHover(unit, hover, toEnemy, game) {
+  if (unit.x_lastHover == undefined || game.time.now > unit.x_lastHover + hover.time) {
+    unit.x_lastHover = game.time.now
+    const x = toEnemy > 0 ? hover.x : CONFIG_WIDTH - hover.x
+    const y = hover.y
+    const targetX = x + (Math.random() - 0.5)*hover.dx
+    const targetY = y + (Math.random() - 0.5)*hover.dy
+    const dx = targetX - unit.x
+    const dy = targetY - unit.y
+    const dis = Math.sqrt(dx*dx + dy*dy)
+    if (dis > 0) unit.setVelocity(hover.speed * dx / dis, hover.speed * dy / dis)
   }
 }
 

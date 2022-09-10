@@ -9,7 +9,10 @@ var buySelectionDisabledButtons = []
 var buySelectionUi = []
 var buyInSelection = false
 
-// Update
+/////////////////////
+// UPDATE & CREATE //
+/////////////////////
+
 function stateBuyUpdate(game) {
 
   // Set up if not done
@@ -28,7 +31,6 @@ function stateBuyUpdate(game) {
 
 }
 
-// Init
 function stateBuyStart(game) {
   goldUpdateText(game)
   buyTurn = 1
@@ -59,8 +61,31 @@ function stateBuyTurnDone(game) {
   stateBuySetUpBuyTurn(game)
 }
 
+//////////////////////
+// BUY/SELL ACTIONS //
+//////////////////////
 
-// First level button cretion
+function buySellBuilding(building, game) {
+  playerAddGold(building.x_player, building.x_props.cost / 2.0)
+  goldUpdateText()
+  unitRelease(building)
+}
+
+function buyBuyBuilding(grid, unitType, game) {
+  const bp = configUnits.get(unitType)
+  if (!bp) throw "Could not find unit props for: " + unitType
+  const player = grid.player
+  const x = (grid.x + 0.5) * CONFIG_BLOCK
+  const y = CONFIG_HEIGHT - (grid.y + 2.5)*CONFIG_BLOCK
+  const newBuilding = unitCreate(unitType, x, y, player, grid, game)
+  grid.building = newBuilding
+  const newGold = playerAddGold(player, -bp.cost)
+  console.log('bought ' + bp.name + ' with cost ' + bp.cost + ' on grid (' + grid.x + ', ' + grid.y + '), new gold: ' + newGold)
+}
+
+/////////////
+// BUTTONS //
+/////////////
 
 function buyCreateFirstButtons(player, game) {
 
@@ -162,7 +187,7 @@ function buyCreateBuildingButtons(building, game) {
     row += 1
   }
   if (allowSell) {
-    buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*row, 200, 30, 'Sell for ' + p.cost/2, undefined, () => buyPressSell(building), game))
+    buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*row, 200, 30, 'Sell for ' + p.cost/2, undefined, () => buyPressSell(building, game), game))
     row += 1
   }
   buySelectionButtons.push(buttonAddClickButton(cx, r0 + dy*(row + 1), 200, 30, 'Cancel', undefined, () => buyPressCancel(), game))
@@ -195,24 +220,13 @@ function buyHandleCreatingBuySelection(x, y, grid, unitType, game) {
 }
 
 function buyPressSell(building, game) {
-  const p = building.x_props
-  if (building.x_player == PLAYER_BLUE) blueGold += p.cost / 2
-  else redGold += p.cost / 2
-  goldUpdateText()
-  unitRelease(building)
+  buySellBuilding(building, game)
   buyPressCancel()
 }
 
+
 function buyPressBuy(grid, unitType, game) {
-  const bp = configUnits.get(unitType)
-  if (!bp) throw "Could not find unit props for: " + unitType
-  const player = grid.player
-  const x = (grid.x + 0.5) * CONFIG_BLOCK
-  const y = CONFIG_HEIGHT - (grid.y + 2.5)*CONFIG_BLOCK
-  const newBuilding = unitCreate(unitType, x, y, player, grid, game)
-  grid.building = newBuilding
-  if (player == PLAYER_BLUE) blueGold -= bp.cost
-  else redGold -= bp.cost
+  buyBuyBuilding(grid, unitType, game)
   goldUpdateText(game)
   buyPressCancel()
 }

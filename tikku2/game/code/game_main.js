@@ -181,9 +181,14 @@ function playerGetGold(player) {
 }
 
 function playerAddGold(player, amount) {
-  if (player == PLAYER_BLUE) blueGold += amount
-  else if (player == PLAYER_RED) redGold += amount
-  else throw "Bad player: " + player
+  if (player == PLAYER_BLUE) {
+    blueGold += amount
+    return blueGold
+  } else if (player == PLAYER_RED) {
+    redGold += amount
+    return redGold
+  }
+  throw "Bad player: " + player
 }
 
 function playerGetAi(player) {
