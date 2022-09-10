@@ -67,7 +67,7 @@ function stateBuyTurnDone(game) {
 
 function buySellBuilding(building, game) {
   playerAddGold(building.x_player, building.x_props.cost / 2.0)
-  goldUpdateText()
+  goldUpdateText(game)
   unitRelease(building)
 }
 
@@ -80,6 +80,7 @@ function buyBuyBuilding(grid, unitType, game) {
   const newBuilding = unitCreate(unitType, x, y, player, grid, game)
   grid.building = newBuilding
   const newGold = playerAddGold(player, -bp.cost)
+  goldUpdateText(game)
   console.log('bought ' + bp.name + ' with cost ' + bp.cost + ' on grid (' + grid.x + ', ' + grid.y + '), new gold: ' + newGold)
 }
 

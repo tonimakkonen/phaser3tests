@@ -7,12 +7,16 @@ function aiBuyUpdate(buyPlayer, game) {
 
   aiBuyLogicSellBroken(buyPlayer, game)
   aiBuyLogicOuterWall(buyPlayer, game)
-  // TODO: Game winner logic
+  aiBuyLogicBuyGameWinners(buyPlayer, game)
   for (var i = 0; i < 3; i++) aiBuyLogicRandom(buyPlayer, game)
   // TODO: Sell crap building for better buildings
 
   return true
 }
+
+//////////////////
+// LOGIC PIECES //
+//////////////////
 
 function aiBuyLogicSellBroken(buyPlayer, game) {
   console.log('>> AI: selling broken buildings for player ' + (buyPlayer == PLAYER_BLUE ? ' blue' : 'red'))
@@ -41,6 +45,49 @@ function aiBuyLogicRandom(buyPlayer, game) {
   else console.log('could not find a free grid')
 }
 
+function aiBuyLogicBuyGameWinners(buyPlayer, game) {
+  console.log('>> AI: game winner buying for player ' + (buyPlayer == PLAYER_BLUE ? ' blue' : 'red'))
+  if (playerGetGold(buyPlayer) < 550) {
+    console.log('Skipping because player gold too low: ' + playerGetGold(buyPlayer))
+    return
+  }
+  if (aiBuyGetBuildingCount(buyPlayer) < 4) {
+    console.log('Skipping because building count too low: ' + aiBuyGetBuildingCount(buyPlayer))
+    return
+  }
+  const grid = aiBuySelectRandomGrid(buyPlayer)
+  if (grid == null) {
+    console.log('Skipping because no free grid found')
+    return
+  }
+  aiBuyMostExpensive(grid, game)
+
+}
+
+///////////
+// UTILS //
+///////////
+
+function aiBuyGetBuildingCount(player) {
+  var count = 0
+  for (const grid of map) {
+    if(grid.player == player && grid.building != undefined) count += 1
+  }
+  return count
+}
+
+function aiBuySelectRandomGrid(player, role) {
+  var options = []
+  for (const grid of map) {
+    if (grid.player == player && grid.building == undefined) {
+      if (!role) options.push(grid)
+      else if(grid.role == role) options.push(grid)
+    }
+  }
+  if(options.length == 0) return null
+  return options[Math.floor(Math.random() * options.length)]
+}
+
 function aiBuyRandomBuy(grid, game) {
   const list = aiBuyGetList(grid)
   const building = list[Math.floor(Math.random() * list.length)]
@@ -55,17 +102,25 @@ function aiBuyRandomBuy(grid, game) {
   }
 }
 
-function aiBuySelectRandomGrid(player, role) {
-  var options = []
-  for (const grid of map) {
-    if (grid.player == player && grid.building == undefined) {
-      if (!role) options.push(grid)
-      else if(grid.role == role) options.push(grid)
+function aiBuyMostExpensive(grid, game) {
+    const list = aiBuyGetList(grid)
+    var selectedBuilding = undefined
+    var selectedCost = undefined
+    for (const building of list) {
+      const bp = configUnits.get(building)
+      if (selectedBuilding == undefined || bp.cost > selectedCost) {
+        selectedBuilding = building
+        selectedCost = bp.cost
+      }
     }
-  }
-  if(options.length == 0) return null
-  return options[Math.floor(Math.random() * options.length)]
+    if (playerGetGold(grid.player) >= selectedCost) {
+      buyBuyBuilding(grid, selectedBuilding, game)
+    } else {
+      console.log('Player did not have the gold to build the most expensive on  on grid (' + grid.x + ', ' + grid.y + ')')
+    }
 }
+
+
 
 function aiBuyGetList(grid) {
   const race = playerGetRace(grid.player)

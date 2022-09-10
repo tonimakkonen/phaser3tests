@@ -15,6 +15,8 @@ const UNIT_FACTORY = 104
 const UNIT_BUGGY = 105
 const UNIT_ASSEMBLY = 106
 const UNIT_ROCKET_LAUNCHER = 107
+const UNIT_FIGHTER_BASE = 108
+const UNIT_FIGHTER = 109
 
 configUnits.set(
   UNIT_HUMAN_BASE,
@@ -181,6 +183,46 @@ configUnits.set(
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 3, speed: 100, time: 400 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_FIGHTER_BASE,
+  {
+    graph: 'fighter_base',
+    name: 'Fighter Base',
+    help: 'Build Fighter Base: crates air superiority fighters',
+    health: 40,
+    building: true,
+    width: 40,
+    cost: 400,
+    spawn: {
+      unit: UNIT_FIGHTER,
+      time: 10000
+    },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 6, speed: 100, time: 1500 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_FIGHTER,
+  {
+    graph: 'fighter',
+    health: 6,
+    hover: { x: CONFIG_WIDTH*0.25, y: CONFIG_BLOCK*6, dx: CONFIG_WIDTH*0.35, dy: CONFIG_BLOCK*6, time: 800, speed: 200 },
+    gravity: 0,
+    shoot: {
+        type: SHOT_LASER,
+        amin: -20,
+        amax: 45,
+        speed: 450,
+        time: 1200
+    },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
     }
   }
 )
@@ -377,12 +419,12 @@ configUnits.set(
     heal: 20,
     building: true,
     width: 40,
-    cost: 240,
+    cost: 250,
     shoot: {
         type: SHOT_FIRE,
-        amin: 55,
+        amin: 50,
         amax: 85,
-        speed: 550,
+        speed: 580,
         time: 1200
     },
     death: {
