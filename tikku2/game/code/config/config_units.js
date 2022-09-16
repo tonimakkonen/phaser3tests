@@ -82,7 +82,7 @@ configUnits.set(
 configUnits.set(
   UNIT_FORT,
   {
-    graph: 'Fort',
+    graph: 'fort',
     name: 'Fort',
     help: 'Build Fort: strong defensive structure',
     health: 100,
