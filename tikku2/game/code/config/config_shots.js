@@ -41,6 +41,11 @@ configShots.set(
         type: SHOT_FIRE,
         count: 6,
         speed: 300
+      },
+      splatter: {
+        graph: 'splatter_explosion',
+        explosion: true,
+        time: 200
       }
     }
   }

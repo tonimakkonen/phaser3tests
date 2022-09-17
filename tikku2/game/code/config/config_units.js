@@ -39,7 +39,7 @@ configUnits.set(
   {
     graph: 'soldier',
     health: 5,
-    velocity: 60,
+    velocity: { speed: 60, time: 1000 },
     jump: {
       feetOnGround: true,
       time: 500,
@@ -127,7 +127,7 @@ configUnits.set(
   {
     graph: 'buggy',
     health: 9,
-    velocity: 70,
+    velocity: {speed: 70, time: 500 },
     mass: 2,
     height: 30,
     shoot: {
@@ -172,7 +172,7 @@ configUnits.set(
   {
     graph: 'artillery',
     health: 9,
-    velocity: 40,
+    velocity: { speed: 40, time: 1000 },
     mass: 2,
     shoot: {
         type: SHOT_ROCKET,
@@ -267,7 +267,7 @@ configUnits.set(
   {
     graph: 'bug',
     health: 3,
-    velocity: 70,
+    velocity: { speed: 70, time: 1000 },
     jump: {
       feetOnGround: false,
       time: 200,
@@ -322,6 +322,7 @@ configUnits.set(
     heal: 10,
     death: {
       spawn: { type: UNIT_BUG, count: 5 },
+      shoot: { type: SHOT_SLIME, count: 10, speed: 150 },
       splatter: { graph: 'splatter_green', count: 6, speed: 200, time: 1500 }
     }
   }
@@ -353,7 +354,7 @@ configUnits.set(
   {
     graph: 'crawler',
     health: 24,
-    velocity: 50,
+    velocity: { speed: 50, time: 200 },
     mass: 2,
     shoot: {
         type: SHOT_SLIME,
@@ -394,7 +395,7 @@ configUnits.set(
   {
     graph: 'fire_larva',
     health: 8,
-    velocity: 40,
+    velocity: { speed: 40, time: 1000 },
     mass: 2,
     shoot: {
         type: SHOT_FIRE_BALL,
@@ -419,13 +420,13 @@ configUnits.set(
     heal: 20,
     building: true,
     width: 40,
-    cost: 250,
+    cost: 240,
     shoot: {
         type: SHOT_FIRE,
         amin: 50,
         amax: 85,
         speed: 580,
-        time: 1200
+        time: 1100
     },
     death: {
       splatter: { graph: 'splatter_green', count: 6, speed: 200, time: 1500 }
@@ -457,7 +458,7 @@ configUnits.set(
   {
     graph: 'flyer',
     health: 3,
-    velocity: 100,
+    velocity: { speed: 100, time: 250 },
     gravity: 0,
     fly: { max: 20, min: -40, time: 400 },
     suicide: { after: CONFIG_WIDTH / 2, before: CONFIG_WIDTH - CONFIG_BLOCK/2, prob: 0.06, time: 200 },
@@ -542,7 +543,7 @@ configUnits.set(
   {
     graph: 'alien',
     health: 9,
-    velocity: 50,
+    velocity: { speed: 50, time: 500 },
     mass: 1.5,
     shoot: {
         type: SHOT_LASER,
@@ -623,7 +624,7 @@ configUnits.set(
   {
     graph: 'fire_spider',
     health: 5,
-    velocity: 80,
+    velocity: { speed: 80, time: 1000 },
     shoot: {
         type: SHOT_FIRE,
         amin: 0,
