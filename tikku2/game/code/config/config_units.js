@@ -17,6 +17,8 @@ const UNIT_ASSEMBLY = 106
 const UNIT_ROCKET_LAUNCHER = 107
 const UNIT_FIGHTER_BASE = 108
 const UNIT_FIGHTER = 109
+const UNIT_BOMBER_BASE = 110
+const UNIT_BOMBER = 111
 
 configUnits.set(
   UNIT_HUMAN_BASE,
@@ -227,6 +229,48 @@ configUnits.set(
   }
 )
 
+configUnits.set(
+  UNIT_BOMBER_BASE,
+  {
+    graph: 'bomber_base',
+    name: 'Bomber Base',
+    help: 'Build Bomber Base: crates bombers',
+    health: 40,
+    building: true,
+    width: 40,
+    cost: 450,
+    spawn: {
+      unit: UNIT_BOMBER,
+      time: 20000
+    },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 6, speed: 100, time: 1500 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_BOMBER,
+  {
+    graph: 'fighter',
+    health: 6,
+    velocity: { speed: 60, time: 1000 },
+    gravity: 0,
+    fly: { max: 5, min: -40, time: 1200, below: 80 },
+    shoot: {
+        type: SHOT_BOMB,
+        amin: -15,
+        amax: 0,
+        speed: 50,
+        time: 2000,
+        after: CONFIG_BLOCK*10
+    },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
+    }
+  }
+)
+
 /////////
 // BUG //
 /////////
@@ -423,10 +467,10 @@ configUnits.set(
     cost: 240,
     shoot: {
         type: SHOT_FIRE,
-        amin: 50,
+        amin: 45,
         amax: 85,
-        speed: 580,
-        time: 1100
+        speed: 620,
+        time: 1000
     },
     death: {
       splatter: { graph: 'splatter_green', count: 6, speed: 200, time: 1500 }
@@ -460,7 +504,7 @@ configUnits.set(
     health: 3,
     velocity: { speed: 100, time: 250 },
     gravity: 0,
-    fly: { max: 20, min: -40, time: 400 },
+    fly: { max: 40, min: -40, time: 800 },
     suicide: { after: CONFIG_WIDTH / 2, before: CONFIG_WIDTH - CONFIG_BLOCK/2, prob: 0.06, time: 200 },
     death: {
       shoot: { type: SHOT_SLIME, count: 10, speed: 150 }

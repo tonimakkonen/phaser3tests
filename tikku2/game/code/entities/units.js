@@ -95,6 +95,7 @@ function unitHandleFly(unit, fly, game) {
     const vy = Math.random() * (fly.max - fly.min) + fly.min
     unit.setVelocityY(vy)
   }
+  if (fly.below && unit.y < fly.below && unit.body.velocity.y < 0) unit.setVelocityY(-unit.body.velocity.y)
 }
 
 function unitHandleHover(unit, hover, game) {
@@ -114,10 +115,14 @@ function unitHandleHover(unit, hover, game) {
 
 function unitHandleShot(unit, game) {
   if (unit.x_alreadyDead) return
-  var toEnemy = unit.x_player == PLAYER_BLUE ? 1 : -1
+  const toEnemy = unit.x_player == PLAYER_BLUE ? 1 : -1
+  const xte = toEnemy > 0 ? unit.x : CONFIG_WIDTH - unit.x
   var props = unit.x_props
   if (props.shoot) {
     var shoot = props.shoot;
+    
+    if (shoot.after && xte < shoot.after) return
+
     if (unit.x_lastShot === undefined || game.time.now > unit.x_lastShot + shoot.time) {
       unit.x_lastShot = game.time.now;
       var vel = shoot.speed
