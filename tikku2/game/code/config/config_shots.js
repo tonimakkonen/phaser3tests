@@ -5,6 +5,7 @@ const SHOT_FIRE = 3
 const SHOT_FIRE_BALL = 4
 const SHOT_ROCKET = 5
 const SHOT_BOMB = 6
+const SHOT_GREEN_LASER = 7
 
 var configShots = new Map();
 
@@ -90,5 +91,13 @@ configShots.set(
       }
     },
     damage: 5
+  }
+)
+
+configShots.set(
+  SHOT_GREEN_LASER,
+  {
+    graph: 'shot_green_laser',
+    damage: 4,
   }
 )

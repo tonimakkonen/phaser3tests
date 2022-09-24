@@ -221,7 +221,7 @@ configUnits.set(
         amin: -20,
         amax: 45,
         speed: 450,
-        time: 900
+        time: 800
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
@@ -460,7 +460,7 @@ configUnits.set(
     graph: 'fire_spitter',
     name: 'Fire Spitter',
     help: 'Mutate Fire Spitter: AA and artillery role',
-    health: 60,
+    health: 80,
     heal: 20,
     building: true,
     width: 40,
@@ -567,6 +567,8 @@ const UNIT_FIRE_SPIDER = 306
 const UNIT_WATCHER = 307
 const UNIT_PORTAL = 308
 const UNIT_DESTROYER = 309
+const UNIT_SKY_BASE = 310
+const UNIT_SEEKER = 311
 
 configUnits.set(
   UNIT_ALIEN_BASE,
@@ -577,10 +579,7 @@ configUnits.set(
     building: true,
     width: 80,
     health: 400,
-    spawn: {
-      unit: UNIT_ALIEN,
-      time: 9000
-    }
+    spawn: { unit: UNIT_ALIEN, time: 9000 }
   }
 )
 
@@ -591,7 +590,7 @@ configUnits.set(
     health: 9,
     velocity: { speed: 50, time: 500 },
     mass: 1.5,
-    shoot: { type: SHOT_LASER, amin: 5, amax: 45, speed: 250, time: 900 }
+    shoot: { type: SHOT_GREEN_LASER, amin: 5, amax: 45, speed: 250, time: 900 }
   }
 )
 
@@ -605,10 +604,7 @@ configUnits.set(
     building: true,
     width: 40,
     cost: 180,
-    spawn: {
-      unit: UNIT_ALIEN,
-      time: 9000
-    }
+    spawn: { unit: UNIT_ALIEN, time: 9000 }
   }
 )
 
@@ -618,17 +614,11 @@ configUnits.set(
     graph: 'ff_generator',
     name: 'Forcefield Generator',
     help: 'Construct Forcefield Generator: defences a large area',
-    health: 20,
+    health: 40,
     building: true,
     width: 40,
     cost: 220,
-    spawn: {
-      unit: UNIT_FF,
-      time: 0,
-      radius: CONFIG_BLOCK*5,
-      count: 40,
-      maxTimes: 1
-    }
+    spawn: { unit: UNIT_FF, time: 0, radius: CONFIG_BLOCK*5, count: 40, maxTimes: 1 }
   }
 )
 
@@ -652,10 +642,7 @@ configUnits.set(
     building: true,
     width: 40,
     cost: 300,
-    spawn: {
-      unit: UNIT_FIRE_SPIDER,
-      time: 4000
-    }
+    spawn: { unit: UNIT_FIRE_SPIDER, time: 4000 }
   }
 )
 
@@ -665,13 +652,7 @@ configUnits.set(
     graph: 'fire_spider',
     health: 5,
     velocity: { speed: 80, time: 1000 },
-    shoot: {
-        type: SHOT_FIRE,
-        amin: 0,
-        amax: 45,
-        speed: 230,
-        time: 900
-    },
+    shoot: { type: SHOT_FIRE, amin: 0, amax: 45, speed: 230, time: 900 },
     jump: {
       feetOnGround: true,
       time: 500,
@@ -694,13 +675,7 @@ configUnits.set(
     building: true,
     width: 40,
     cost: 200,
-    shoot: {
-        type: SHOT_LASER,
-        amin: -5,
-        amax: 30,
-        speed: 500,
-        time: 1400
-    }
+    shoot: { type: SHOT_GREEN_LASER, amin: -5, amax: 30, speed: 500, time: 1400 }
   }
 )
 
@@ -726,6 +701,43 @@ configUnits.set(
     velocity: { speed: 60, time: 250 },
     gravity: 0,
     fly: { max: 40, min: -40, time: 800 },
-    shoot: { type: SHOT_LASER, amin: -10, amax: 20, speed: 450, time: 700 }
+    shoot: { type: SHOT_GREEN_LASER, amin: -10, amax: 20, speed: 450, time: 700 }
+  }
+)
+
+configUnits.set(
+  UNIT_SKY_BASE,
+  {
+    graph: 'sky_base',
+    name: 'Sky Base',
+    help: 'Build Sky Base: creates seekers',
+    health: 40,
+    building: true,
+    width: 40,
+    cost: 400,
+    spawn: { unit: UNIT_SEEKER, time: 12500 },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 6, speed: 100, time: 1500 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_SEEKER,
+  {
+    graph: 'seeker',
+    health: 10,
+    hover: { x: CONFIG_WIDTH*0.5, y: CONFIG_BLOCK*6, dx: CONFIG_WIDTH*0.35, dy: CONFIG_BLOCK*6, time: 800, speed: 100 },
+    gravity: 0,
+    shoot: {
+        type: SHOT_GREEN_LASER,
+        amin: -30,
+        amax: 30,
+        speed: 550,
+        time: 900
+    },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
+    }
   }
 )
