@@ -87,10 +87,10 @@ configUnits.set(
     graph: 'fort',
     name: 'Fort',
     help: 'Build Fort: strong defensive structure',
-    health: 100,
+    health: 150,
     building: true,
     width: 40,
-    cost: 150,
+    cost: 125,
     shoot: {
         type: SHOT_LASER,
         amin: 5,
@@ -181,7 +181,7 @@ configUnits.set(
         amin: 20,
         amax: 45,
         speed: 560,
-        time: 2500
+        time: 2000
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 3, speed: 100, time: 400 }
@@ -221,7 +221,7 @@ configUnits.set(
         amin: -20,
         amax: 45,
         speed: 450,
-        time: 1200
+        time: 900
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
@@ -241,7 +241,7 @@ configUnits.set(
     cost: 450,
     spawn: {
       unit: UNIT_BOMBER,
-      time: 20000
+      time: 15000
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 6, speed: 100, time: 1500 }
@@ -262,7 +262,7 @@ configUnits.set(
         amin: -15,
         amax: 0,
         speed: 50,
-        time: 2000,
+        time: 1500,
         after: CONFIG_BLOCK*10
     },
     death: {
@@ -521,7 +521,7 @@ configUnits.set(
     health: 50,
     building: true,
     width: 40,
-    cost: 580,
+    cost: 600,
     heal: 10,
     spawn: {
       unit: UNIT_DRAGONBUG,
@@ -537,7 +537,7 @@ configUnits.set(
   UNIT_DRAGONBUG,
   {
     graph: 'dragonbug',
-    health: 30,
+    health: 25,
     hover: { x: CONFIG_WIDTH*0.5, y: CONFIG_BLOCK*8, dx: CONFIG_WIDTH*0.25, dy: CONFIG_BLOCK*8, time: 1000, speed: 100 },
     gravity: 0,
     shoot: {
@@ -565,6 +565,8 @@ const UNIT_FF = 304
 const UNIT_SPIDER_ASSEMBLY = 305
 const UNIT_FIRE_SPIDER = 306
 const UNIT_WATCHER = 307
+const UNIT_PORTAL = 308
+const UNIT_DESTROYER = 309
 
 configUnits.set(
   UNIT_ALIEN_BASE,
@@ -589,13 +591,7 @@ configUnits.set(
     health: 9,
     velocity: { speed: 50, time: 500 },
     mass: 1.5,
-    shoot: {
-        type: SHOT_LASER,
-        amin: 5,
-        amax: 45,
-        speed: 250,
-        time: 900
-    }
+    shoot: { type: SHOT_LASER, amin: 5, amax: 45, speed: 250, time: 900 }
   }
 )
 
@@ -705,5 +701,31 @@ configUnits.set(
         speed: 500,
         time: 1400
     }
+  }
+)
+
+configUnits.set(
+  UNIT_PORTAL,
+  {
+    graph: 'portal',
+    name: 'Portal',
+    help: 'Construct Portal: summons destroyers',
+    health: 40,
+    building: true,
+    width: 40,
+    cost: 500,
+    spawn: { unit: UNIT_DESTROYER, time: 10000 }
+  }
+)
+
+configUnits.set(
+  UNIT_DESTROYER,
+  {
+    graph: 'destroyer',
+    health: 10,
+    velocity: { speed: 60, time: 250 },
+    gravity: 0,
+    fly: { max: 40, min: -40, time: 800 },
+    shoot: { type: SHOT_LASER, amin: -10, amax: 20, speed: 450, time: 700 }
   }
 )
