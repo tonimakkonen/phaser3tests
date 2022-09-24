@@ -19,6 +19,8 @@ const UNIT_FIGHTER_BASE = 108
 const UNIT_FIGHTER = 109
 const UNIT_BOMBER_BASE = 110
 const UNIT_BOMBER = 111
+const UNIT_MECH_BASE = 112
+const UNIT_MECH = 113
 
 configUnits.set(
   UNIT_HUMAN_BASE,
@@ -90,7 +92,7 @@ configUnits.set(
     health: 150,
     building: true,
     width: 40,
-    cost: 125,
+    cost: 120,
     shoot: {
         type: SHOT_LASER,
         amin: 5,
@@ -267,6 +269,40 @@ configUnits.set(
     },
     death: {
       splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_MECH_BASE,
+  {
+    graph: 'mech_base',
+    name: 'Mech base',
+    help: 'Build Mech Base: creates strong mech units',
+    health: 40,
+    building: true,
+    width: 40,
+    cost: 700,
+    spawn: {
+      unit: UNIT_MECH,
+      time: 18000
+    },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 6, speed: 200, time: 1500 }
+    }
+  }
+)
+
+configUnits.set(
+  UNIT_MECH,
+  {
+    graph: 'mech',
+    health: 30,
+    velocity: {speed: 50, time: 100 },
+    mass: 2,
+    shoot: { type: SHOT_LASER, amin: 5, amax: 25, speed: 500, time: 300 },
+    death: {
+      splatter: { graph: 'splatter_metal', count: 6, speed: 100, time: 400 }
     }
   }
 )
@@ -569,6 +605,8 @@ const UNIT_PORTAL = 308
 const UNIT_DESTROYER = 309
 const UNIT_SKY_BASE = 310
 const UNIT_SEEKER = 311
+const UNIT_TEMPLE = 312
+const UNIT_MOTHERSHIP = 313
 
 configUnits.set(
   UNIT_ALIEN_BASE,
@@ -587,7 +625,7 @@ configUnits.set(
   UNIT_ALIEN,
   {
     graph: 'alien',
-    health: 9,
+    health: 8,
     velocity: { speed: 50, time: 500 },
     mass: 1.5,
     shoot: { type: SHOT_GREEN_LASER, amin: 5, amax: 45, speed: 250, time: 900 }
@@ -697,11 +735,11 @@ configUnits.set(
   UNIT_DESTROYER,
   {
     graph: 'destroyer',
-    health: 10,
+    health: 15,
     velocity: { speed: 60, time: 250 },
     gravity: 0,
     fly: { max: 40, min: -40, time: 800 },
-    shoot: { type: SHOT_GREEN_LASER, amin: -10, amax: 20, speed: 450, time: 700 }
+    shoot: { type: SHOT_GREEN_LASER, amin: 0, amax: 15, speed: 500, time: 600 }
   }
 )
 
@@ -710,7 +748,7 @@ configUnits.set(
   {
     graph: 'sky_base',
     name: 'Sky Base',
-    help: 'Build Sky Base: creates seekers',
+    help: 'Construct Sky Base: creates seekers',
     health: 40,
     building: true,
     width: 40,
@@ -739,5 +777,31 @@ configUnits.set(
     death: {
       splatter: { graph: 'splatter_metal', count: 4, speed: 200, time: 500 }
     }
+  }
+)
+
+configUnits.set(
+  UNIT_TEMPLE,
+  {
+    graph: 'temple',
+    name: 'Temple',
+    help: 'Construct Temple: creates motherships',
+    health: 50,
+    building: true,
+    width: 40,
+    cost: 750,
+    spawn: { unit: UNIT_MOTHERSHIP, time: 40000 }
+  }
+)
+
+configUnits.set(
+  UNIT_MOTHERSHIP,
+  {
+    graph: 'mothership',
+    health: 45,
+    hover: { x: CONFIG_WIDTH*0.5, y: CONFIG_BLOCK*8, dx: CONFIG_WIDTH*0.25, dy: CONFIG_BLOCK*8, time: 1000, speed: 50 },
+    gravity: 0,
+    shoot: { type: SHOT_GREEN_LASER, amin: -30, amax: 45, speed: 500, time: 600 },
+    spawn: { unit: UNIT_ALIEN, time: 8000 },
   }
 )
