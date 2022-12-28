@@ -32,7 +32,9 @@ function swarmConsiderSpawn(game, lastSpawn, unit, player) {
     return
   }
 
-  const nextSpawn = lastSpawn.get(unit.unit) + unit.time * Math.pow(0.8, round)
+  var deltaT =  unit.time * Math.pow(0.8, round)
+  if (deltaT < 1000.0) deltaT = 1000.0
+  const nextSpawn = lastSpawn.get(unit.unit) + deltaT
   if (game.time.now >= nextSpawn) {
     lastSpawn.set(unit.unit, nextSpawn)
     unitCreate(unit.unit, playerGetX(player, CONFIG_BLOCK*0.5), unit.y, player, undefined, game)
