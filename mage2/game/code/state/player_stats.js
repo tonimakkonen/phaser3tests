@@ -21,7 +21,7 @@ var playerStats = playerStatsZero();
 
 function playerStatsZero() {
   return {
-    healthRegen: 0.0,
+    healthRegen: 1.0,
     healthRegenText: 'Health regeneration per sec\n',
     manaRegen: 4.0,
     manaRegenText: 'Mana regeneration per sec\n',

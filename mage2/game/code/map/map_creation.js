@@ -72,7 +72,7 @@ function mapInitialize(game, map, mapObjectList, inEditor) {
   game.cameras.main.setBounds(0, 0, map.x*80, map.y*80);
 }
 
-// Create "blocks" responsible for blocking the player
+// Create "blocks" responsible for blocking the player and enemies etc
 function createMapBlocks(game, mapArray, mapX, mapY, tileX, tileY, group, list) {
 
   const MARGIN = 2; // TODO

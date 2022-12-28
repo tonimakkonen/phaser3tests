@@ -20,6 +20,7 @@ const ENEMY_FROST_MONSTER          = 11;
 const ENEMY_BUG_MONSTER            = 12;
 const ENEMY_WALL                   = 13;
 const ENEMY_MUMMY_MONSTER          = 14;
+const ENEMY_PYRAMID_MONSTER        = 15;
 
 
 var ENEMIES = new Map();
@@ -203,9 +204,24 @@ ENEMIES.set(
     graph: GRAPH_MUMMY_MONSTER,
     moveWalk: { maxSpeed: 80, alpha: 1},
     moveJump: { delay: 6000, velocity: 300 },
-    shoot1: { type: SHOT_FIRE, time: 1000, randomAngle: 25.0, topBias: 0.2 },
+    shoot1: { type: SHOT_FIRE, time: 3000, randomAngle: 10.0, topBias: 0.25 },
     health: 200,
     mass: 2.0,
-    earthDef: 50
+    earthDef: 50,
+    fireDef: -50
+  }
+);
+
+ENEMIES.set(
+  ENEMY_PYRAMID_MONSTER,
+  {
+    graph: GRAPH_PYRAMID_MONSTER,
+    immovable: true,
+    health: 2000,
+    spawn: { type: ENEMY_MUMMY_MONSTER, time: 8000 },
+    mass: 10.0,
+    fireDef: 50,
+    earthDef: 50,
+    airDef: -50
   }
 );

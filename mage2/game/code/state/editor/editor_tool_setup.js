@@ -87,14 +87,16 @@ EDITOR_MENU.add({x: 10, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FROST_MONST
 EDITOR_MENU.add({x: 11, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BUG_MONSTER, image: 'enemy_bug_monster'});
 EDITOR_MENU.add({x: 12, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_WALL, image: 'enemy_wall'});
 EDITOR_MENU.add({x: 13, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MUMMY_MONSTER, image: 'enemy_mummy_monster'});
+EDITOR_MENU.add({x: 13, y: 5, tool: EDITOR_TOOL_ENEMY, option: ENEMY_PYRAMID_MONSTER, image: 'enemy_pyramid_monster', scale: 0.25});
+
 
 // Pickups
-EDITOR_MENU.add({x: 0, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
-EDITOR_MENU.add({x: 1, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM1, image: 'pickup_mushroom1'});
-EDITOR_MENU.add({x: 2, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM2, image: 'pickup_mushroom2'});
-EDITOR_MENU.add({x: 3, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_BOOK, image: 'pickup_book'});
-EDITOR_MENU.add({x: 4, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_APPLE, image: 'pickup_apple'});
-EDITOR_MENU.add({x: 5, y: 5, tool: EDITOR_TOOL_PICKUP, option: PICKUP_BANANA, image: 'pickup_banana'});
+EDITOR_MENU.add({x: 0, y: 6, tool: EDITOR_TOOL_PICKUP, option: PICKUP_WATERMELON, image: 'pickup_watermelon'});
+EDITOR_MENU.add({x: 1, y: 6, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM1, image: 'pickup_mushroom1'});
+EDITOR_MENU.add({x: 2, y: 6, tool: EDITOR_TOOL_PICKUP, option: PICKUP_MUSHROOM2, image: 'pickup_mushroom2'});
+EDITOR_MENU.add({x: 3, y: 6, tool: EDITOR_TOOL_PICKUP, option: PICKUP_BOOK, image: 'pickup_book'});
+EDITOR_MENU.add({x: 4, y: 6, tool: EDITOR_TOOL_PICKUP, option: PICKUP_APPLE, image: 'pickup_apple'});
+EDITOR_MENU.add({x: 5, y: 6, tool: EDITOR_TOOL_PICKUP, option: PICKUP_BANANA, image: 'pickup_banana'});
 
 // Special options
 

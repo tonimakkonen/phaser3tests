@@ -68,6 +68,7 @@ const GRAPH_FROST_MONSTER        = 111;
 const GRAPH_BUG_MONSTER          = 112;
 const GRAPH_WALL                 = 113;
 const GRAPH_MUMMY_MONSTER        = 114;
+const GRAPH_PYRAMID_MONSTER      = 115;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
@@ -256,6 +257,15 @@ GRAPHS.set(
   {
     location: 'imgs/monsters/wall.png',
     name: 'enemy_wall',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_PYRAMID_MONSTER,
+  {
+    location: 'imgs/monsters/pyramid.png',
+    name: 'enemy_pyramid_monster',
     type: GRAPH_TYPE_SINGLE
   }
 );
