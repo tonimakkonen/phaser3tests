@@ -13,6 +13,7 @@ const SKILL_WATER_2   = 12;
 const SKILL_WATER_3   = 13;
 const SKILL_WATER_4   = 14;
 
+
 const SKILL_FIRE_1    = 21;
 const SKILL_FIRE_2    = 22;
 const SKILL_FIRE_3    = 23;

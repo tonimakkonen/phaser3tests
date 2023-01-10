@@ -21,6 +21,7 @@ const ENEMY_BUG_MONSTER            = 12;
 const ENEMY_WALL                   = 13;
 const ENEMY_MUMMY_MONSTER          = 14;
 const ENEMY_PYRAMID_MONSTER        = 15;
+const ENEMY_BUG_BASE_MONSTER       = 16;
 
 
 var ENEMIES = new Map();
@@ -223,5 +224,18 @@ ENEMIES.set(
     fireDef: 50,
     earthDef: 50,
     airDef: -50
+  }
+);
+
+ENEMIES.set(
+  ENEMY_BUG_BASE_MONSTER,
+  {
+    graph: GRAPH_BUG_BASE_MONSTER,
+    immovable: true,
+    health: 300,
+    spawn: { type: ENEMY_BUG_MONSTER, time: 5000 },
+    mass: 10.0,
+    fireDef: -50,
+    earthDef: 50
   }
 );

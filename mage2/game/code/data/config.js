@@ -69,6 +69,7 @@ const GRAPH_BUG_MONSTER          = 112;
 const GRAPH_WALL                 = 113;
 const GRAPH_MUMMY_MONSTER        = 114;
 const GRAPH_PYRAMID_MONSTER      = 115;
+const GRAPH_BUG_BASE_MONSTER     = 116;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
@@ -76,6 +77,8 @@ const GRAPH_MUSHROOM2_PICKUP     = 203;
 const GRAPH_BOOK_PICKUP          = 204;
 const GRAPH_APPLE_PICKUP         = 205;
 const GRAPH_BANANA_PICKUP        = 206;
+const GRAPH_COCONUT_PICKUP       = 207;
+const GRAPH_MUSHROOM3_PICKUP     = 208;
 
 const GRAPH_WATER_SHOT           = 301;
 const GRAPH_ELECTRIC_SHOT        = 302;
@@ -107,6 +110,11 @@ const GRAPH_TREE6_DECORATION     = 512;
 const GRAPH_CACTUS2_DECORATION   = 513;
 const GRAPH_WORKSHOP_DECORATION  = 514;
 const GRAPH_LIGHT1_DECORATION    = 515;
+const GRAPH_MOSS1_DECORATION     = 516;
+const GRAPH_MOSS2_DECORATION     = 517;
+const GRAPH_TREE7_DECORATION     = 518;
+const GRAPH_TREE8_DECORATION     = 519;
+const GRAPH_GRASS1_DECORATION    = 520;
 
 var GRAPHS = new Map();
 
@@ -270,6 +278,15 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_BUG_BASE_MONSTER,
+  {
+    location: 'imgs/monsters/bug_base.png',
+    name: 'enemy_bug_base_monster',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
 // Pickups
 
 GRAPHS.set(
@@ -322,6 +339,24 @@ GRAPHS.set(
   {
     location: 'imgs/pickups/banana.png',
     name: 'pickup_banana',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_COCONUT_PICKUP,
+  {
+    location: 'imgs/pickups/coconut.png',
+    name: 'pickup_coconut',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_MUSHROOM3_PICKUP,
+  {
+    location: 'imgs/pickups/mushroom3.png',
+    name: 'pickup_mushroom3',
     type: GRAPH_TYPE_SINGLE
   }
 );
@@ -588,6 +623,51 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_MOSS1_DECORATION,
+  {
+    location: 'imgs/decorations/moss1.png',
+    name: 'decoration_moss1',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_MOSS2_DECORATION,
+  {
+    location: 'imgs/decorations/moss2.png',
+    name: 'decoration_moss2',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_TREE7_DECORATION,
+  {
+    location: 'imgs/decorations/tree7.png',
+    name: 'decoration_tree7',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_TREE8_DECORATION,
+  {
+    location: 'imgs/decorations/tree8.png',
+    name: 'decoration_tree8',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_GRASS1_DECORATION,
+  {
+    location: 'imgs/decorations/grass1.png',
+    name: 'decoration_grass1',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
@@ -606,6 +686,7 @@ const LAYER_INVISIBLE = 6;
 const LAYER_SAND      = 7;
 const LAYER_SNOWCAVE  = 8;
 const LAYER_BRIDGE    = 9;
+const LAYER_ROCK2     = 10;
 
 var LAYERS = new Map();
 
@@ -718,6 +799,18 @@ LAYERS.set(
   }
 );
 
+LAYERS.set(
+  LAYER_ROCK2,
+  {
+    type: LAYER_TYPE_SYMMETRIC,
+    name: 'rock2',
+    locationBase: 'imgs/ground/rock2',
+    block: true,
+    zInternal: -0.41,
+    zBlock: -0.41
+  }
+);
+
 ////////////////////////////////////
 // All the different pickup types //
 ////////////////////////////////////
@@ -729,6 +822,8 @@ const PICKUP_MUSHROOM2  = 3;
 const PICKUP_BOOK       = 4;
 const PICKUP_APPLE      = 5;
 const PICKUP_BANANA     = 6;
+const PICKUP_COCONUT    = 7;
+const PICKUP_MUSHROOM3  = 8;
 
 var PICKUPS = new Map();
 
@@ -791,6 +886,27 @@ PICKUPS.set(
   }
 );
 
+PICKUPS.set(
+  PICKUP_COCONUT,
+  {
+    graph: GRAPH_COCONUT_PICKUP,
+    heal: 60,
+    mana: 60,
+    sound: 'sound_eat'
+  }
+);
+
+PICKUPS.set(
+  PICKUP_MUSHROOM3,
+  {
+    graph: GRAPH_MUSHROOM3_PICKUP,
+    moveY: 27.5,
+    heal: 20,
+    mana: 80,
+    sound: 'sound_eat'
+  }
+);
+
 
 //////////////////////////////////
 // All the different decoration //
@@ -811,6 +927,11 @@ const DECORATION_TREE6    = 12;
 const DECORATION_CACTUS2  = 13;
 const DECORATION_WORKSHOP = 14;
 const DECORATION_LIGHT1   = 15;
+const DECORATION_MOSS1    = 16;
+const DECORATION_MOSS2    = 17;
+const DECORATION_TREE7    = 18;
+const DECORATION_TREE8    = 19;
+const DECORATION_GRASS1   = 20;
 
 var DECORATIONS = new Map();
 
@@ -842,7 +963,8 @@ DECORATIONS.set(
   DECORATION_TREE2,
   {
     graph: GRAPH_TREE2_DECORATION,
-    z: -0.05
+    z: -0.05,
+    moveY: -80
   }
 )
 
@@ -940,6 +1062,49 @@ DECORATIONS.set(
     graph: GRAPH_LIGHT1_DECORATION,
     z: 2,
     moveY: 40
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_MOSS1,
+  {
+    graph: GRAPH_MOSS1_DECORATION,
+    z: 2
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_MOSS2,
+  {
+    graph: GRAPH_MOSS2_DECORATION,
+    z: 2.1
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_TREE7,
+  {
+    graph: GRAPH_TREE7_DECORATION,
+    z: -0.025,
+    moveY: -80
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_TREE8,
+  {
+    graph: GRAPH_TREE8_DECORATION,
+    z: -0.025,
+    moveY: -40
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_GRASS1,
+  {
+    graph: GRAPH_GRASS1_DECORATION,
+    z: 1,
+    moveY: 20
   }
 );
 

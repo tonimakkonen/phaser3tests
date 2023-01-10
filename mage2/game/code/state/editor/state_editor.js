@@ -46,16 +46,16 @@ function stateStartEditor(game) {
   editorCreateAllFromMap(game, mapBlueprint);
 
   // Create grid and other UI phaser3 objects
-  editorAddToolBox(game.add.rectangle(settingWidth / 2.0, settingHeight / 2.0, settingWidth - 160.0, settingHeight - 160.0, 0xffffff), 0.25);
-  edLeftSelect = editorAddToolBox(game.add.rectangle(edLeftSelectPos.x * 80.0 + 40.0 + 80.0, edLeftSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0xff0000), 0.5);
-  edRightSelect = editorAddToolBox(game.add.rectangle(edRightSelectPos.x * 80.0 + 40.0 + 80.0, edRightSelectPos.y * 80.0 + 40.0 + 80.0, 60, 60, 0x00ff00), 0.5);
+  editorAddToolBox(game.add.rectangle(settingWidth / 2.0, settingHeight / 2.0, settingWidth, settingHeight, 0x000000), 0.9);
+  edLeftSelect = editorAddToolBox(game.add.rectangle(edLeftSelectPos.x * 80.0 + 40.0, edLeftSelectPos.y * 80.0 + 40.0, 60, 60, 0xff0000), 0.5);
+  edRightSelect = editorAddToolBox(game.add.rectangle(edRightSelectPos.x * 80.0 + 40.0, edRightSelectPos.y * 80.0 + 40.0, 60, 60, 0x00ff00), 0.5);
   EDITOR_MENU.forEach(mo => editorAddMenuOption(game, mo) );
   edToolBoxObjects.forEach(o => o.setVisible(false) );
 }
 
 function editorAddMenuOption(game, mo) {
-  const cx = mo.x * 80.0 + 40.0 + 80.0;
-  const cy = mo.y * 80.0 + 40.0 + 80.0;
+  const cx = mo.x * 80.0 + 40.0;
+  const cy = mo.y * 80.0 + 40.0;
   if (mo.image) {
     var image = game.add.image(cx, cy, mo.image);
     if (mo.scale) image.setScale(mo.scale);
@@ -137,8 +137,8 @@ function editorHandleTab(game) {
     return GAME_MODE_MAP_EDITOR;
   }
 
-  const wx = game.input.mousePointer.x - 80.0;
-  const wy = game.input.mousePointer.y - 80.0;
+  const wx = game.input.mousePointer.x;
+  const wy = game.input.mousePointer.y;
   const gx = Math.floor(wx / 80.0);
   const gy = Math.floor(wy / 80.0);
 
@@ -156,7 +156,7 @@ function editorHandleTab(game) {
       edToolLeftOption = toolOn.option;
       edToolLeftClick = toolOn.click;
       edLeftSelectPos = {x: toolOn.x, y: toolOn.y};
-      edLeftSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
+      edLeftSelect.setPosition(toolOn.x * 80.0 + 40.0, toolOn.y * 80.0 + 40.0);
     }
     // Handle special options
     if (inputLeftClick) {
@@ -200,7 +200,7 @@ function editorHandleTab(game) {
       edToolRightOption = toolOn.option;
       edToolRightClick = toolOn.click;
       edRightSelectPos = {x: toolOn.x, y: toolOn.y};
-      edRightSelect.setPosition(toolOn.x * 80.0 + 40.0 + 80.0, toolOn.y * 80.0 + 40.0 + 80.0);
+      edRightSelect.setPosition(toolOn.x * 80.0 + 40.0, toolOn.y * 80.0 + 40.0);
     }
   }
   return GAME_MODE_MAP_EDITOR;
