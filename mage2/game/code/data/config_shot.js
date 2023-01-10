@@ -12,6 +12,7 @@ const SHOT_SMALL_WATER = 8;
 const SHOT_ROCK        = 9;
 const SHOT_POISON      = 10;
 const SHOT_METEOR      = 11;
+const SHOT_SMALL_ROCK  = 12;
 
 
 var SHOTS = new Map();
@@ -161,5 +162,16 @@ SHOTS.set(
     punch: 1.0,
     sound: 'sound_fire2',
     deathSound: 'sound_explosion1'
+  }
+)
+
+SHOTS.set(
+  SHOT_SMALL_ROCK,
+  {
+    graph: GRAPH_SMALL_ROCK_SHOT,
+    damage: 10,
+    type: MAGIC_TYPE_EARTH,
+    velocity: 300,
+    grav: 1.0
   }
 )

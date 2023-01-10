@@ -91,6 +91,7 @@ const GRAPH_SMALL_WATER_SHOT     = 308;
 const GRAPH_ROCK_SHOT            = 309;
 const GRAPH_POISON_SHOT          = 310;
 const GRAPH_METEOR_SHOT          = 311;
+const GRAPH_SMALL_ROCK_SHOT      = 312;
 
 const GRAPH_EXIT_DOOR1           = 401;
 const GRAPH_SIGN                 = 402;
@@ -462,6 +463,15 @@ GRAPHS.set(
   {
     location: 'imgs/shots/meteor.png',
     name: 'shot_meteor',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SMALL_ROCK_SHOT,
+  {
+    location: 'imgs/shots/small_rock.png',
+    name: 'shot_small_rock',
     type: GRAPH_TYPE_SINGLE
   }
 );

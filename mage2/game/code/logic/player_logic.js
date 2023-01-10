@@ -128,9 +128,7 @@ function playerHandleSpell(game, spell, last, dx, dy) {
   if (curTime < last + reloadTime) return last;
   const manaCost = spell.cost;
   if (playerUseManaIfCan(game, manaCost)) {
-    if (spell.shoot) {
-        shotShoot(game, true, spell.shoot, player.x, player.y, dx, dy, true);
-    }
+    if (spell.shoot) playerSpellShoot(game, spell, player.x, player.y, dx, dy);
     if (spell.effect) shotHandleEffect(game, spell.effect, player.x, player.y, dx, dy);
     if (spell.jump) playerAddJump(game, spell.jump);
     if (spell.heal) playerHeal(game, spell.heal);
@@ -138,6 +136,25 @@ function playerHandleSpell(game, spell, last, dx, dy) {
     return curTime;
   }
   return last;
+}
+
+function playerSpellShoot(game, spell, px, py, dx, dy) {
+  const count = spell.count != undefined ? spell.count : 1;
+  if (count == 1) {
+    shotShoot(game, true, spell.shoot, px, py, dx, dy, true);
+  } else {
+    const dx2 = -dy;
+    const dy2 = dx;
+    const fan = spell.fan != undefined ? spell.fan : 0.0;
+    for (var i = 0; i < count; i++) {
+      const a = fan * (2.0*i / (count - 1.0) - 1.0) / 2.0 * (Math.PI / 180.0);
+      const sa = Math.sin(a);
+      const ca = Math.cos(a);
+      const adx = ca*dx + sa*dx2;
+      const ady = ca*dy + sa*dy2;
+      shotShoot(game, true, spell.shoot, px, py, adx, ady, true);
+    }
+  }
 }
 
 // Handle fly spell effect

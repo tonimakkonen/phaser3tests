@@ -7,6 +7,7 @@ const SKILL_AIR_1     = 1;
 const SKILL_AIR_2     = 2;
 const SKILL_AIR_3     = 3;
 const SKILL_AIR_4     = 4;
+const SKILL_AIR_5     = 5;
 
 const SKILL_WATER_1   = 11;
 const SKILL_WATER_2   = 12;
@@ -23,6 +24,7 @@ const SKILL_EARTH_1   = 31;
 const SKILL_EARTH_2   = 32;
 const SKILL_EARTH_3   = 33;
 const SKILL_EARTH_4   = 34;
+const SKILL_EARTH_5   = 35;
 
 const SKILL_RAIN      = 41;
 const SKILL_METEOR    = 42;
@@ -74,6 +76,17 @@ SKILLS.set(
     airDef: 25,
     speed: 300,
     jump: 25
+  }
+)
+
+SKILLS.set(
+  SKILL_AIR_5,
+  {
+    name: 'Air magic V: Storm',
+    help: 'Storm spell ',
+    spell: SPELL_STORM,
+    needs: [SKILL_AIR_4],
+    airDef: 50
   }
 )
 
@@ -190,7 +203,7 @@ SKILLS.set(
   SKILL_EARTH_3,
   {
     name: 'Earth magic III: Rock',
-    help: 'Learn the rock spell and earth earth',
+    help: 'Learn the rock spell and earth defence',
     needs: [SKILL_EARTH_2],
     spell: SPELL_ROCK,
     earthDef: 25
@@ -207,6 +220,17 @@ SKILLS.set(
     waterDef: 25,
     fireDef: 25,
     earthDef: 25
+  }
+)
+
+SKILLS.set(
+  SKILL_EARTH_5,
+  {
+    name: 'Earth magic V: Earthquake',
+    help: 'Learn the earthquake spell and defence against earth',
+    needs: [SKILL_EARTH_4],
+    spell: SPELL_EARTHQUAKE,
+    earthDef: 50
   }
 )
 

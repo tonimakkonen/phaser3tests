@@ -6,23 +6,27 @@
 
 const SPELL_AIR_PUNCH      = 1;
 const SPELL_BALL_LIGHTNING = 2;
+const SPELL_STORM          = 3;
 
-const SPELL_WATER          = 3;
-const SPELL_ICE            = 4;
+const SPELL_WATER          = 11;
+const SPELL_ICE            = 12;
 
-const SPELL_FIRE_BALL      = 5;
-const SPELL_FIRE_STORM     = 6;
+const SPELL_FIRE_BALL      = 21;
+const SPELL_FIRE_STORM     = 22;
 
-const SPELL_SUMMON_STICK   = 7;
-const SPELL_ROCK           = 8;
+const SPELL_SUMMON_STICK   = 31;
+const SPELL_ROCK           = 32;
+const SPELL_EARTHQUAKE     = 33;
 
-const SPELL_RAIN           = 9;
-const SPELL_METEOR         = 10;
-const SPELL_VOLCANO        = 11;
-const SPELL_POISON         = 12;
+const SPELL_RAIN           = 101;
+const SPELL_METEOR         = 102;
+const SPELL_VOLCANO        = 103;
+const SPELL_POISON         = 104;
 
 
-const EFFECT_TYPE_SKY = 1;
+const EFFECT_TYPE_SKY   = 1;
+const EFFECT_TYPE_EARTH = 2;
+
 
 var SPELLS = new Map();
 
@@ -53,6 +57,22 @@ SPELLS.set(
     shoot: SHOT_ELECTRIC,
     cost: 10,
     reload: 500
+  }
+)
+
+SPELLS.set(
+  SPELL_STORM,
+  {
+    name: 'Storm',
+    posX: 0,
+    posY: -3,
+    image: 'spell_storm',
+    type: MAGIC_TYPE_AIR,
+    shoot: SHOT_AIR_PUNCH,
+    count: 11,
+    fan: 135.0,
+    cost: 25,
+    reload: 400
   }
 )
 
@@ -142,6 +162,20 @@ SPELLS.set(
     type: MAGIC_TYPE_EARTH,
     shoot: SHOT_ROCK,
     cost: 10,
+    reload: 500
+  }
+)
+
+SPELLS.set(
+  SPELL_EARTHQUAKE,
+  {
+    name: 'Earthquake',
+    posX: 0,
+    posY: 3,
+    image: 'spell_earthquake',
+    type: MAGIC_TYPE_EARTH,
+    effect: {type: EFFECT_TYPE_EARTH, range: 600, shoot: SHOT_SMALL_ROCK, reload: 25, time: 5000},
+    cost: 50,
     reload: 500
   }
 )

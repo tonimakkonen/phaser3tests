@@ -71,15 +71,27 @@ function shotShoot(game, isPlayer, shotType, x, y, dx, dy, allowSound) {
  function shotHandleSingleEffect(game, entry) {
    if (player == null) return;
    const px = player.x;
+   const py = player.y;
    if (entry.effect.type == EFFECT_TYPE_SKY) {
-      if (game.time.now >= entry.lastShot + entry.effect.reload) {
-        const sx = (Math.random()*2.0 - 1) * entry.effect.range + px;
-        shotShoot(game, true, entry.effect.shoot, sx, 0, Math.random()*2.0 - 1, 1, false);
-        entry.lastShot = game.time.now;
+    if (game.time.now >= entry.lastShot + entry.effect.reload) {
+      const sx = (Math.random()*2.0 - 1) * entry.effect.range + px;
+      shotShoot(game, true, entry.effect.shoot, sx, 0, Math.random()*2.0 - 1, 1, false);
+      entry.lastShot = game.time.now;
+    }
+  } else if (entry.effect.type == EFFECT_TYPE_EARTH) {
+    if (game.time.now >= entry.lastShot + entry.effect.reload) {
+      const tile = mapFindEdge(px, py, entry.effect.range);
+      if (tile != null) {
+        const a = Math.random()*2.0*Math.PI;
+        const ca = Math.cos(a);
+        const sa = Math.sin(a);
+        shotShoot(game, true, entry.effect.shoot, tile.cx, tile.cy, ca, sa, false);
       }
-   } else {
-     throw new 'Unkown effect type: ' + entry.effect.type;
-   }
+      entry.lastShot = game.time.now;
+    }
+  } else {
+    throw new 'Unkown effect type: ' + entry.effect.type;
+  }
  }
 
 // TODO: Some duplicate code here in these two functions

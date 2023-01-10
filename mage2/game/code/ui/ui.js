@@ -12,7 +12,7 @@ const uiOptions = {
   m: 4,
   gridDeltaY: 50.0,
   spellCenterX: 300.0,
-  spellCenterY: 260.0,
+  spellCenterY: 320.0,
   spellDelta: 90.0,
   spellScale: 0.75,
   statX: 600,

@@ -56,6 +56,7 @@ function resLoadResources(game) {
   game.load.image('spell_base', 'imgs/spells/spell_base.png');
   game.load.image('spell_air_punch', 'imgs/spells/spell_air_punch.png');
   game.load.image('spell_ball_lightning', 'imgs/spells/spell_ball_lightning.png');
+  game.load.image('spell_storm', 'imgs/spells/spell_storm.png');
   game.load.image('spell_water_ball', 'imgs/spells/spell_water_ball.png');
   game.load.image('spell_ice', 'imgs/spells/spell_ice.png');
   game.load.image('spell_fire_ball', 'imgs/spells/spell_fire_ball.png');
