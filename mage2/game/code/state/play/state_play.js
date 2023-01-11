@@ -15,7 +15,12 @@ function stateStartPlay(game) {
   // TODO: Move to player logic
   playerHealth = 100.0;
   playerMana = 100.0;
-  if (gameModePlayingCampaign) playerStatsReset();
+  if (gameModePlayingCampaign) {
+    playerStatsReset();
+    // disable used spells that were not learner at the start of the map
+    if (playerLeftSpell != null && !playerStatsKnowSpell(playerLeftSpell.id)) playerLeftSpell = null;
+    if (playerRightSpell != null && !playerStatsKnowSpell(playerRightSpell.id)) playerRightSpell = null;
+  }
 
   playInitMap(game);
   uiCreate(game);
@@ -105,6 +110,10 @@ function stateHandlePlay(game) {
         playDestroyPhaserObjects(game);
         stateStartPlay(game);
       } else {
+        if (playState == PLAY_STATE_FINISHED && gameModePlayingCampaign) {
+          playerProgress.level += 1;
+          playerStatsSave();
+        }
         // Back to whereever we were before this
         playDestroyPhaserObjects(game);
         return gameModeLast;

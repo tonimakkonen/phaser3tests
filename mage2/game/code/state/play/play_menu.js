@@ -28,7 +28,7 @@ function playMenuGetLastModetext() {
   if (gameModeLast == GAME_MODE_MAP_EDITOR) {
     return 'Back to editor';
   } else if (gameModeLast == GAME_MODE_MAIN_MENU) {
-    return 'Back to main menu';
+    return 'Back to main menu (progress saved)';
   } else {
     throw 'Cannot handle other last game mode: ' + gameModeLast;
   }

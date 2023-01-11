@@ -35,6 +35,7 @@ var SPELLS = new Map();
 SPELLS.set(
   SPELL_AIR_PUNCH,
   {
+    id: SPELL_AIR_PUNCH,
     name: 'Air punch',
     posX: 0,
     posY: -1,
@@ -42,13 +43,14 @@ SPELLS.set(
     type: MAGIC_TYPE_AIR,
     shoot: SHOT_AIR_PUNCH,
     cost: 7.5,
-    reload: 350
+    reload: 350,
   }
 )
 
 SPELLS.set(
   SPELL_BALL_LIGHTNING,
   {
+    id: SPELL_BALL_LIGHTNING,
     name: 'Ball lightning',
     posX: 0,
     posY: -2,
@@ -63,6 +65,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_STORM,
   {
+    id: SPELL_STORM,
     name: 'Storm',
     posX: 0,
     posY: -3,
@@ -81,6 +84,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_WATER,
   {
+    id: SPELL_WATER,
     name: 'Water ball',
     posX: -1,
     posY: 0,
@@ -95,6 +99,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_ICE,
   {
+    id: SPELL_ICE,
     name: 'Frost shot',
     posX: -2,
     posY: 0,
@@ -111,6 +116,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_FIRE_BALL,
   {
+    id: SPELL_FIRE_BALL,
     name: 'Fire ball',
     posX: 1,
     posY: 0,
@@ -125,6 +131,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_FIRE_STORM,
   {
+    id: SPELL_FIRE_STORM,
     name: 'Fire storm',
     posX: 2,
     posY: 0,
@@ -141,6 +148,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_SUMMON_STICK,
   {
+    id: SPELL_SUMMON_STICK,
     name: 'Stick',
     posX: 0,
     posY: 1,
@@ -155,6 +163,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_ROCK,
   {
+    id: SPELL_ROCK,
     name: 'Rock',
     posX: 0,
     posY: 2,
@@ -169,6 +178,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_EARTHQUAKE,
   {
+    id: SPELL_EARTHQUAKE,
     name: 'Earthquake',
     posX: 0,
     posY: 3,
@@ -185,6 +195,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_RAIN,
   {
+    id: SPELL_RAIN,
     name: 'Rain',
     posX: -1,
     posY: -1,
@@ -200,6 +211,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_METEOR,
   {
+    id: SPELL_METEOR,
     name: 'Meteors',
     posX: 1,
     posY: -1,
@@ -215,6 +227,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_VOLCANO,
   {
+    id: SPELL_VOLCANO,
     name: 'Volcano',
     posX: 1,
     posY: 1,
@@ -229,6 +242,7 @@ SPELLS.set(
 SPELLS.set(
   SPELL_POISON,
   {
+    id: SPELL_POISON,
     name: 'Poison',
     posX: -1,
     posY: 1,

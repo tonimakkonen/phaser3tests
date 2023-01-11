@@ -1,16 +1,16 @@
 
 "use strict";
 
-// TODO:
-
-var playerProgressSave = {
+// Current player progress while playing
+var playerProgress = {
   skills: [],
   spellBooks: 0,
   level: 0,
   started: false
 }
 
-var playerProgress = {
+// Player progress at the start of a level
+var playerProgressSave = {
   skills: [],
   spellBooks: 0,
   level: 0,
@@ -127,4 +127,13 @@ function playerStatsSave() {
 function playerStatsGetInitialSpell() {
   // TODO
   return null;
+}
+
+function playerStatsKnowSpell(spell) {
+  if (spell === undefined || spell === null) return false;
+  for(var i = 0; i < playerProgress.skills.length; i++) {
+    const si = SKILLS.get(playerProgress.skills[i]);
+    if (si.spell === spell) return true;
+  }
+  return false;
 }

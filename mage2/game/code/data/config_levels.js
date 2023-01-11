@@ -8,6 +8,16 @@ var LEVELS = new Map();
 LEVELS.set(
   0,
   {
+    name: 'Introduction',
+    location: 'maps/level0.json'
+  }
+);
+
+LEVELS.set(
+  1,
+  {
+    name: 'Credits',
+    last: true,
     location: 'maps/level0.json'
   }
 );

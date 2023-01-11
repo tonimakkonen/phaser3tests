@@ -36,3 +36,7 @@ function storageSavePlayerProgress() {
   console.log('saving player progress to local storage');
   localStorage.setItem('playerProgress', JSON.stringify(playerProgressSave));
 }
+
+function storageClear() {
+  localStorage.clear();
+}
