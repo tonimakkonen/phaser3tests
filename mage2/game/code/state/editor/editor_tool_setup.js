@@ -95,6 +95,7 @@ EDITOR_MENU.add({x: 12, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_WALL, image
 EDITOR_MENU.add({x: 13, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MUMMY_MONSTER, image: 'enemy_mummy_monster'});
 EDITOR_MENU.add({x: 14, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_PYRAMID_MONSTER, image: 'enemy_pyramid_monster', scale: 0.25});
 EDITOR_MENU.add({x: 15, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BUG_BASE_MONSTER, image: 'enemy_bug_base_monster', scale: 0.75});
+EDITOR_MENU.add({x: 0, y: 5, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SLIME_MONSTER, image: 'enemy_slime_monster'});
 
 
 // Pickups

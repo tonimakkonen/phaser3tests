@@ -70,6 +70,7 @@ const GRAPH_WALL                 = 113;
 const GRAPH_MUMMY_MONSTER        = 114;
 const GRAPH_PYRAMID_MONSTER      = 115;
 const GRAPH_BUG_BASE_MONSTER     = 116;
+const GRAPH_SLIME_MONSTER        = 117;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
@@ -92,6 +93,8 @@ const GRAPH_ROCK_SHOT            = 309;
 const GRAPH_POISON_SHOT          = 310;
 const GRAPH_METEOR_SHOT          = 311;
 const GRAPH_SMALL_ROCK_SHOT      = 312;
+const GRAPH_SLIME_SHOT           = 313;
+const GRAPH_SMALL_SLIME_SHOT     = 314;
 
 const GRAPH_EXIT_DOOR1           = 401;
 const GRAPH_SIGN                 = 402;
@@ -288,6 +291,17 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_SLIME_MONSTER,
+  {
+    location: 'imgs/monsters/slime_monster.png',
+    name: 'enemy_slime_monster',
+    type: GRAPH_TYPE_ANIM_3,
+    sizeX: 65,
+    sizeY: 60
+  }
+);
+
 // Pickups
 
 GRAPHS.set(
@@ -472,6 +486,24 @@ GRAPHS.set(
   {
     location: 'imgs/shots/small_rock.png',
     name: 'shot_small_rock',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SLIME_SHOT,
+  {
+    location: 'imgs/shots/slime.png',
+    name: 'shot_slime',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_SMALL_SLIME_SHOT,
+  {
+    location: 'imgs/shots/small_slime.png',
+    name: 'shot_small_slime',
     type: GRAPH_TYPE_SINGLE
   }
 );

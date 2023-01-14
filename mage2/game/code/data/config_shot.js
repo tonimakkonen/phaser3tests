@@ -13,6 +13,8 @@ const SHOT_ROCK        = 9;
 const SHOT_POISON      = 10;
 const SHOT_METEOR      = 11;
 const SHOT_SMALL_ROCK  = 12;
+const SHOT_SLIME       = 13;
+const SHOT_SMALL_SLIME = 14;
 
 
 var SHOTS = new Map();
@@ -163,7 +165,7 @@ SHOTS.set(
     sound: 'sound_fire2',
     deathSound: 'sound_explosion1'
   }
-)
+);
 
 SHOTS.set(
   SHOT_SMALL_ROCK,
@@ -172,6 +174,31 @@ SHOTS.set(
     damage: 10,
     type: MAGIC_TYPE_EARTH,
     velocity: 300,
+    grav: 1.0
+  }
+);
+
+SHOTS.set(
+  SHOT_SLIME,
+  {
+    graph: GRAPH_SLIME_SHOT,
+    damage: 35,
+    type: MAGIC_TYPE_WATER,
+    spawn: { type: SHOT_SMALL_SLIME, amount: 6, velocity: 0.75},
+    velocity: 700,
+    grav: 1.0,
+    punch: 0.2,
+    sound: 'sound_water1' // TODO
+  }
+);
+
+SHOTS.set(
+  SHOT_SMALL_SLIME,
+  {
+    graph: GRAPH_SMALL_SLIME_SHOT,
+    damage: 7,
+    type: MAGIC_TYPE_WATER,
+    velocity: 400,
     grav: 1.0
   }
 )

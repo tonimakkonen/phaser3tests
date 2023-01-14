@@ -5,7 +5,6 @@
 // All different enemy types //
 ///////////////////////////////
 
-// TODO: Simplify names?
 const ENEMY_FOREST_MONSTER         = 1;
 const ENEMY_BURNING_MONSTER        = 2;
 const ENEMY_ELECTRIC_MONSTER       = 3;
@@ -22,6 +21,7 @@ const ENEMY_WALL                   = 13;
 const ENEMY_MUMMY_MONSTER          = 14;
 const ENEMY_PYRAMID_MONSTER        = 15;
 const ENEMY_BUG_BASE_MONSTER       = 16;
+const ENEMY_SLIME_MONSTER          = 17;
 
 
 var ENEMIES = new Map();
@@ -237,5 +237,18 @@ ENEMIES.set(
     mass: 10.0,
     fireDef: -50,
     earthDef: 50
+  }
+);
+
+ENEMIES.set(
+  ENEMY_SLIME_MONSTER,
+  {
+    graph: GRAPH_SLIME_MONSTER,
+    moveWalk: { maxSpeed: 70, alpha: 1},
+    moveJump: { delay: 3000, velocity: 300 },
+    shoot1: { type: SHOT_SLIME, time: 2000, randomAngle: 45.0, topBias: 0.2 },
+    health: 150,
+    mass: 2.0,
+    waterDef: 50
   }
 );
