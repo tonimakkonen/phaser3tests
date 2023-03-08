@@ -16,6 +16,22 @@ LEVELS.set(
 LEVELS.set(
   1,
   {
+    name: 'Hills',
+    location: 'maps/level1.json'
+  }
+);
+
+LEVELS.set(
+  2,
+  {
+    name: 'The climb',
+    location: 'maps/level2.json'
+  }
+);
+
+LEVELS.set(
+  3,
+  {
     name: 'Credits',
     last: true,
     location: 'maps/level0.json'
