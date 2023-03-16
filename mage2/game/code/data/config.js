@@ -1211,6 +1211,7 @@ const BACKGROUND_EMPTY     = 1;
 const BACKGROUND_MOUNTAINS = 2;
 const BACKGROUND_NIGHT     = 3;
 const BACKGROUND_FOREST    = 4;
+const BACKGROUND_MESA      = 5;
 
 var BACKGROUNDS = new Map();
 
@@ -1242,5 +1243,13 @@ BACKGROUNDS.set(
   {
     name: 'bg_forest',
     location: 'imgs/bg_forest.jpg' // TODO: rename
+  }
+)
+
+BACKGROUNDS.set(
+  BACKGROUND_MESA,
+  {
+    name: 'bg_mesa',
+    location: 'imgs/bg_mesa.jpg' // TODO: rename
   }
 )

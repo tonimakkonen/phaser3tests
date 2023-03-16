@@ -39,6 +39,7 @@ EDITOR_MENU.add({x: 6, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_EMPT
 EDITOR_MENU.add({x: 7, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_MOUNTAINS, text: 'BG 1'});
 EDITOR_MENU.add({x: 8, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_NIGHT, text: 'BG 2'});
 EDITOR_MENU.add({x: 9, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_FOREST, text: 'BG 3'});
+EDITOR_MENU.add({x: 10, y: 0, special: EDITOR_SPECIAL_BG, option: BACKGROUND_MESA, text: 'BG 4'});
 
 EDITOR_MENU.add({x: 11, y: 0, special: EDITOR_SPECIAL_TRY, text: 'Try'});
 EDITOR_MENU.add({x: 12, y: 0, special: EDITOR_SPECIAL_EXPORT, text: 'Export'});
