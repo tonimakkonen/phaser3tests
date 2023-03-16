@@ -22,6 +22,7 @@ const ENEMY_MUMMY_MONSTER          = 14;
 const ENEMY_PYRAMID_MONSTER        = 15;
 const ENEMY_BUG_BASE_MONSTER       = 16;
 const ENEMY_SLIME_MONSTER          = 17;
+const ENEMY_GOBLIN_MONSTER         = 18;
 
 
 var ENEMIES = new Map();
@@ -250,5 +251,16 @@ ENEMIES.set(
     health: 150,
     mass: 2.0,
     waterDef: 50
+  }
+);
+
+ENEMIES.set(
+  ENEMY_GOBLIN_MONSTER,
+  {
+    graph: GRAPH_GOBLIN_MONSTER,
+    moveWalk: { maxSpeed: 50, alpha: 1},
+    moveJump: { delay: 3000, velocity: 300 },
+    health: 35,
+    mass: 1.0
   }
 );

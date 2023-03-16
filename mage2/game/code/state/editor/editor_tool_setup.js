@@ -77,6 +77,8 @@ EDITOR_MENU.add({x: 0, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_MO
 EDITOR_MENU.add({x: 1, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE7, image: 'decoration_tree7', scale: 0.3});
 EDITOR_MENU.add({x: 2, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_TREE8, image: 'decoration_tree8', scale: 0.3});
 EDITOR_MENU.add({x: 3, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_GRASS1, image: 'decoration_grass1'});
+EDITOR_MENU.add({x: 4, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_MUSHROOM1, image: 'decoration_mushroom1', scale: 0.9});
+EDITOR_MENU.add({x: 5, y: 3, tool: EDITOR_TOOL_DECORATION, option: DECORATION_GIANT, image: 'decoration_giant', scale: 0.3});
 
 // Enemies
 EDITOR_MENU.add({x: 0, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_FOREST_MONSTER, image: 'enemy_forest_monster'});
@@ -96,6 +98,7 @@ EDITOR_MENU.add({x: 13, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_MUMMY_MONST
 EDITOR_MENU.add({x: 14, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_PYRAMID_MONSTER, image: 'enemy_pyramid_monster', scale: 0.25});
 EDITOR_MENU.add({x: 15, y: 4, tool: EDITOR_TOOL_ENEMY, option: ENEMY_BUG_BASE_MONSTER, image: 'enemy_bug_base_monster', scale: 0.75});
 EDITOR_MENU.add({x: 0, y: 5, tool: EDITOR_TOOL_ENEMY, option: ENEMY_SLIME_MONSTER, image: 'enemy_slime_monster'});
+EDITOR_MENU.add({x: 1, y: 5, tool: EDITOR_TOOL_ENEMY, option: ENEMY_GOBLIN_MONSTER, image: 'enemy_goblin_monster'});
 
 
 // Pickups

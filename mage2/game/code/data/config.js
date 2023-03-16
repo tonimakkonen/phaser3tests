@@ -71,6 +71,7 @@ const GRAPH_MUMMY_MONSTER        = 114;
 const GRAPH_PYRAMID_MONSTER      = 115;
 const GRAPH_BUG_BASE_MONSTER     = 116;
 const GRAPH_SLIME_MONSTER        = 117;
+const GRAPH_GOBLIN_MONSTER       = 118;
 
 const GRAPH_WATERMELON_PICKUP    = 201;
 const GRAPH_MUSHROOM1_PICKUP     = 202;
@@ -119,6 +120,8 @@ const GRAPH_MOSS2_DECORATION     = 517;
 const GRAPH_TREE7_DECORATION     = 518;
 const GRAPH_TREE8_DECORATION     = 519;
 const GRAPH_GRASS1_DECORATION    = 520;
+const GRAPH_MUSHROOM1_DECORATION = 521;
+const GRAPH_GIANT_DECORATION     = 522;
 
 var GRAPHS = new Map();
 
@@ -298,6 +301,17 @@ GRAPHS.set(
     name: 'enemy_slime_monster',
     type: GRAPH_TYPE_ANIM_3,
     sizeX: 65,
+    sizeY: 60
+  }
+);
+
+GRAPHS.set(
+  GRAPH_GOBLIN_MONSTER,
+  {
+    location: 'imgs/monsters/goblin_monster.png',
+    name: 'enemy_goblin_monster',
+    type: GRAPH_TYPE_LEFT_RIGHT,
+    sizeX: 60,
     sizeY: 60
   }
 );
@@ -710,6 +724,24 @@ GRAPHS.set(
   }
 );
 
+GRAPHS.set(
+  GRAPH_MUSHROOM1_DECORATION,
+  {
+    location: 'imgs/decorations/mushroom1.png',
+    name: 'decoration_mushroom1',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
+GRAPHS.set(
+  GRAPH_GIANT_DECORATION,
+  {
+    location: 'imgs/decorations/giant.png',
+    name: 'decoration_giant',
+    type: GRAPH_TYPE_SINGLE
+  }
+);
+
 /////////////////////////////////////////////////////////
 // All the different layer types and various z indexes //
 /////////////////////////////////////////////////////////
@@ -954,26 +986,28 @@ PICKUPS.set(
 // All the different decoration //
 //////////////////////////////////
 
-const DECORATION_ROCK1    = 1;
-const DECORATION_ROCK2    = 2;
-const DECORATION_TREE1    = 3;
-const DECORATION_TREE2    = 4;
-const DECORATION_TREE3    = 5;
-const DECORATION_TREE4    = 6;
-const DECORATION_TREE5    = 7;
-const DECORATION_CACTUS1  = 8;
-const DECORATION_HOUSE1   = 9;
-const DECORATION_HOUSE2   = 10;
-const DECORATION_WELL1    = 11;
-const DECORATION_TREE6    = 12;
-const DECORATION_CACTUS2  = 13;
-const DECORATION_WORKSHOP = 14;
-const DECORATION_LIGHT1   = 15;
-const DECORATION_MOSS1    = 16;
-const DECORATION_MOSS2    = 17;
-const DECORATION_TREE7    = 18;
-const DECORATION_TREE8    = 19;
-const DECORATION_GRASS1   = 20;
+const DECORATION_ROCK1     = 1;
+const DECORATION_ROCK2     = 2;
+const DECORATION_TREE1     = 3;
+const DECORATION_TREE2     = 4;
+const DECORATION_TREE3     = 5;
+const DECORATION_TREE4     = 6;
+const DECORATION_TREE5     = 7;
+const DECORATION_CACTUS1   = 8;
+const DECORATION_HOUSE1    = 9;
+const DECORATION_HOUSE2    = 10;
+const DECORATION_WELL1     = 11;
+const DECORATION_TREE6     = 12;
+const DECORATION_CACTUS2   = 13;
+const DECORATION_WORKSHOP  = 14;
+const DECORATION_LIGHT1    = 15;
+const DECORATION_MOSS1     = 16;
+const DECORATION_MOSS2     = 17;
+const DECORATION_TREE7     = 18;
+const DECORATION_TREE8     = 19;
+const DECORATION_GRASS1    = 20;
+const DECORATION_MUSHROOM1 = 21;
+const DECORATION_GIANT     = 22;
 
 var DECORATIONS = new Map();
 
@@ -1147,6 +1181,23 @@ DECORATIONS.set(
     graph: GRAPH_GRASS1_DECORATION,
     z: 1,
     moveY: 20
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_MUSHROOM1,
+  {
+    graph: GRAPH_MUSHROOM1_DECORATION,
+    z: 1,
+    moveY: 32.5
+  }
+);
+
+DECORATIONS.set(
+  DECORATION_GIANT,
+  {
+    graph: GRAPH_GIANT_DECORATION,
+    z: 1
   }
 );
 
